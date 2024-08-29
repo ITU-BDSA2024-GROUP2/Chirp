@@ -6,7 +6,10 @@ class Program
     {
         string path = "/Users/nikolai/Chirp/Chirp.CLI/data/chirp_cli_db.csv";
         parseCSV(path);
-        cheep(args);
+        if (args[0].Equals("cheep"))
+        {
+            cheep(args, path);
+        }
     }
 
     private static void parseCSV(string path)
@@ -23,7 +26,6 @@ class Program
         {
             string[] row = csvParser.ReadFields();
             displayCheep(row);
-
         }
     }
 
@@ -39,14 +41,13 @@ class Program
         Console.WriteLine(author + " @ " + formattedTime + ": " + message);
     }
 
-    public static void cheep(string[] args)
+    public static void cheep(string[] args, string path)
     {
-        string path = "/Users/nikolai/Chirp/Chirp.CLI/data/test.txt";
         StreamWriter streamWriter = File.AppendText(path);
 
         using (streamWriter)
         {
-            streamWriter.WriteLine(args[0]);
+            streamWriter.WriteLine(args[1]);
         }
     }
 }
