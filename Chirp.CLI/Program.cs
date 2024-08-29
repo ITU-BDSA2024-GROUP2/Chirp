@@ -36,7 +36,7 @@ class Program
         var message = row[1];
         
         var unixTimeStamp = int.Parse(row[2]);
-        DateTimeOffset dateTime = DateTimeOffset.FromUnixTimeSeconds(unixTimeStamp).DateTime; // converts from unix to date time
+        DateTimeOffset dateTime = DateTimeOffset.FromUnixTimeSeconds(unixTimeStamp).DateTime.ToLocalTime(); // converts from unix to date time
         string formattedTime = dateTime.ToString("dd'/'MM'/'yy HH':'mm':'ss");
         
         Console.WriteLine(author + " @ " + formattedTime + ": " + message);
