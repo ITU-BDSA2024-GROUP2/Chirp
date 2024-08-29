@@ -4,8 +4,9 @@ class Program
 {
     public static void Main(string[] args)
     {
-        var path = "/Users/nikolai/Chirp/Chirp.CLI/data/chirp_cli_db.csv";
+        string path = "/Users/nikolai/Chirp/Chirp.CLI/data/chirp_cli_db.csv";
         parseCSV(path);
+        cheep(args);
     }
 
     private static void parseCSV(string path)
@@ -32,9 +33,20 @@ class Program
         var message = row[1];
         
         var unixTimeStamp = int.Parse(row[2]);
-        DateTimeOffset dateTime = DateTimeOffset.FromUnixTimeSeconds(unixTimeStamp).DateTime;
+        DateTimeOffset dateTime = DateTimeOffset.FromUnixTimeSeconds(unixTimeStamp).DateTime; // converts from unix to date time
         string formattedTime = dateTime.ToString("dd'/'MM'/'yy HH':'mm':'ss");
         
         Console.WriteLine(author + " @ " + formattedTime + ": " + message);
+    }
+
+    public static void cheep(string[] args)
+    {
+        string path = "/Users/nikolai/Chirp/Chirp.CLI/data/test.txt";
+        StreamWriter streamWriter = File.AppendText(path);
+
+        using (streamWriter)
+        {
+            streamWriter.WriteLine(args[0]);
+        }
     }
 }
