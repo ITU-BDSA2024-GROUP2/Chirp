@@ -4,12 +4,14 @@ class Program
 {
     public static void Main(string[] args)
     {
-        string path = "/Users/nikolai/Chirp/Chirp.CLI/data/chirp_cli_db.csv";
-        parseCSV(path);
-        if (args[0].Equals("cheep"))
+        string path = "data/chirp_cli_db.csv";
+        
+        if (args.Length > 0 && args[0].Equals("cheep"))
         {
             cheep(args, path);
         }
+        
+        parseCSV(path);
     }
 
     private static void parseCSV(string path)
@@ -20,8 +22,7 @@ class Program
         csvParser.SetDelimiters(",");
         csvParser.HasFieldsEnclosedInQuotes = true;
         csvParser.ReadLine(); // skips the first row with column names
-
-        int i = 0;
+        
         while (!csvParser.EndOfData)
         {
             string[] row = csvParser.ReadFields();
@@ -47,7 +48,7 @@ class Program
 
         using (streamWriter)
         {
-            streamWriter.WriteLine(args[1]);
+            streamWriter.WriteLine(Environment.UserName + ",\"" + args[1] + "\"," + DateTimeOffset.Now.ToUnixTimeSeconds());
         }
     }
 }
