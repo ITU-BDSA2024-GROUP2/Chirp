@@ -8,29 +8,31 @@ class Program
         
         if (args.Length > 0 && args[0].Equals("cheep"))
         {
-            cheep(args, path);
+            Cheep(args, path);
         }
         
-        parseCSV(path);
+        ParseCSV(path);
     }
 
-    private static void parseCSV(string path)
+    private static void ParseCSV(string path)
     {
         //Source: https://dev.to/bristolsamo/c-csv-parser-step-by-step-tutorial-25ok
-        
-        TextFieldParser csvParser = new TextFieldParser(path);
-        csvParser.SetDelimiters(",");
-        csvParser.HasFieldsEnclosedInQuotes = true;
-        csvParser.ReadLine(); // skips the first row with column names
-        
-        while (!csvParser.EndOfData)
+
+        using (TextFieldParser csvParser = new TextFieldParser(path))
         {
-            string[] row = csvParser.ReadFields();
-            displayCheep(row);
+            csvParser.SetDelimiters(",");
+            csvParser.HasFieldsEnclosedInQuotes = true;
+            csvParser.ReadLine(); // skips the first row with column names
+
+            while (!csvParser.EndOfData)
+            {
+                string[] row = csvParser.ReadFields();
+                DisplayCheep(row);
+            }
         }
     }
 
-    private static void displayCheep(string[] row)
+    private static void DisplayCheep(string[] row)
     {
         var author = row[0];
         var message = row[1];
@@ -47,7 +49,7 @@ class Program
     }
     
 
-    public static void cheep(string[] args, string path)
+    public static void Cheep(string[] args, string path)
     {
         StreamWriter streamWriter = File.AppendText(path);
 
