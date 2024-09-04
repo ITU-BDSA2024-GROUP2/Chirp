@@ -1,7 +1,9 @@
-﻿using Microsoft.VisualBasic.FileIO;
+﻿using Chirp.CLI;
+using Microsoft.VisualBasic.FileIO;
 
 class Program
 {
+    
     public static void Main(string[] args)
     {
         string path = "data/chirp_cli_db.csv";
@@ -27,27 +29,10 @@ class Program
             while (!csvParser.EndOfData)
             {
                 string[] row = csvParser.ReadFields();
-                DisplayCheep(row);
+                UserInterface.PrintCheep(row);
             }
         }
     }
-
-    private static void DisplayCheep(string[] row)
-    {
-        var author = row[0];
-        var message = row[1];
-        
-        Console.WriteLine(author + " @ " + getCurrentTime(row) + ": " + message);
-    }
-
-    public static String getCurrentTime(string[] row)
-    {
-        var unixTimeStamp = int.Parse(row[2]);
-        DateTimeOffset dateTime = DateTimeOffset.FromUnixTimeSeconds(unixTimeStamp).DateTime.ToLocalTime(); // converts from unix to date time
-        string formattedTime = dateTime.ToString("dd'/'MM'/'yy HH':'mm':'ss");
-        return formattedTime;
-    }
-    
 
     public static void Cheep(string[] args, string path)
     {
