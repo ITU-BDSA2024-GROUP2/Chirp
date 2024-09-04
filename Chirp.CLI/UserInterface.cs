@@ -1,19 +1,20 @@
-﻿namespace Chirp.CLI;
+﻿using Chirp.CLI.data;
+
+namespace Chirp.CLI;
 
 public static class UserInterface
 {
-    public static void PrintCheep(string[] row)
+    public static void PrintCheep(List<Cheep> cheeps)
     {
-        var author = row[0];
-        var message = row[1];
-        
-        Console.WriteLine(author + " @ " + GetCurrentTime(row) + ": " + message);
+        foreach (var cheep in cheeps)
+        {
+            Console.WriteLine(cheep.Author + " @ " + unixToLocalTime(cheep.Timestamp) + ": " + cheep.Message);
+        }
     }
 
-    private static String GetCurrentTime(string[] row)
+    private static String unixToLocalTime(long timestamp)
     {
-        var unixTimeStamp = int.Parse(row[2]);
-        DateTimeOffset dateTime = DateTimeOffset.FromUnixTimeSeconds(unixTimeStamp).DateTime.ToLocalTime(); // converts from unix to date time
+        DateTimeOffset dateTime = DateTimeOffset.FromUnixTimeSeconds(timestamp).DateTime.ToLocalTime(); // converts from unix to date time
         string formattedTime = dateTime.ToString("dd'/'MM'/'yy HH':'mm':'ss");
         return formattedTime;
     }
