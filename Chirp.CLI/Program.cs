@@ -35,12 +35,17 @@ class Program
         var author = row[0];
         var message = row[1];
         
+        Console.WriteLine(author + " @ " + getCurrentTime(row) + ": " + message);
+    }
+
+    public static String getCurrentTime(string[] row)
+    {
         var unixTimeStamp = int.Parse(row[2]);
         DateTimeOffset dateTime = DateTimeOffset.FromUnixTimeSeconds(unixTimeStamp).DateTime.ToLocalTime(); // converts from unix to date time
         string formattedTime = dateTime.ToString("dd'/'MM'/'yy HH':'mm':'ss");
-        
-        Console.WriteLine(author + " @ " + formattedTime + ": " + message);
+        return formattedTime;
     }
+    
 
     public static void cheep(string[] args, string path)
     {
