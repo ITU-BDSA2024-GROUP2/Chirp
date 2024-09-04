@@ -6,4 +6,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Reference Include="CsvHelper">
+      <HintPath>..\..\.nuget\packages\csvhelper\33.0.1\lib\net7.0\CsvHelper.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

@@ -1,5 +1,8 @@
 ﻿using Chirp.CLI;
+using Chirp.CLI.data;
 using Microsoft.VisualBasic.FileIO;
+using CsvHelper;
+using SimpleDB;
 
 class Program
 {
@@ -7,6 +10,10 @@ class Program
     public static void Main(string[] args)
     {
         string path = "data/chirp_cli_db.csv";
+        
+        IDatabaseRepository<Cheep> database = new CSVDatabase<Cheep>();
+        Cheep cheep = new Cheep("nikolai", "test", 12345678);
+        database.Store(cheep);
         
         if (args.Length > 0 && args[0].Equals("cheep"))
         {
