@@ -12,5 +12,10 @@ public record Cheep(string Author, string Message, long Timestamp)
     {
         return $"{Author} @ {GetFormattedTime(Timestamp)}: {Message}";
     }
+
+    public static Cheep CreateCheep(string message)
+    {
+        return new Cheep(Environment.UserName, message, DateTimeOffset.Now.ToUnixTimeSeconds());
+    }
   
 }
