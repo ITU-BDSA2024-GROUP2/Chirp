@@ -1,5 +1,4 @@
 ﻿using DocoptNet;
-using Microsoft.VisualBasic.CompilerServices;
 using SimpleDB;
 
 namespace Chirp.CLI
@@ -23,7 +22,7 @@ Options:
         {
             IDatabaseRepository<Cheep> database = new CSVDatabase<Cheep>();
             var arguments = new Docopt().Apply(usage, args, version: "1.0", exit: true)!;
-
+            
             try
             {
                 if (arguments["read"] != null)
@@ -33,7 +32,8 @@ Options:
                 }
                 else if (arguments["cheep"] != null)
                 {
-                    database.Store(createCheep(arguments["<message>"].ToString()));
+                    string message = arguments["<message>"].ToString();
+                    database.Store(CreateCheep(message));
                 } else if (arguments["-h"] != null || arguments["--help"] != null)
                 {
                     Console.WriteLine(usage);
@@ -49,7 +49,7 @@ Options:
             }
         }
 
-        private static Cheep createCheep(String message)
+        private static Cheep CreateCheep(string message)
         {
             return new Cheep(Environment.UserName, message, DateTimeOffset.Now.ToUnixTimeMilliseconds());
         }
