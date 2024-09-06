@@ -14,7 +14,7 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
         {
             // Returns a new enumerable collection that contains the last count elements from source.
             // https://learn.microsoft.com/en-us/dotnet/api/system.linq.enumerable.takelast?view=net-8.0
-            return CSVParser.Parse<T>(path).TakeLast(limit.Value).ToList();
+            return CSVParser.Parse<T>(path).TakeLast(limit.Value);
         }
 
         return CSVParser.Parse<T>(path);
