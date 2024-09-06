@@ -1,10 +1,8 @@
-﻿using Chirp.CLI.data;
-
-namespace Chirp.CLI;
+﻿namespace Chirp.CLI;
 
 public static class UserInterface
 {
-    public static void PrintCheep(List<Cheep> cheeps)
+    public static void PrintCheeps(IEnumerable<Cheep> cheeps)
     {
         foreach (var cheep in cheeps)
         {

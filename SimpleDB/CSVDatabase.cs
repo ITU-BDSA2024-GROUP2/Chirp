@@ -1,14 +1,13 @@
 ﻿using System.Globalization;
 using Chirp.CLI;
 using CsvHelper;
-using CsvHelper.Configuration;
 
 namespace SimpleDB;
 
 public sealed class CSVDatabase<T> : IDatabaseRepository<T>
 {
-    private string path = "data/chirp_cli_db.csv";
-    
+    private const string path = "data/chirp_cli_db.csv";
+
     public IEnumerable<T> Read(int? limit = null)
     {
         if (limit.HasValue)

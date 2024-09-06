@@ -1,6 +1,6 @@
-﻿using Chirp.CLI;
-using Chirp.CLI.data;
-using SimpleDB;
+﻿using SimpleDB;
+
+namespace Chirp.CLI;
 
 class Program
 {
@@ -13,6 +13,6 @@ class Program
 
         //List<Cheep> cheeps = CSVParser.Parse(path);
         List<Cheep> cheeps = database.Read(20).ToList();
-        UserInterface.PrintCheep(cheeps);
+        UserInterface.PrintCheeps(cheeps);
     }
 }
