@@ -1,7 +1,12 @@
-﻿using SimpleDB;
-using DocoptNet;
+﻿using DocoptNet;
+using Microsoft.VisualBasic.CompilerServices;
+using SimpleDB;
 
-const string usage = @"Chirp CLI version.
+namespace Chirp.CLI
+{
+  class Program
+  {
+    const string usage = @"Chirp CLI.
 
 Usage:
   chirp read <limit>
@@ -13,19 +18,40 @@ Options:
   -h --help     Show this screen.
   --version     Show version.
 ";
-
-var arguments = new Docopt().Apply(usage, args, version: "1.0", exit: true)!;
-
-namespace Chirp.CLI
-{
-    class Program
-    {
     
-        public static void Main(string[] args)
+    public static void Main(string[] args)
+    {
+      IDatabaseRepository<Cheep> database = new CSVDatabase<Cheep>();
+      var arguments = new Docopt().Apply(usage, args, version: "1.0", exit: true)!;
+
+      try
+      {
+        if (arguments["read"] != null)
         {
-            IDatabaseRepository<Cheep> database = new CSVDatabase<Cheep>();
-            List<Cheep> cheeps = database.Read(20).ToList();
-            UserInterface.PrintCheeps(cheeps);
+          List<Cheep> cheeps = database.Read(int.Parse(arguments["<limit>"].ToString())).ToList();
+          UserInterface.PrintCheeps(cheeps);
         }
+        else if (arguments["cheep"] != null)
+        {
+          database.Store(createCheep(arguments["<message>"].ToString()));
+        } else if (arguments["-h"] != null || arguments["--help"] != null)
+        {
+          Console.WriteLine(usage);
+        } else if (arguments["--version"] != null)
+        {
+          Console.WriteLine("Chirp CLI 1.0");
+        }
+      }
+      catch (Exception e)
+      {
+        Console.WriteLine("Invalid arguments");
+        Console.WriteLine(usage);
+      }
     }
+
+    private static Cheep createCheep(String message)
+    {
+      return new Cheep(Environment.UserName, message, DateTimeOffset.Now.ToUnixTimeMilliseconds());
+    }
+  }
 }
