@@ -8,7 +8,7 @@ public static class UserInterface
     {
         foreach (var cheep in cheeps)
         {
-            Console.WriteLine(cheep.toString());
+            Console.WriteLine(cheep.ToString());
         }
     }
 }
