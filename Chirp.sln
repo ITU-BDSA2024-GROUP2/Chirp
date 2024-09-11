@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{8B3C0F06-BCEF-4B8A-9C83-CBFD6CCDE17C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.CLI", "src\Chirp.CLI\Chirp.CLI.csproj", "{D3492159-3676-4A0D-8533-793A265F81D4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSVDB", "src\CSVDB\CSVDB.csproj", "{A9CD35C5-719B-4CFA-90AA-B3968A9940EE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D3492159-3676-4A0D-8533-793A265F81D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3492159-3676-4A0D-8533-793A265F81D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3492159-3676-4A0D-8533-793A265F81D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3492159-3676-4A0D-8533-793A265F81D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9CD35C5-719B-4CFA-90AA-B3968A9940EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9CD35C5-719B-4CFA-90AA-B3968A9940EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9CD35C5-719B-4CFA-90AA-B3968A9940EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9CD35C5-719B-4CFA-90AA-B3968A9940EE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D3492159-3676-4A0D-8533-793A265F81D4} = {8B3C0F06-BCEF-4B8A-9C83-CBFD6CCDE17C}
+		{A9CD35C5-719B-4CFA-90AA-B3968A9940EE} = {8B3C0F06-BCEF-4B8A-9C83-CBFD6CCDE17C}
+	EndGlobalSection
+EndGlobal
