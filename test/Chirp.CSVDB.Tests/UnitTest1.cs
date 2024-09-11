@@ -1,4 +1,4 @@
-namespace test;
+namespace Chirp.CSVDB.Tests;
 
 public class UnitTest1
 {

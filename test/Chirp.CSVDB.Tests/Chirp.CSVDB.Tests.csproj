@@ -23,8 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\Chirp.CLI\Chirp.CLI.csproj" />
-    <ProjectReference Include="..\src\CSVDB\CSVDB.csproj" />
+    <ProjectReference Include="..\..\src\CSVDB\CSVDB.csproj" />
   </ItemGroup>
 
 </Project>
