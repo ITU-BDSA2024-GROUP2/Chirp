@@ -15,32 +15,59 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 7.0.x
+        
+      # Restore
     - name: Restore dependencies
       run: dotnet restore
+      
+      # Build
     - name: Build
       run: dotnet build --no-restore
+      
+      # Test
     - name: Test
       run: dotnet test --no-build --verbosity normal
+      
+      # Publish for Linux
     - name: Publish Linux
-      run: 
-        dotnet publish src/Chirp.CLI/Chirp.CLI.csproj -r linux-x64 -o publish/linux-x64
-        zip -r Chirp_CLI_linux-x64.zip publish/linux-x64
+      run: dotnet publish src/Chirp.CLI/Chirp.CLI.csproj -r linux-x64 -o publish/linux-x64
+      
+      # Zip Linux artifacts
+    - name: Zip Linux Artifacts
+      run: zip -r Chirp_CLI_linux-x64.zip publish/linux-x64
+      
+      # Publish for Windows
     - name: Publish Windows
-      run: 
-        dotnet publish src/Chirp.CLI/Chirp.CLI.csproj -r win-x64 -o publish/win-x64
-        zip -r Chirp_CLI_win-x64.zip publish/win-x64
+      run: dotnet publish src/Chirp.CLI/Chirp.CLI.csproj -r win-x64 -o publish/win-x64
+      
+      # Zip Windows artifacts
+    - name: Zip Windows Artifacts
+      run: zip -r Chirp_CLI_win-x64.zip publish/win-x64
+      
+      # Publish for MacOS x64
     - name: Publish MacOS x64
-      run: 
-        dotnet publish src/Chirp.CLI/Chirp.CLI.csproj -r osx-x64 -o publish/osx-x64
-        zip -r Chirp_CLI_osx-x64.zip publish/osx-x64
+      run: dotnet publish src/Chirp.CLI/Chirp.CLI.csproj -r osx-x64 -o publish/osx-x64
+      
+      # Zip MacOS x64 artifacts
+    - name: Zip MacOS x64 Artifacts
+      run: zip -r Chirp_CLI_osx-x64.zip publish/osx-x64
+      
+      # Publish for MacOS ARM
     - name: Publish MacOS ARM
-      run: 
-        dotnet publish src/Chirp.CLI/Chirp.CLI.csproj -r osx-arm64 -o publish/osx-arm64
-        zip -r Chirp_CLI_osx-arm64.zip publish/osx-arm64
+      run: dotnet publish src/Chirp.CLI/Chirp.CLI.csproj -r osx-arm64 -o publish/osx-arm64
+      
+      # Zip MacOS ARM artifacts
+    - name: Zip MacOS ARM Artifacts
+      run: zip -r Chirp_CLI_osx-arm64.zip publish/osx-arm64
 
+      # Create release
     - name: Create Release
       uses: softprops/action-gh-release@v2
       with:
-        files: "Chirp*"
+        files: |
+          Chirp_CLI_linux-x64.zip
+          Chirp_CLI_win-x64.zip
+          Chirp_CLI_osx-x64.zip
+          Chirp_CLI_osx-arm64.zip
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
