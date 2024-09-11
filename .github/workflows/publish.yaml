@@ -62,7 +62,7 @@ jobs:
 
       # Create release
     - name: Create Release
-      uses: softprops/action-gh-release@v2
+      uses: softprops/action-gh-release@v1
       with:
         files: |
           Chirp_CLI_linux-x64.zip
