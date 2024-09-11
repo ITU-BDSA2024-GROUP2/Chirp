@@ -1,0 +1,16 @@
+name: .NET
+
+on:
+  push:
+    branches: [ $default-branch ]
+  pull_request:
+    branches: [ $default-branch ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - run: echo "HEEEEEEJ"
+        
