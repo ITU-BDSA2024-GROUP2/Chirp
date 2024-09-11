@@ -60,7 +60,7 @@ jobs:
     - name: Zip MacOS ARM Artifacts
       run: zip -r Chirp_CLI_osx-arm64.zip publish/osx-arm64
 
-      # Create release
+      # Create publish
     - name: Create Release
       uses: softprops/action-gh-release@v2
       with:
