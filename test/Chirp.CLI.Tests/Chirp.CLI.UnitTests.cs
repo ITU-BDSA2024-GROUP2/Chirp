@@ -43,8 +43,7 @@ namespace Chirp.CLI.UnitTests
             //Assert
             Assert.Equal(expectedResult, result);
         }
-
-       
+        
         [Theory]
         [InlineData("I am lost")]
         [InlineData("Where is the fridge?")]
@@ -61,23 +60,21 @@ namespace Chirp.CLI.UnitTests
         }
         
    
-        [Fact]
-        public void PrintingCheepsTest()
+        [Theory]
+        [InlineData("Michael", "I have a ball", 1690891760, "Michael @ 01/08/23 14:09:20: I have a ball")]
+        [InlineData("Harald", "I am him", 1726056884, "Harald @ 11/09/24 14:14:44: I am him")]
+        public void PrintingCheepsTest(string author, string message, long timestamp, string expectedResult )
         {
             //Arrange
-            Cheep Cheep1 = new Cheep("Michael", "I have a ball", 1690891760);
-            Cheep Cheep2 = new Cheep("Poppy", "My balls are gone", 1690978778);
-            Cheep Cheep3 = new Cheep("Sam", "I took Poppy's balls :)", 1690979858);
+            Cheep Cheep = new Cheep(author, message, timestamp);
             //Act
-            //string result = Cheep1.ToString();
-            //IEnumerable<Cheep> cheeps = new IEnumerable<>();
-            //cheeps.append(Cheep1);
-            // cheeps.append(Cheep2);
-            // cheeps.append(Cheep3);
-            //UserInterface.printCheeps(cheeps);
+            string result = Cheep.ToString();
+            List<Cheep> cheeps = new List<>();
+            cheeps.Add(Cheep);
+            UserInterface.printCheeps(cheeps);
+
             //Assert
-            string expectedResult = "Michael @ 01/08/23 14:09:20: I have a ball";
-            //Assert.Equal(expectedResult, _consoleOutput.ToString()); 
+            Assert.Equal(results, _consoleOutput.ToString()); 
         }
 
         //Database Read and Store
