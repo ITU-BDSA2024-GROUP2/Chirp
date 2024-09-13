@@ -18,7 +18,7 @@ Options:
   --version     Show version.
 ";
 
-        private static IDatabaseRepository<Cheep> database = new CSVDatabase<Cheep>();
+        private static IDatabaseRepository<Cheep> database = CSVDatabase<Cheep>.Instance;
         
         static int ShowHelp(string help) { Console.WriteLine(help); return 0; }
         static int ShowVersion(string version) { Console.WriteLine(version); return 0; }

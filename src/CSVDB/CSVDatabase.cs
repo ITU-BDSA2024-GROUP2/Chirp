@@ -8,6 +8,27 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
 {
     private const string path = "../../data/chirp_cli_db.csv";
 
+    private static CSVDatabase<T>? instance = null;
+
+    private static readonly object padlock = new object();
+    
+    CSVDatabase() { }
+
+    public static CSVDatabase<T> Instance
+    {
+        get
+        {
+            lock (padlock)
+            {
+                if (instance is null)
+                {
+                    instance = new CSVDatabase<T>();
+                }
+                return instance;
+            }
+        }
+    }
+
     public IEnumerable<T> Read(int? limit = null)
     {
         if (limit.HasValue)
