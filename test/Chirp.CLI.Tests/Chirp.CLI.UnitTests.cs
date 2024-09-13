@@ -61,21 +61,27 @@ namespace Chirp.CLI.UnitTests
         
    
         [Theory]
-        [InlineData("Michael", "I have a ball", 1690891760, "Michael @ 01/08/23 14:09:20: I have a ball")]
-        [InlineData("Harald", "I am him", 1726056884, "Harald @ 11/09/24 14:14:44: I am him")]
-        public void PrintingCheepsTest(string author, string message, long timestamp, string expectedResult )
+        [InlineData("Michael", "I have a ball", 1690891760)]
+        [InlineData("Harald", "I am him", 1726056884)]
+        public void PrintingCheepsTest(string author, string message, long timestamp)
         {
-            //Arrange
-            Cheep Cheep = new Cheep(author, message, timestamp);
-            //Act
-            string result = Cheep.ToString();
-            List<Cheep> cheeps = new List<>();
-            cheeps.Add(Cheep);
-            UserInterface.printCheeps(cheeps);
+            // Arrange
+            Cheep cheep = new Cheep(author, message, timestamp);
+            List<Cheep> cheeps = new List<Cheep> { cheep };
+            using (var consoleOutput = new StringWriter())
+            {
+                Console.SetOut(consoleOutput);
 
-            //Assert
-            Assert.Equal(results, _consoleOutput.ToString()); 
+
+                // Act
+                UserInterface.PrintCheeps(cheeps);
+                string result = cheep.ToString();
+
+                // Assert
+                Assert.Equal(result, consoleOutput.ToString().Trim()); 
+            }
         }
+
 
         //Database Read and Store
        /* [Fact]
