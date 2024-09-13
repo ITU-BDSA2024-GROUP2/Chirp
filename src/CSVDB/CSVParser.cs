@@ -2,7 +2,7 @@ using System.Globalization;
 using CsvHelper;
 using CsvHelper.Configuration;
 
-namespace Chirp.CLI;
+namespace CSVDB;
 
 public static class CSVParser
 {

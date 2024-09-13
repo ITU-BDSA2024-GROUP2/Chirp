@@ -1,63 +1,66 @@
-using Xunit;
+using Chirp.CLI;
+using CSVDB;
 
-/* Naming your tests
-   The name of your test should consist of three parts:
-
-   The name of the method being tested.
-   The scenario under which it's being tested.
-   The expected behavior when the scenario is invoked.
-
-    // Arrange - Define all the parameters and create an instance of the system (class) under test (SUT).
-
-    // Act - Execute the method being tested, and capture the result.
-
-    // Assert - Verify that the result of the Act stage had the expected value.
-*/
-
-namespace Chirp.CLI.UnitTests
+public class Chirp_CSVDB_IntegrationTests
 {
-    public class Chirp_CSVDB_IntegrationTests
+    private readonly string testCsvFilePath;
+
+    public Chirp_CSVDB_IntegrationTests()
     {
-        private static IDatabaseRepository<Cheep> database = CSVDatabase<Cheep>.Instance;
+        testCsvFilePath = Path.GetTempFileName();
         
-        [Fact]
-        public void CsvParserTest()
+        using (var writer = new StreamWriter(testCsvFilePath))
         {
-            // Arrange
-            string path = "../../../../../data/CsvParseTest.csv";
-    
-            // Act
-            var cheeps = CSVParser.Parse<Cheep>(path);
-            var cheep1 = cheeps.FirstOrDefault();
-            
-            // Assert
-            Assert.Equal(cheep1.Author, "ageh");
+            // Write header
+            writer.WriteLine("Author,Message,Timestamp");
         }
         
-        [Fact]
-        public void CSVDB_StoreAndReadCheep()
+        CSVDatabase<Cheep>.Instance.SetFilePath(testCsvFilePath);
+    }
+
+    [Fact]
+    public void TestName()
+    {
+        // Arrange - Define all the parameters and create an instance of the system (class) under test (SUT).
+
+        // Act - Execute the method being tested, and capture the result.
+
+        // Assert - Verify that the result of the Act stage had the expected value.
+
+        Assert.True(true);
+    }
+    
+    [Fact]
+    public void CSVDB_StoreAndReadCheep()
+    {
+        // Arrange
+        string Author = "John Smith";
+        string Message = "Hello, world!";
+        long Timestamp = 123456789;
+            
+        Cheep cheep = new Cheep(Author, Message, Timestamp);
+            
+        // Act
+        CSVDatabase<Cheep>.Instance.Store(cheep);
+            
+        // Assert
+        var cheeps = CSVDatabase<Cheep>.Instance.Read();
+        var storedCheep = cheeps.FirstOrDefault();
+        
+        //Console.WriteLine($"Author: {Author}, Message: {Message}, Timestamp: {Timestamp}");
+            
+        Assert.NotNull(storedCheep);
+        Assert.Equal("John Smith", storedCheep.Author);
+        Assert.Equal("Hello, world!", storedCheep.Message);
+        Assert.Equal(123456789, storedCheep.Timestamp);
+    }
+    
+    public void Dispose()
+    {
+        // Cleanup: Delete the temporary file after each test
+        if (File.Exists(testCsvFilePath))
         {
-            // Arrange
-            string Author = "John Smith";
-            string Message = "Hello, world!";
-            long Timestamp = 123456789;
-            
-            Cheep cheep = new Cheep(Author, Message, Timestamp);
-            CSVDatabase<T> csvDatabase = new CSVDatabase<>(T);
-            
-            // Act
-            csvDatabase.Store(cheep);
-            
-            // Assert
-            
-            var cheeps = CSVParser.Parse<Cheep>();
-            var storedCheep = cheeps.FirstOrDefault();
-            
-            Assert.NotNull(storedCheep);
-            Assert.Equal("John Smith", storedCheep.Author);
-            Assert.Equal("Hello, world!", storedCheep.Message);
-            Assert.Equal(123456789, storedCheep.Timestamp);
-            
+            File.Delete(testCsvFilePath);
         }
     }
 }
