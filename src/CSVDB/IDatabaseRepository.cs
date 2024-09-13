@@ -1,4 +1,4 @@
-namespace SimpleDB;
+namespace CSVDB;
 
 public interface IDatabaseRepository<T>
 {
