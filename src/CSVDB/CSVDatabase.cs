@@ -2,7 +2,7 @@
 using Chirp.CLI;
 using CsvHelper;
 
-namespace SimpleDB;
+namespace CSVDB;
 
 public sealed class CSVDatabase<T> : IDatabaseRepository<T>
 {
