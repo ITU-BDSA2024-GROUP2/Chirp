@@ -18,6 +18,7 @@ namespace Chirp.CLI.UnitTests
 {
     public class Chirp_CSVDB_IntegrationTests
     {
+        private static IDatabaseRepository<Cheep> database = CSVDatabase<Cheep>.Instance;
         
         [Fact]
         public void CsvParserTest()
@@ -33,7 +34,7 @@ namespace Chirp.CLI.UnitTests
             Assert.Equal(cheep1.Author, "ageh");
         }
         
-        /*[Fact]
+        [Fact]
         public void CSVDB_StoreAndReadCheep()
         {
             // Arrange
@@ -57,6 +58,6 @@ namespace Chirp.CLI.UnitTests
             Assert.Equal("Hello, world!", storedCheep.Message);
             Assert.Equal(123456789, storedCheep.Timestamp);
             
-        }*/
+        }
     }
 }
