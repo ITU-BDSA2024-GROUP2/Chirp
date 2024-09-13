@@ -63,6 +63,7 @@ namespace Chirp.CLI.UnitTests
         [Theory]
         [InlineData("Michael", "I have a ball", 1690891760)]
         [InlineData("Harald", "I am him", 1726056884)]
+        [InlineData("Anders", "I have Netflix", 1726056833)]
         public void PrintingCheepsTest(string author, string message, long timestamp)
         {
             // Arrange
