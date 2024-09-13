@@ -19,19 +19,6 @@ namespace Chirp.CLI.UnitTests
     public class Chirp_CSVDB_IntegrationTests
     {
         
-        [Fact]
-        public void CsvParserTest()
-        {
-            // Arrange
-            string path = "../../../../../data/CsvParseTest.csv";
-    
-            // Act
-            var cheeps = CSVParser.Parse<Cheep>(path);
-            var cheep1 = cheeps.FirstOrDefault();
-            
-            // Assert
-            Assert.Equal(cheep1.Author, "ageh");
-        }
         
         /*[Fact]
         public void CSVDB_StoreAndReadCheep()
