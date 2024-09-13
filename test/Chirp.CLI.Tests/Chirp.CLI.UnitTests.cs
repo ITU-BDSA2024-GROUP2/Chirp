@@ -63,6 +63,7 @@ namespace Chirp.CLI.UnitTests
         [Theory]
         [InlineData("Michael", "I have a ball", 1690891760)]
         [InlineData("Harald", "I am him", 1726056884)]
+        [InlineData("Anders", "I have Netflix", 1726056833)]
         public void PrintingCheepsTest(string author, string message, long timestamp)
         {
             // Arrange
@@ -81,30 +82,6 @@ namespace Chirp.CLI.UnitTests
                 Assert.Equal(result, consoleOutput.ToString().Trim()); 
             }
         }
-
-
-        //Database Read and Store
-       /* [Fact]
-        public void SavingAndReadingCheepsInDatabaseTest()
-        {
-            //Arrange
-            Cheep cheep1 = new Cheep("Michael", "I have a ball", 1690891760);
-            Cheep cheep2 = new Cheep("Poppy", "My balls are gone", 1690978778);
-            Cheep cheep3 = new Cheep("Sam", "I took Poppy's balls :)", 1690979858);
-            private static IDatabaseRepository<Cheep> databaseTest = new CSVDatabase<Cheep>();
-
-            //Act
-            databaseTest.Store(cheep1);
-            databaseTest.Store(cheep2);
-            databaseTest.Store(cheep3);
-      
-            List<Cheep> cheepsTest = database.Read(3).ToList();
-  
-            //Assert
-            Assert.Equal(Cheep1, cheepsTest[0]);
-            //Assert.Equal(Cheep2, cheepsTest[1]);
-            //Assert.Equal(Cheep3, cheepsTest[2]);
-        }*/
     
     }
 }
