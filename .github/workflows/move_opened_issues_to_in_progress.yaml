@@ -6,6 +6,9 @@ on:
 jobs:
   move-assigned-card:
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      project: write
     steps:
       - uses: alex-page/github-project-automation-plus@7ffb872c64bd809d23563a130a0a97d01dfa8f43
         with:
