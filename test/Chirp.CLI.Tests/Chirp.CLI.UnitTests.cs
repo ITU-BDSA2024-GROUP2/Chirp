@@ -26,31 +26,21 @@ namespace Chirp.CLI.UnitTests
             Assert.True(true);
 
         }
-        
-        [Theory]
-        [InlineData(1690891760, "01/08/23 14:09:20")]
-        [InlineData(1690978778, "02/08/23 14:19:38")]
-        [InlineData(1690979858, "02/08/23 14:37:38")]
-        [InlineData(1726056884, "11/09/24 14:14:44")]
-        public void GetFormattedTimeTest(long timeInLong, string expectedResult)
-        {
-            //Arrange
-            Cheep cheep1 = new Cheep("Michael", "I have a ball", timeInLong);
-            //Act
-            string output = cheep1.GetFormattedTime(timeInLong);
-            //Assert
-            Assert.Equal(expectedResult, output);
-        }
    
-        [Fact]
-        public void CheepToStringTest()
+        [Theory]
+        [InlineData("Michael", "I have a ball", 1690891760, 
+            "Michael @ 01/08/23 14:09:20: I have a ball")]
+        [InlineData("Poppy", "My balls are gone", 1690978778,
+            "Poppy @ 02/08/23 14:19:38: My balls are gone")]
+        [InlineData("Sam", "I took Poppy's balls :)", 1690979858,
+            "Sam @ 02/08/23 14:37:38: I took Poppy's balls :)")]
+        public void CheepToStringTest(string author, string message, long timeStamp, string expectedResult)
         {
             //Arrange
-            Cheep Cheep1 = new Cheep("Michael", "I have a ball", 1726056884);
+            Cheep cheep = new Cheep(author, message, timeStamp);
             //Act
-            string result = Cheep1.ToString();
+            string result = cheep.ToString();
             //Assert
-            string expectedResult = "Michael @ 11/09/24 14:14:44: I have a ball";
             Assert.Equal(expectedResult, result);
         }
 
@@ -76,8 +66,8 @@ namespace Chirp.CLI.UnitTests
         {
             //Arrange
             Cheep Cheep1 = new Cheep("Michael", "I have a ball", 1690891760);
-            //Cheep Cheep2 = new Cheep("Poppy", "My balls are gone", 1690978778);
-            //Cheep Cheep3 = new Cheep("Sam", "I took Poppy's balls :)", 1690979858);
+            Cheep Cheep2 = new Cheep("Poppy", "My balls are gone", 1690978778);
+            Cheep Cheep3 = new Cheep("Sam", "I took Poppy's balls :)", 1690979858);
             //Act
             //string result = Cheep1.ToString();
             //IEnumerable<Cheep> cheeps = new IEnumerable<>();
@@ -91,7 +81,7 @@ namespace Chirp.CLI.UnitTests
         }
 
         //Database Read and Store
-        /*[Fact]
+       /* [Fact]
         public void SavingAndReadingCheepsInDatabaseTest()
         {
             //Arrange
@@ -109,8 +99,8 @@ namespace Chirp.CLI.UnitTests
   
             //Assert
             Assert.Equal(Cheep1, cheepsTest[0]);
-            Assert.Equal(Cheep2, cheepsTest[1]);
-            Assert.Equal(Cheep3, cheepsTest[2]);
+            //Assert.Equal(Cheep2, cheepsTest[1]);
+            //Assert.Equal(Cheep3, cheepsTest[2]);
         }*/
     
     }
