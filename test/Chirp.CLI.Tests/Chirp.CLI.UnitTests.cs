@@ -36,8 +36,10 @@ public class Chirp_CLI_UnitTests
     {
         //Arrange
         Cheep cheep = new Cheep(author, message, timeStamp);
+		
         //Act
         string result = cheep.ToString();
+
         //Assert
         Assert.Equal(expectedResult, result);
     }
