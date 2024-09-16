@@ -22,20 +22,22 @@ public class Chirp_CLI_UnitTests
         // Assert - Verify that the result of the Act stage had the expected value.
 
         Assert.True(true);
-
     }
 
     [Theory]
-    [InlineData("Michael", "I have a ball", 1690891760, 
-        "Michael @ 01/08/23 14:09:20: I have a ball")]
-    [InlineData("Poppy", "My balls are gone", 1690978778,
-        "Poppy @ 02/08/23 14:19:38: My balls are gone")]
-    [InlineData("Sam", "I took Poppy's balls :)", 1690979858,
-        "Sam @ 02/08/23 14:37:38: I took Poppy's balls :)")]
-    public void CheepToStringTest(string author, string message, long timeStamp, string expectedResult)
+    [InlineData("Michael", "I have a ball", 1690891760)]
+    [InlineData("Poppy", "My balls are gone", 1690978778)]
+    [InlineData("Sam", "I took Poppy's balls :)", 1690979858)]
+    public void CheepToStringTest(string author, string message, long timeStamp)
     {
         //Arrange
         Cheep cheep = new Cheep(author, message, timeStamp);
+
+		DateTime utcTime = DateTimeOffset.FromUnixTimeSeconds(timeStamp).UtcDateTime;
+        DateTime localTime = utcTime.ToLocalTime();
+
+        // Constructs the expected result based on the local time zone
+        string expectedResult = $"{author} @ {localTime.ToString("dd'/'MM'/'yy HH':'mm':'ss")}: {message}";
 		
         //Act
         string result = cheep.ToString();
