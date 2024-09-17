@@ -1,4 +1,5 @@
-namespace DefaultNamespace;
+using Chirp.CLI;
+using CSVDB;
 
 public class Chirp_CLI_IntegrationTests
 {

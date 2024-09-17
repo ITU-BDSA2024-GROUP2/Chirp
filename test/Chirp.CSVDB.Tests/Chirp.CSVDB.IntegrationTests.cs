@@ -18,18 +18,6 @@ public class Chirp_CSVDB_IntegrationTests
         
         CSVDatabase<Cheep>.Instance.SetFilePath(testCsvFilePath);
     }
-
-    [Fact]
-    public void TestName()
-    {
-        // Arrange - Define all the parameters and create an instance of the system (class) under test (SUT).
-
-        // Act - Execute the method being tested, and capture the result.
-
-        // Assert - Verify that the result of the Act stage had the expected value.
-
-        Assert.True(true);
-    }
     
     [Fact]
     public void CSVDB_StoreAndReadCheep()
