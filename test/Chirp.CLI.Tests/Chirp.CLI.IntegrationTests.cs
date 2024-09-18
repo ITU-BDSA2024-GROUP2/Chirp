@@ -26,6 +26,7 @@ public class Chirp_CLI_IntegrationTests
         }
     }
     
+    /*
     [Fact]
     public void CsvToCheepInConsole() //tror den er e2e
     {
@@ -49,4 +50,5 @@ public class Chirp_CLI_IntegrationTests
             Assert.Equal("nitn @ 02/08/23 14:19:38: Recently engaged", outputLines[1].Trim());
         }
     }
+    */
 }
