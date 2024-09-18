@@ -19,10 +19,12 @@ Options:
   -h --help     Show this screen.
   --version     Show version.
 ";
-        private static readonly string baseUrl = "http://localhost:5282";
-        private static HttpClient client = new()
+
+        private const string BaseUrl = "http://localhost:5282";
+
+        private static readonly HttpClient Client = new()
         {
-            BaseAddress = new Uri(baseUrl),
+            BaseAddress = new Uri(BaseUrl),
         };
         
         static int ShowHelp(string help) { Console.WriteLine(help); return 0; }
@@ -31,8 +33,8 @@ Options:
 
         public static void Main(string[] args)
         {
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            Client.DefaultRequestHeaders.Accept.Clear();
+            Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             
             //Source: https://docopt.github.io/docopt.net/dev/#api
             
@@ -66,7 +68,7 @@ Options:
 
         private static async Task RunReadCommand(int limit)
         {
-            var cheeps = await client.GetFromJsonAsync<List<Cheep>>("/cheeps");
+            var cheeps = await Client.GetFromJsonAsync<List<Cheep>>("/cheeps");
             
             if (cheeps != null) UserInterface.PrintCheeps(cheeps);
         }
@@ -75,7 +77,7 @@ Options:
         {
             var newCheep = Cheep.CreateCheep(message);
             
-            using var response = await client.PostAsJsonAsync($"/cheep", newCheep);
+            using var response = await Client.PostAsJsonAsync($"/cheep", newCheep);
             response.EnsureSuccessStatusCode();
             
             Console.WriteLine($"Post successful: {newCheep.ToString()}");
