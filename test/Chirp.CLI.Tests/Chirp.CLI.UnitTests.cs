@@ -51,7 +51,6 @@ public class Chirp_CLI_UnitTests
         Assert.Equal(expectedCheep, cheep);
     }
         
-        
     [Fact]
     public void CsvParserTest()
     {
