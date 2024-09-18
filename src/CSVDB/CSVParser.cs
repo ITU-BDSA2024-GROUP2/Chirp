@@ -11,7 +11,7 @@ public static class CSVParser
     {
         var config = new CsvConfiguration(CultureInfo.InvariantCulture)
         {
-            HasHeaderRecord = true // The CSV file has a header row
+            HasHeaderRecord = true, // The CSV file has a header row
         };
         
         // Source: https://joshclose.github.io/CsvHelper/getting-started/#reading-a-csv-file
