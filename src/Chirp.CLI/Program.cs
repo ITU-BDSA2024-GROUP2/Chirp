@@ -1,5 +1,7 @@
 ﻿using DocoptNet;
-using CSVDB;
+using System.Net;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
 
 namespace Chirp.CLI
 {
@@ -17,8 +19,11 @@ Options:
   -h --help     Show this screen.
   --version     Show version.
 ";
-
-        private static IDatabaseRepository<Cheep> database = CSVDatabase<Cheep>.Instance;
+        private static readonly string baseUrl = "http://localhost:5282";
+        private static HttpClient client = new()
+        {
+            BaseAddress = new Uri(baseUrl),
+        };
         
         static int ShowHelp(string help) { Console.WriteLine(help); return 0; }
         static int ShowVersion(string version) { Console.WriteLine(version); return 0; }
@@ -26,6 +31,9 @@ Options:
 
         public static void Main(string[] args)
         {
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            
             //Source: https://docopt.github.io/docopt.net/dev/#api
             
             Docopt.CreateParser(usage)
@@ -46,25 +54,31 @@ Options:
                     Console.WriteLine("Bad input: <limit> must be an integer greater than 0.");
                     return 1;
                 }
-                RunReadCommand(limit);
+                RunReadCommand(limit).Wait();
             }
             else if (arguments["cheep"].IsTrue)
             {
                 string message = arguments["<message>"].ToString();
-                RunCheepCommand(message);
+                RunCheepCommand(message).Wait();
             }
             return 0;
         }
 
-        private static void RunReadCommand(int limit)
+        private static async Task RunReadCommand(int limit)
         {
-            List<Cheep> cheeps = database.Read(limit).ToList();
-            UserInterface.PrintCheeps(cheeps);
+            var cheeps = await client.GetFromJsonAsync<List<Cheep>>("/cheeps");
+            
+            if (cheeps != null) UserInterface.PrintCheeps(cheeps);
         }
 
-        private static void RunCheepCommand(string message)
+        private static async Task RunCheepCommand(string message)
         {
-            database.Store(Cheep.CreateCheep(message));
+            var newCheep = Cheep.CreateCheep(message);
+            
+            using var response = await client.PostAsJsonAsync($"/cheep", newCheep);
+            response.EnsureSuccessStatusCode();
+            
+            Console.WriteLine($"Post successful: {newCheep.ToString()}");
         }
     }
 }

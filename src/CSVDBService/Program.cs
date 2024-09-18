@@ -1,24 +1,13 @@
 using Chirp.CLI;
 using CSVDB;
 
-public class Program
-{
-    private static IDatabaseRepository<Cheep> database = CSVDatabase<Cheep>.Instance;
-    public static void Main(string[] args)
-    {
-        var builder = WebApplication.CreateBuilder(args);
-        var app = builder.Build();
+var database = CSVDatabase<Cheep>.Instance;
 
-        app.MapGet("/cheeps", () =>
-        {
-            return database.Read();
-        });
+var builder = WebApplication.CreateBuilder(args);
+var app = builder.Build();
 
-        app.MapPost("/cheep", (Cheep cheep) =>
-        {
-            database.Store(cheep);
-        });
+app.MapGet("/cheeps", () => database.Read());
 
-        app.Run();
-    }
-}
+app.MapPost("/cheep", (Cheep cheep) => database.Store(cheep));
+
+app.Run();
