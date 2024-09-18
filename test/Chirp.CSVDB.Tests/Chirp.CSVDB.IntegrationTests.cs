@@ -43,6 +43,7 @@ public class Chirp_CSVDB_IntegrationTests
         Assert.Equal(123456789, storedCheep.Timestamp);
     }
     
+    [Fact]
     public void Dispose()
     {
         // Cleanup: Delete the temporary file after each test

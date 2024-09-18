@@ -14,6 +14,6 @@ public class Chirp_CSVDB_UnitTests
         var cheep = cheeps.FirstOrDefault();
 
         // Assert
-        Assert.Equal(cheep.Author, "ageh");
+        Assert.Equal("ageh", cheep.Author);
     }
 }

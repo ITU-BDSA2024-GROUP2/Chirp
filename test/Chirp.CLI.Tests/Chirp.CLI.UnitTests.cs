@@ -63,9 +63,9 @@ public class Chirp_CLI_UnitTests
         var cheep1 = cheeps.FirstOrDefault();
         
         // Assert
-        Assert.Equal(cheep1.Author, "ageh");
-        Assert.Equal(cheep1.Message, "SIIIIIUUUUUUUU!");
-        Assert.Equal(cheep1.Timestamp, 1690891760);
+        Assert.Equal("ageh", cheep1.Author);
+        Assert.Equal("SIIIIIUUUUUUUU!", cheep1.Message);
+        Assert.Equal(1690891760, cheep1.Timestamp);
     }
         
 }

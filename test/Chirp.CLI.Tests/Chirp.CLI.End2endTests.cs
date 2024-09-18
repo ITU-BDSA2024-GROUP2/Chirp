@@ -66,6 +66,5 @@ public class Chirp_CLI_End2endTests
         Assert.NotNull(lastCheep);
         Assert.Equal("Hello!!!", lastCheep.Message);
         Assert.Equal(Environment.UserName, lastCheep.Author);
-        Assert.NotNull(lastCheep.Timestamp);
     }
 }
