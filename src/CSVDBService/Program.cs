@@ -6,10 +6,8 @@ var database = CSVDatabase<Cheep>.Instance;
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
-app.MapGet("/", () => "Hello World!");
+app.MapGet("/cheeps", () => database.Read());
 
-//app.MapGet("/", () => database.Read());
-
-app.MapPost("/", (Cheep cheep) => database.Store(cheep));
+app.MapPost("/cheep", (Cheep cheep) => database.Store(cheep));
 
 app.Run();
