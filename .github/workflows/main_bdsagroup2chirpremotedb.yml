@@ -27,7 +27,7 @@ jobs:
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
-          name: .net-app
+          name: myapp
           path: ./myapp
 
   deploy:
@@ -37,20 +37,20 @@ jobs:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
-      id-token: write #This is required for requesting the JWT
+      id-token: write # This is required for requesting the JWT
 
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
-          name: .net-app
-      
+          name: myapp
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_FEB48E7F659E4B2A8FE083E92A6DB0DE }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_2CB3029D3BD24C7EA134FE7C25CD4F98 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_27E2F68EC4F94C25861FA0B53C03DDED }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
@@ -58,4 +58,4 @@ jobs:
         with:
           app-name: 'bdsagroup2chirpremotedb'
           slot-name: 'Production'
-          package: ./myapp
+          package: myapp
