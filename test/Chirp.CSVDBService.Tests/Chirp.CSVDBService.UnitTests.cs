@@ -7,10 +7,7 @@ public class ChirpCSVDBServiceUnitTests
 {
     private const string BaseUrl = "http://localhost:5282";
 
-    private static readonly HttpClient Client = new()
-    {
-        BaseAddress = new Uri(BaseUrl),
-    };
+    private static readonly HttpClient Client = new() { BaseAddress = new Uri(BaseUrl) };
 
     [Fact]
     public async Task GETCheeps_ReturnsStatusCode200AndListOfCheeps()
@@ -37,5 +34,6 @@ public class ChirpCSVDBServiceUnitTests
         using var response = await Client.PostAsJsonAsync($"/cheep", newCheep);
         
         // Assert
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
 }
