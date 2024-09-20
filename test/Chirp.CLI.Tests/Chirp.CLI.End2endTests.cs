@@ -1,40 +1,29 @@
 using Chirp.CLI;
 using CSVDB;
 using System.Diagnostics;
+using System.Net.Http.Json;
 
 public class Chirp_CLI_End2endTests
 {
-    private readonly string directoryPath = "../../../../../src/Chirp.CLI";
-    private readonly string csvPath = "../../../../../data/chirp_cli_db.csv";
-    
+   
+    private const string BaseUrl = "http://localhost:5282";
+    private static readonly HttpClient Client = new HttpClient { BaseAddress = new Uri(BaseUrl) };
+
     [Fact]
-    public void CSVDB_cheepCommand()
+    public async Task WebService_CheepCommand()
     {
-        string command = "cheep Hello!!!";
+        // Arrange
+        var newCheep = Cheep.CreateCheep("I am a TEST!!");
         
-        var process = new Process
-        {
-            StartInfo = new ProcessStartInfo
-            {
-                FileName = "dotnet",
-                WorkingDirectory = @$"{directoryPath}",
-                Arguments = $"run {command}",
-                RedirectStandardOutput = true,
-                UseShellExecute = false,
-                CreateNoWindow = true
-            }
-        };
+        // Act
+        HttpResponseMessage postResponse = await Client.PostAsJsonAsync("/cheep", newCheep);
         
-        process.Start();
-        string output = process.StandardOutput.ReadToEnd();
-        process.WaitForExit();
+        var cheeps = await Client.GetFromJsonAsync<List<Cheep>>("/cheeps");
 
-        CSVDatabase<Cheep>.Instance.SetFilePath(csvPath);
-        var cheeps = CSVDatabase<Cheep>.Instance.Read();
-        var lastCheep = cheeps.LastOrDefault(); 
-
-        Assert.NotNull(lastCheep);
-        Assert.Equal("Hello!!!", lastCheep.Message);
-        Assert.Equal(Environment.UserName, lastCheep.Author);
+        // Assert
+        Assert.NotNull(cheeps);
+        Assert.Contains(cheeps, c => c.Message == "I am a TEST!!" && c.Author == Environment.UserName);
+        Assert.True(postResponse.IsSuccessStatusCode);
+        
     }
 }

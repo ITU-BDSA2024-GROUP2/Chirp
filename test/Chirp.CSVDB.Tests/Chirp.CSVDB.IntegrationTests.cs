@@ -34,8 +34,6 @@ public class Chirp_CSVDB_IntegrationTests
         // Assert
         var cheeps = CSVDatabase<Cheep>.Instance.Read();
         var storedCheep = cheeps.FirstOrDefault();
-        
-        //Console.WriteLine($"Author: {Author}, Message: {Message}, Timestamp: {Timestamp}");
             
         Assert.NotNull(storedCheep);
         Assert.Equal("John Smith", storedCheep.Author);

@@ -1,15 +1,5 @@
-using System.Reflection;
-using System;
 using Chirp.CLI;
 using CSVDB;
-
-/* Naming your tests
-   The name of your test should consist of three parts:
-   
-   The name of the method being tested.
-   The scenario under which it's being tested.
-   The expected behavior when the scenario is invoked.
-*/
 
 public class Chirp_CLI_UnitTests
 {
