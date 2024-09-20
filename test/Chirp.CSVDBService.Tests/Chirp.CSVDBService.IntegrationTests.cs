@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Http.Json;
 using Chirp.CLI;
 
-public class ChirpCSVDBServiceUnitTests
+public class ChirpCSVDBServiceIntegrationTests
 {
     private const string BaseUrl = "http://localhost:5282";
 
@@ -25,15 +25,22 @@ public class ChirpCSVDBServiceUnitTests
     }
     
     [Fact]
-    public async Task POSTCheep_ReturnsStatusCode200AndStoresCheep()
+    public async Task POSTCheep_ReturnsStatusCode200AndListOfCheeps()
     {
         // Arrange
         var newCheep = Cheep.CreateCheep("Hello from CSVDBService Unit Test");
         
         // Act
+        var cheepsBefore = await Client.GetFromJsonAsync<List<Cheep>>("/cheeps");
+        var beforeSize = cheepsBefore.Count;
+        
         using var response = await Client.PostAsJsonAsync($"/cheep", newCheep);
+        var cheepsAfter = await Client.GetFromJsonAsync<List<Cheep>>("/cheeps");
+        var afterSize = cheepsAfter.Count;
         
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.NotNull(cheepsAfter);
+        Assert.NotEqual(beforeSize, afterSize);
     }
 }
