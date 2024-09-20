@@ -9,8 +9,6 @@ public class Chirp_CLI_End2endTests
     private const string BaseUrl = "http://localhost:5282";
     private static readonly HttpClient Client = new HttpClient { BaseAddress = new Uri(BaseUrl) };
 
-    private readonly string csvPath = "../../../../../data/chirp_cli_db.csv";
-
     [Fact]
     public async Task WebService_CheepCommand()
     {
