@@ -33,7 +33,6 @@ Options:
 
         public static void Main(string[] args)
         {
-            //test push
             Client.DefaultRequestHeaders.Accept.Clear();
             Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             
