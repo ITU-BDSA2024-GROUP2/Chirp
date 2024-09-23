@@ -67,9 +67,15 @@ Options:
             return 0;
         }
 
-        private static async Task RunReadCommand(int limit)
+        private static async Task RunReadCommand(int? limit = null)
         {
-            var cheeps = await Client.GetFromJsonAsync<List<Cheep>>("/cheeps");
+            string url = "/cheeps";
+            if (limit.HasValue && limit > 0)
+            {
+                url += $"?limit={limit}";
+            }
+            
+            var cheeps = await Client.GetFromJsonAsync<List<Cheep>>(url);
             
             if (cheeps != null) UserInterface.PrintCheeps(cheeps);
         }
