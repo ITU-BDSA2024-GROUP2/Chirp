@@ -5,7 +5,7 @@ using Chirp.CLI;
 
 public class ChirpCSVDBServiceIntegrationTests
 {
-    private const string BaseUrl = "http://localhost:5282";
+    private const string BaseUrl = "https://bdsagroup2chirpremotedb-eqdfdrh6hrdbceer.northeurope-01.azurewebsites.net/";
 
     private static readonly HttpClient Client = new() { BaseAddress = new Uri(BaseUrl) };
 

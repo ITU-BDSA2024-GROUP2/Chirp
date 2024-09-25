@@ -6,7 +6,7 @@ using System.Net.Http.Json;
 public class Chirp_CLI_End2endTests
 {
    
-    private const string BaseUrl = "http://localhost:5282";
+    private const string BaseUrl = "https://bdsagroup2chirpremotedb-eqdfdrh6hrdbceer.northeurope-01.azurewebsites.net/";
     private static readonly HttpClient Client = new HttpClient { BaseAddress = new Uri(BaseUrl) };
 
     [Fact]
