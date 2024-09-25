@@ -11,6 +11,20 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
     private CSVDatabase()
     {
         _filePath = "../../../../../data/chirp_cli_db.csv";
+
+        var currentDirectory = AppDomain.CurrentDomain.BaseDirectory;
+        _filePath = Path.Combine(currentDirectory, "data", "chirp_cli_db.csv");
+        
+        var directoryPath = Path.GetDirectoryName(_filePath);
+        if (!Directory.Exists(directoryPath))
+        {
+            Directory.CreateDirectory(directoryPath);
+        }
+        
+        if (!File.Exists(_filePath))
+        {
+            File.WriteAllText(_filePath, "Author,Message,Timestamp\n");
+        }
     }
 
     public static CSVDatabase<T> Instance
