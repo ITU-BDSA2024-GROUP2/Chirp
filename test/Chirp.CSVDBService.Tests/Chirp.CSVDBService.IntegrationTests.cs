@@ -39,7 +39,6 @@ public class ChirpCSVDBServiceIntegrationTests
         var afterSize = cheepsAfter.Count;
         
         // Assert
-        //Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.NotNull(cheepsAfter);
         Assert.NotEqual(beforeSize, afterSize);
     }
