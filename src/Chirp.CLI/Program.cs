@@ -20,7 +20,7 @@ Options:
   --version     Show version.
 ";
 
-        private const string BaseUrl = "https://bdsagroup2chirpremotedb-eqdfdrh6hrdbceer.northeurope-01.azurewebsites.net/";
+        private const string BaseUrl = "https://bdsagroup2chirpremotedb-eqdfdrh6hrdbceer.northeurope-01.azurewebsites.net";
 
         private static readonly HttpClient Client = new()
         {
