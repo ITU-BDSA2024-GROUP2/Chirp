@@ -10,6 +10,4 @@ app.MapGet("/cheeps", (int? limit) => database.Read(limit));
 
 app.MapPost("/cheep", (Cheep cheep) => database.Store(cheep));
 
-app.MapPost("/", () => "Chirp");
-
 app.Run();
