@@ -1,6 +1,7 @@
 using Chirp.CLI;
 using CSVDB;
 using System.Diagnostics;
+using System.Net;
 using System.Net.Http.Json;
 
 public class Chirp_CLI_End2endTests
@@ -23,7 +24,7 @@ public class Chirp_CLI_End2endTests
         // Assert
         Assert.NotNull(cheeps);
         Assert.Contains(cheeps, c => c.Message == "I am a TEST!!" && c.Author == Environment.UserName);
-        Assert.True(postResponse.IsSuccessStatusCode);
+        Assert.Equal(HttpStatusCode.OK, postResponse.StatusCode);;
         
     }
 }
