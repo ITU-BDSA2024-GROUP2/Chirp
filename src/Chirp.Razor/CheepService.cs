@@ -18,9 +18,11 @@ public class CheepService : ICheepService
 
     public List<CheepViewModel> GetCheepsFromAuthor(string author)
     {
+        DBFacade dbFacade = new DBFacade();
+        List<CheepViewModel> cheeps = dbFacade.ReadCheeps();
+        
         // filter by the provided author name
-        //return _cheeps.Where(x => x.Author == author).ToList();
-        return null;
+        return cheeps.Where(x => x.Author == author).ToList();
     }
 
     private static string UnixTimeStampToDateTimeString(double unixTimeStamp)
