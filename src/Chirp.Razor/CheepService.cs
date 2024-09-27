@@ -2,24 +2,24 @@ using Chirp.Razor;
 
 public interface ICheepService
 {
-    public List<CheepViewModel> GetCheeps();
-    public List<CheepViewModel> GetCheepsFromAuthor(string author);
+    public List<CheepViewModel> GetCheeps(int pageNumber, int pageSize);
+    public List<CheepViewModel> GetCheepsFromAuthor(string author, int pageNumber, int pageSize);
 }
 
 public class CheepService : ICheepService
 {
-    public List<CheepViewModel> GetCheeps()
+    public List<CheepViewModel> GetCheeps(int pageNumber, int pageSize)
     {
         DBFacade dbFacade = new DBFacade();
-        List<CheepViewModel> cheeps = dbFacade.ReadCheeps();
+        List<CheepViewModel> cheeps = dbFacade.ReadCheeps(pageNumber, pageSize);
         
         return cheeps;
     }
 
-    public List<CheepViewModel> GetCheepsFromAuthor(string author)
+    public List<CheepViewModel> GetCheepsFromAuthor(string author, int pageNumber, int pageSize)
     {
         DBFacade dbFacade = new DBFacade();
-        List<CheepViewModel> cheeps = dbFacade.ReadCheeps();
+        List<CheepViewModel> cheeps = dbFacade.ReadCheeps(pageNumber, pageSize);
         
         // filter by the provided author name
         return cheeps.Where(x => x.Author == author).ToList();

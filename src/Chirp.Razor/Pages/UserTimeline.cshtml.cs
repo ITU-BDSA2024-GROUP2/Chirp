@@ -7,15 +7,17 @@ public class UserTimelineModel : PageModel
 {
     private readonly ICheepService _service;
     public List<CheepViewModel> Cheeps { get; set; }
+    private int pageSize = 5;
 
     public UserTimelineModel(ICheepService service)
     {
         _service = service;
     }
 
-    public ActionResult OnGet(string author)
+    public ActionResult OnGet(string author, int? page)
     {
-        Cheeps = _service.GetCheepsFromAuthor(author);
+        int currentPage = page ?? 1;
+        Cheeps = _service.GetCheepsFromAuthor(author,currentPage,pageSize);
         return Page();
     }
 }

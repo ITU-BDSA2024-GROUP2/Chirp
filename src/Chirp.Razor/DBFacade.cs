@@ -12,14 +12,15 @@ public class DBFacade
         _sqlDBFilePath = sqlDBFilePath;
     }
 
-    public List<CheepViewModel> ReadCheeps() // Skal denne laves async??
+    public List<CheepViewModel> ReadCheeps(int pageNumber, int pageSize) // Skal denne laves async??
     {
         List<CheepViewModel> cheeps = new List<CheepViewModel>();
         
         var queryString = @"SELECT u.username, m.text, m.pub_date
                             FROM message m
                             JOIN user u ON m.author_id = u.user_id
-                            ORDER BY m.pub_date DESC";
+                            ORDER BY m.pub_date DESC
+                            LIMIT {pageSize} OFFSET {(pageNumber - 1) * pageSize}";
         
         using (var connection = new SqliteConnection($"Data Source={_sqlDBFilePath}"))
         {
