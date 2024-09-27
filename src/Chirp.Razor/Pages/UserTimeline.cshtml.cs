@@ -7,7 +7,7 @@ public class UserTimelineModel : PageModel
 {
     private readonly ICheepService _service;
     public List<CheepViewModel> Cheeps { get; set; }
-    private int pageSize = 5;
+    private int pageSize = 32;
 
     public UserTimelineModel(ICheepService service)
     {
