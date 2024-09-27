@@ -50,4 +50,34 @@ public class DBFacade
         var Cheep = CheepViewModel.CreateCheep(author, message, pubDate);
         return Cheep;
     }
+    
+    public List<CheepViewModel> ReadCheepsFromAuthor(string author) 
+    {
+        List<CheepViewModel> cheeps = new List<CheepViewModel>();
+        
+        var queryString = @"SELECT u.username, m.text, m.pub_date
+                            FROM message m
+                            JOIN user u ON m.author_id = u.user_id
+                            WHERE u.username = @author
+                            ORDER BY m.pub_date DESC";
+        
+        using (var connection = new SqliteConnection($"Data Source={_sqlDBFilePath}"))
+        {
+            connection.Open();
+            
+            var command = connection.CreateCommand();
+            command.CommandText = queryString;
+            
+            using var reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                var dataRecord = (IDataRecord)reader;
+
+                var cheep = ReadSingleRow(dataRecord);
+                cheeps.Add(cheep);
+            }
+            reader.Close();
+        }
+        return cheeps;
+    }
 }
