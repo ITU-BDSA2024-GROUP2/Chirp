@@ -12,14 +12,34 @@ public class DBFacade
         _sqlDBFilePath = sqlDBFilePath;
     }
 
-    public List<CheepViewModel> ReadCheeps() // Skal denne laves async??
+    public List<CheepViewModel> ReadCheeps()
+    {
+        var queryString = @"SELECT u.username, m.text, m.pub_date
+                                FROM message m
+                                JOIN user u ON m.author_id = u.user_id
+                                ORDER BY m.pub_date DESC";
+        
+        return ExecuteQuery(queryString);
+    }
+
+    public List<CheepViewModel> ReadCheepsFromAuthor(string author)
+    {
+        var queryString = @"SELECT u.username, m.text, m.pub_date
+                                FROM message m
+                                JOIN user u ON m.author_id = u.user_id
+                                WHERE u.username = @author
+                                ORDER BY m.pub_date DESC";
+        
+        var parameter = new Dictionary<string, object>
+        {
+            { "@author", author }
+        };
+        return ExecuteQuery(queryString, parameter);
+    }
+
+    public List<CheepViewModel> ExecuteQuery(string queryString, Dictionary<string, object>? parameters = null)
     {
         List<CheepViewModel> cheeps = new List<CheepViewModel>();
-        
-        var queryString = @"SELECT u.username, m.text, m.pub_date
-                            FROM message m
-                            JOIN user u ON m.author_id = u.user_id
-                            ORDER BY m.pub_date DESC";
         
         using (var connection = new SqliteConnection($"Data Source={_sqlDBFilePath}"))
         {
@@ -27,6 +47,14 @@ public class DBFacade
             
             var command = connection.CreateCommand();
             command.CommandText = queryString;
+            
+            if (parameters != null)
+            {
+                foreach (var parameter in parameters)
+                {
+                    command.Parameters.AddWithValue(parameter.Key, parameter.Value);
+                }
+            }
             
             using var reader = command.ExecuteReader();
             while (reader.Read())
@@ -47,37 +75,7 @@ public class DBFacade
         var message = dataRecord["text"].ToString();
         var pubDate = Convert.ToInt64(dataRecord["pub_date"]);
         
-        var Cheep = CheepViewModel.CreateCheep(author, message, pubDate);
-        return Cheep;
-    }
-    
-    public List<CheepViewModel> ReadCheepsFromAuthor(string author) 
-    {
-        List<CheepViewModel> cheeps = new List<CheepViewModel>();
-        
-        var queryString = @"SELECT u.username, m.text, m.pub_date
-                            FROM message m
-                            JOIN user u ON m.author_id = u.user_id
-                            WHERE u.username = @author
-                            ORDER BY m.pub_date DESC";
-        
-        using (var connection = new SqliteConnection($"Data Source={_sqlDBFilePath}"))
-        {
-            connection.Open();
-            
-            var command = connection.CreateCommand();
-            command.CommandText = queryString;
-            
-            using var reader = command.ExecuteReader();
-            while (reader.Read())
-            {
-                var dataRecord = (IDataRecord)reader;
-
-                var cheep = ReadSingleRow(dataRecord);
-                cheeps.Add(cheep);
-            }
-            reader.Close();
-        }
-        return cheeps;
+        var cheep = CheepViewModel.CreateCheep(author, message, pubDate);
+        return cheep;
     }
 }
