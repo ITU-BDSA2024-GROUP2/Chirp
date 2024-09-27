@@ -15,7 +15,7 @@ public class PublicModel : PageModel
         _service = service;
     }
 
-    public ActionResult OnGet(int? page)
+    public ActionResult OnGet([FromQuery] int? page)
     {
         int currentPage = page ?? 1;
         

@@ -20,7 +20,7 @@ public class DBFacade
                             FROM message m
                             JOIN user u ON m.author_id = u.user_id
                             ORDER BY m.pub_date DESC
-                            LIMIT {pageSize} OFFSET {(pageNumber - 1) * pageSize}";
+                            LIMIT @PageSize OFFSET @Offset";
         
         using (var connection = new SqliteConnection($"Data Source={_sqlDBFilePath}"))
         {
@@ -29,6 +29,9 @@ public class DBFacade
             var command = connection.CreateCommand();
             command.CommandText = queryString;
             
+            command.Parameters.AddWithValue("@PageSize", pageSize);
+            command.Parameters.AddWithValue("@Offset", (pageNumber - 1) * pageSize);
+
             using var reader = command.ExecuteReader();
             while (reader.Read())
             {

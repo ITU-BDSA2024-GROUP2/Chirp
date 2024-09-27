@@ -14,7 +14,7 @@ public class UserTimelineModel : PageModel
         _service = service;
     }
 
-    public ActionResult OnGet(string author, int? page)
+    public ActionResult OnGet(string author,[FromQuery] int? page)
     {
         int currentPage = page ?? 1;
         Cheeps = _service.GetCheepsFromAuthor(author,currentPage,pageSize);
