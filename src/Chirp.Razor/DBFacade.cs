@@ -11,16 +11,48 @@ public class DBFacade
     {
         _sqlDBFilePath = sqlDBFilePath;
     }
-
-    public List<CheepViewModel> ReadCheeps(int pageNumber, int pageSize) // Skal denne laves async??
+    
+    public List<CheepViewModel> ReadCheeps(int pageNumber, int pageSize) 
     {
-        List<CheepViewModel> cheeps = new List<CheepViewModel>();
-        
         var queryString = @"SELECT u.username, m.text, m.pub_date
                             FROM message m
                             JOIN user u ON m.author_id = u.user_id
                             ORDER BY m.pub_date DESC
-                            LIMIT @PageSize OFFSET @Offset";
+                            LIMIT @pageSize OFFSET @offset";
+        
+        int offset = (pageNumber - 1) * pageSize;
+        var parameter = new Dictionary<string, object>
+        {
+            { "@pageSize", pageSize},
+            { "@offset", offset}
+        };
+        
+        return ExecuteQuery(queryString);
+    }
+
+    public List<CheepViewModel> ReadCheepsFromAuthor(string author, int pageNumber, int pageSize)
+    {
+        var queryString = @"SELECT u.username, m.text, m.pub_date
+                                FROM message m
+                                JOIN user u ON m.author_id = u.user_id
+                                WHERE u.username = @author
+                                ORDER BY m.pub_date DESC
+                                LIMIT @pageSize OFFSET @offset";
+        
+        int offset = (pageNumber - 1) * pageSize;
+        var parameter = new Dictionary<string, object>
+        {
+            { "@author", author },
+            { "@pageSize", pageSize},
+            { "@offset", offset}
+        };
+        return ExecuteQuery(queryString, parameter);
+    }
+
+    public List<CheepViewModel> ExecuteQuery(string queryString, Dictionary<string, object>? parameters = null)
+    {
+        List<CheepViewModel> cheeps = new List<CheepViewModel>();
+
         
         using (var connection = new SqliteConnection($"Data Source={_sqlDBFilePath}"))
         {
@@ -29,9 +61,14 @@ public class DBFacade
             var command = connection.CreateCommand();
             command.CommandText = queryString;
             
-            command.Parameters.AddWithValue("@PageSize", pageSize);
-            command.Parameters.AddWithValue("@Offset", (pageNumber - 1) * pageSize);
-
+            if (parameters != null)
+            {
+                foreach (var parameter in parameters)
+                {
+                    command.Parameters.AddWithValue(parameter.Key, parameter.Value);
+                }
+            }
+            
             using var reader = command.ExecuteReader();
             while (reader.Read())
             {
@@ -51,7 +88,7 @@ public class DBFacade
         var message = dataRecord["text"].ToString();
         var pubDate = Convert.ToInt64(dataRecord["pub_date"]);
         
-        var Cheep = CheepViewModel.CreateCheep(author, message, pubDate);
-        return Cheep;
+        var cheep = CheepViewModel.CreateCheep(author, message, pubDate);
+        return cheep;
     }
 }
