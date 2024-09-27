@@ -27,7 +27,7 @@ public class DBFacade
             { "@offset", offset}
         };
         
-        return ExecuteQuery(queryString);
+        return ExecuteQuery(queryString, parameter);
     }
 
     public List<CheepViewModel> ReadCheepsFromAuthor(string author, int pageNumber, int pageSize)
