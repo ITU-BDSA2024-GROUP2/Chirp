@@ -21,11 +21,15 @@ jobs:
         with:
           dotnet-version: '8.x'
 
+      - name: Setup SQLite DB
+        working-directory: scripts
+        run: ./initDB.sh
+
       - name: Build with dotnet
-        run: dotnet build src/CSVDBService --configuration Release
+        run: dotnet build src/Chirp.Razor --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish src/CSVDBService -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        run: dotnet publish src/Chirp.Razor -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -59,6 +63,6 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'bdsagroup2chirpremotedb'
+          app-name: 'bdsagroup02chirprazor'
           slot-name: 'Production'
           package: .
