@@ -1,6 +1,7 @@
 using System.Data;
-using System.Diagnostics;
+using System.Reflection;
 using Microsoft.Data.Sqlite;
+using Microsoft.Extensions.FileProviders;
 
 namespace Chirp.Razor;
 
@@ -10,7 +11,38 @@ public class DBFacade
 
     public DBFacade()
     {
-        _sqlDbFilePath  = Environment.GetEnvironmentVariable("CHIRPDBPATH") ?? Path.Combine(Path.GetTempPath(), "chirp.db");
+        _sqlDbFilePath  = Environment.GetEnvironmentVariable("CHIRPDBPATH");
+        if (_sqlDbFilePath == null)
+        {
+            _sqlDbFilePath = Path.Combine(Path.GetTempPath(), "chirp.db");
+            InitDB();
+        }
+    }
+
+    private void InitDB()
+    {
+        try
+        {
+            var embeddedProvider = new EmbeddedFileProvider(Assembly.GetExecutingAssembly());
+
+            // Read the schema file
+            using var schemaReader = embeddedProvider.GetFileInfo("data/schema.sql").CreateReadStream();
+            using var schemaStreamReader = new StreamReader(schemaReader);
+            var schema = schemaStreamReader.ReadToEnd();
+        
+            ExecuteNonQuery(schema);
+
+            // Read the dump file
+            using var dumpReader = embeddedProvider.GetFileInfo("data/dump.sql").CreateReadStream();
+            using var dumpStreamReader = new StreamReader(dumpReader);
+            var dump = dumpStreamReader.ReadToEnd();
+            
+            ExecuteNonQuery(dump);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"An error occurred while initializing the database: {e.Message}");
+        }
     }
     
     public List<CheepViewModel> ReadCheeps(int pageNumber, int pageSize) 
@@ -34,7 +66,7 @@ public class DBFacade
         }
         catch (SqliteException e)
         {
-            Console.WriteLine("An error occured: ", e.Message);
+            Console.WriteLine($"An error occured: {e.Message}");
         }
         return new List<CheepViewModel>();
     }
@@ -65,6 +97,19 @@ public class DBFacade
             Console.WriteLine("An error occured: ", e.Message);
         }
         return new List<CheepViewModel>();
+    }
+    
+    public void ExecuteNonQuery(string nonQueryString)
+    {
+        using (var connection = new SqliteConnection($"Data Source={_sqlDbFilePath}"))
+        {
+            connection.Open();
+
+            var command = connection.CreateCommand();
+            command.CommandText = nonQueryString;
+
+            command.ExecuteNonQuery();
+        }
     }
 
     public List<CheepViewModel> ExecuteQuery(string queryString, Dictionary<string, object>? parameters = null)
