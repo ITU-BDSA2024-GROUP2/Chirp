@@ -1,15 +1,16 @@
 using System.Data;
+using System.Diagnostics;
 using Microsoft.Data.Sqlite;
 
 namespace Chirp.Razor;
 
 public class DBFacade
 {
-    private readonly string _sqlDBFilePath;
+    private readonly string _sqlDbFilePath;
 
-    public DBFacade(string sqlDBFilePath = "/tmp/chirp.db")
+    public DBFacade()
     {
-        _sqlDBFilePath = sqlDBFilePath;
+        _sqlDbFilePath  = Environment.GetEnvironmentVariable("CHIRPDBPATH") ?? Path.Combine(Path.GetTempPath(), "chirp.db");
     }
     
     public List<CheepViewModel> ReadCheeps(int pageNumber, int pageSize) 
@@ -26,8 +27,16 @@ public class DBFacade
             { "@pageSize", pageSize},
             { "@offset", offset}
         };
-        
-        return ExecuteQuery(queryString, parameter);
+
+        try
+        {
+            return ExecuteQuery(queryString, parameter);
+        }
+        catch (SqliteException e)
+        {
+            Console.WriteLine("An error occured: ", e.Message);
+        }
+        return new List<CheepViewModel>();
     }
 
     public List<CheepViewModel> ReadCheepsFromAuthor(string author, int pageNumber, int pageSize)
@@ -46,7 +55,16 @@ public class DBFacade
             { "@pageSize", pageSize},
             { "@offset", offset}
         };
-        return ExecuteQuery(queryString, parameter);
+
+        try
+        {
+            return ExecuteQuery(queryString, parameter);
+        }
+        catch (SqliteException e)
+        {
+            Console.WriteLine("An error occured: ", e.Message);
+        }
+        return new List<CheepViewModel>();
     }
 
     public List<CheepViewModel> ExecuteQuery(string queryString, Dictionary<string, object>? parameters = null)
@@ -54,7 +72,7 @@ public class DBFacade
         List<CheepViewModel> cheeps = new List<CheepViewModel>();
 
         
-        using (var connection = new SqliteConnection($"Data Source={_sqlDBFilePath}"))
+        using (var connection = new SqliteConnection($"Data Source={_sqlDbFilePath}"))
         {
             connection.Open();
             
