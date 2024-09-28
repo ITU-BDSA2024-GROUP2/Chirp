@@ -94,7 +94,7 @@ public class DBFacade
         }
         catch (SqliteException e)
         {
-            Console.WriteLine("An error occured: ", e.Message);
+            Console.WriteLine($"An error occured: {e.Message}");
         }
         return new List<CheepViewModel>();
     }
