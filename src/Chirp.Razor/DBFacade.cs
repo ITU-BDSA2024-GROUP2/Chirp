@@ -11,28 +11,40 @@ public class DBFacade
     {
         _sqlDBFilePath = sqlDBFilePath;
     }
-
-    public List<CheepViewModel> ReadCheeps()
+    
+    public List<CheepViewModel> ReadCheeps(int pageNumber, int pageSize) 
     {
         var queryString = @"SELECT u.username, m.text, m.pub_date
-                                FROM message m
-                                JOIN user u ON m.author_id = u.user_id
-                                ORDER BY m.pub_date DESC";
+                            FROM message m
+                            JOIN user u ON m.author_id = u.user_id
+                            ORDER BY m.pub_date DESC
+                            LIMIT @pageSize OFFSET @offset";
         
-        return ExecuteQuery(queryString);
+        int offset = (pageNumber - 1) * pageSize;
+        var parameter = new Dictionary<string, object>
+        {
+            { "@pageSize", pageSize},
+            { "@offset", offset}
+        };
+        
+        return ExecuteQuery(queryString, parameter);
     }
 
-    public List<CheepViewModel> ReadCheepsFromAuthor(string author)
+    public List<CheepViewModel> ReadCheepsFromAuthor(string author, int pageNumber, int pageSize)
     {
         var queryString = @"SELECT u.username, m.text, m.pub_date
                                 FROM message m
                                 JOIN user u ON m.author_id = u.user_id
                                 WHERE u.username = @author
-                                ORDER BY m.pub_date DESC";
+                                ORDER BY m.pub_date DESC
+                                LIMIT @pageSize OFFSET @offset";
         
+        int offset = (pageNumber - 1) * pageSize;
         var parameter = new Dictionary<string, object>
         {
-            { "@author", author }
+            { "@author", author },
+            { "@pageSize", pageSize},
+            { "@offset", offset}
         };
         return ExecuteQuery(queryString, parameter);
     }
@@ -40,6 +52,7 @@ public class DBFacade
     public List<CheepViewModel> ExecuteQuery(string queryString, Dictionary<string, object>? parameters = null)
     {
         List<CheepViewModel> cheeps = new List<CheepViewModel>();
+
         
         using (var connection = new SqliteConnection($"Data Source={_sqlDBFilePath}"))
         {
