@@ -21,10 +21,6 @@ jobs:
         with:
           dotnet-version: '8.x'
 
-      - name: Setup SQLite DB
-        working-directory: scripts
-        run: ./initDB.sh
-
       - name: Build with dotnet
         run: dotnet build src/Chirp.Razor --configuration Release
 
