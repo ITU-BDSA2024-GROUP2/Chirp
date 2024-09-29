@@ -1,15 +1,48 @@
 using System.Data;
+using System.Reflection;
 using Microsoft.Data.Sqlite;
+using Microsoft.Extensions.FileProviders;
 
 namespace Chirp.Razor;
 
 public class DBFacade
 {
-    private readonly string _sqlDBFilePath;
+    private readonly string _sqlDbFilePath;
 
-    public DBFacade(string sqlDBFilePath = "/tmp/chirp.db")
+    public DBFacade()
     {
-        _sqlDBFilePath = sqlDBFilePath;
+        _sqlDbFilePath  = Environment.GetEnvironmentVariable("CHIRPDBPATH");
+        if (_sqlDbFilePath == null)
+        {
+            _sqlDbFilePath = Path.Combine(Path.GetTempPath(), "chirp.db");
+            InitDB();
+        }
+    }
+
+    private void InitDB()
+    {
+        try
+        {
+            var embeddedProvider = new EmbeddedFileProvider(Assembly.GetExecutingAssembly());
+
+            // Read the schema file
+            using var schemaReader = embeddedProvider.GetFileInfo("data/schema.sql").CreateReadStream();
+            using var schemaStreamReader = new StreamReader(schemaReader);
+            var schema = schemaStreamReader.ReadToEnd();
+        
+            ExecuteNonQuery(schema);
+
+            // Read the dump file
+            using var dumpReader = embeddedProvider.GetFileInfo("data/dump.sql").CreateReadStream();
+            using var dumpStreamReader = new StreamReader(dumpReader);
+            var dump = dumpStreamReader.ReadToEnd();
+            
+            ExecuteNonQuery(dump);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"An error occurred while initializing the database: {e.Message}");
+        }
     }
     
     public List<CheepViewModel> ReadCheeps(int pageNumber, int pageSize) 
@@ -26,8 +59,16 @@ public class DBFacade
             { "@pageSize", pageSize},
             { "@offset", offset}
         };
-        
-        return ExecuteQuery(queryString, parameter);
+
+        try
+        {
+            return ExecuteQuery(queryString, parameter);
+        }
+        catch (SqliteException e)
+        {
+            Console.WriteLine($"An error occured: {e.Message}");
+        }
+        return new List<CheepViewModel>();
     }
 
     public List<CheepViewModel> ReadCheepsFromAuthor(string author, int pageNumber, int pageSize)
@@ -46,7 +87,29 @@ public class DBFacade
             { "@pageSize", pageSize},
             { "@offset", offset}
         };
-        return ExecuteQuery(queryString, parameter);
+
+        try
+        {
+            return ExecuteQuery(queryString, parameter);
+        }
+        catch (SqliteException e)
+        {
+            Console.WriteLine($"An error occured: {e.Message}");
+        }
+        return new List<CheepViewModel>();
+    }
+    
+    public void ExecuteNonQuery(string nonQueryString)
+    {
+        using (var connection = new SqliteConnection($"Data Source={_sqlDbFilePath}"))
+        {
+            connection.Open();
+
+            var command = connection.CreateCommand();
+            command.CommandText = nonQueryString;
+
+            command.ExecuteNonQuery();
+        }
     }
 
     public List<CheepViewModel> ExecuteQuery(string queryString, Dictionary<string, object>? parameters = null)
@@ -54,7 +117,7 @@ public class DBFacade
         List<CheepViewModel> cheeps = new List<CheepViewModel>();
 
         
-        using (var connection = new SqliteConnection($"Data Source={_sqlDBFilePath}"))
+        using (var connection = new SqliteConnection($"Data Source={_sqlDbFilePath}"))
         {
             connection.Open();
             

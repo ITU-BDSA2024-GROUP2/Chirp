@@ -8,8 +8,11 @@ public interface ICheepService
 
 public class CheepService : ICheepService
 {
-
-    private readonly DBFacade _dbFacade = new DBFacade();
+    private readonly DBFacade _dbFacade;
+    public CheepService(DBFacade dbFacade)
+    {
+        _dbFacade = dbFacade;
+    }
     public List<CheepViewModel> GetCheeps(int pageNumber, int pageSize)
     {
         List<CheepViewModel> cheeps = _dbFacade.ReadCheeps(pageNumber, pageSize);
