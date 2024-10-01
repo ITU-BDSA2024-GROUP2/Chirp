@@ -70,4 +70,44 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
         Assert.Contains("Public Timeline", content2);
         Assert.NotEqual(content1, content2);
     }
+    
+    [Theory]
+    [InlineData("Helge")]
+    [InlineData("Adrian")]
+    public async void PrivateTimelinePage1SameAsPrivateDefault(string author)
+    {
+        var responseHomePage = await _client.GetAsync($"/{author}");
+        var content1 = await responseHomePage.Content.ReadAsStringAsync();
+        responseHomePage.EnsureSuccessStatusCode();
+        
+        var responsePage4 = await _client.GetAsync($"/{author}?page=1");
+        responsePage4.EnsureSuccessStatusCode();
+        var content2 = await responsePage4.Content.ReadAsStringAsync();
+
+        Assert.Contains("Chirp!", content1);
+        Assert.Contains($"{author}'s Timeline", content1);
+        Assert.Contains("Chirp!", content2);
+        Assert.Contains($"{author}'s Timeline", content2);
+        Assert.Equal(content1, content2);
+    }
+    
+    [Theory]
+    [InlineData("Helge")]
+    [InlineData("Adrian")]
+    public async void PrivateTimelinePage4NotSameAsPrivateDefault(string author)
+    {
+        var responseHomePage = await _client.GetAsync($"/{author}");
+        var content1 = await responseHomePage.Content.ReadAsStringAsync();
+        responseHomePage.EnsureSuccessStatusCode();
+        
+        var responsePage4 = await _client.GetAsync($"/{author}?page=4");
+        responsePage4.EnsureSuccessStatusCode();
+        var content2 = await responsePage4.Content.ReadAsStringAsync();
+
+        Assert.Contains("Chirp!", content1);
+        Assert.Contains($"{author}'s Timeline", content1);
+        Assert.Contains("Chirp!", content2);
+        Assert.Contains($"{author}'s Timeline", content2);
+        Assert.NotEqual(content1, content2);
+    }
 }
