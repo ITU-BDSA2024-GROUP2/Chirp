@@ -42,11 +42,11 @@ public class DBFacadeTests
         // Assert
         Assert.Equal("TestUser1", cheeps[1].Author);
         Assert.Equal("Test cheep 1", cheeps[1].Message);
-        Assert.Equal("09.29.23 20.58.14", cheeps[1].Timestamp);
+        Assert.Equal("09/29/23 20:58:14", cheeps[1].Timestamp);
         
         Assert.Equal("TestUser2", cheeps[0].Author);
         Assert.Equal("Test cheep 2", cheeps[0].Message);
-        Assert.Equal("09.29.23 20.59.54", cheeps[0].Timestamp);
+        Assert.Equal("09/29/23 20:59:54", cheeps[0].Timestamp);
     }
 
     [Theory]
