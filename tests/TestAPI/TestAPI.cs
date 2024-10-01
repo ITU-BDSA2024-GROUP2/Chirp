@@ -35,4 +35,39 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
         Assert.Contains("Chirp!", content);
         Assert.Contains($"{author}'s Timeline", content);
     }
+    
+    [Fact]
+    public async void IsPage1SameAsDefaultTimeline()
+    {
+        var responseHomePage = await _client.GetAsync("/");
+        var content1 = await responseHomePage.Content.ReadAsStringAsync();
+        responseHomePage.EnsureSuccessStatusCode();
+        var responseFirstPage = await _client.GetAsync("/?page=1");
+        var content2 = await responseFirstPage.Content.ReadAsStringAsync();
+        responseFirstPage.EnsureSuccessStatusCode();
+        
+        Assert.Contains("Chirp!", content1);
+        Assert.Contains("Public Timeline", content1);
+        Assert.Contains("Chirp!", content2);
+        Assert.Contains("Public Timeline", content2);
+        Assert.Equal(content1, content2);
+    }
+    
+    [Fact]
+    public async void SiteHasMorePagesAndNotSameAsSameAsDefaultTimeline()
+    {
+        var responseHomePage = await _client.GetAsync("/");
+        var content1 = await responseHomePage.Content.ReadAsStringAsync();
+        responseHomePage.EnsureSuccessStatusCode();
+        
+        var responsePage4 = await _client.GetAsync("/?page=4");
+        responsePage4.EnsureSuccessStatusCode();
+        var content2 = await responsePage4.Content.ReadAsStringAsync();
+
+        Assert.Contains("Chirp!", content1);
+        Assert.Contains("Public Timeline", content1);
+        Assert.Contains("Chirp!", content2);
+        Assert.Contains("Public Timeline", content2);
+        Assert.NotEqual(content1, content2);
+    }
 }
