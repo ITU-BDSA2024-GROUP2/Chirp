@@ -11,17 +11,32 @@ public class CheepRepository : ICheepRepository
         _dbContext = dbContext;
     }
     
-    public async Task<List<Cheep>> GetCheeps()
+    public async Task<List<CheepDTO>> GetCheeps()
     {
-        var query = from cheep in _dbContext.Cheeps 
-            select cheep;
+        var query = from cheep in _dbContext.Cheeps
+            select new CheepDTO
+            {
+                Author = cheep.Author.Name,
+                Text = cheep.Text,
+                TimeStamp = cheep.TimeStamp.ToString()
+            };
         
         var result = await query.ToListAsync();
         return result;
     }
 
-    public async Task<List<Cheep>> GetCheepsFromAuthor(int authorId)
+    public async Task<List<CheepDTO>> GetCheepsFromAuthor(int authorId)
     {
-        throw new NotImplementedException();
+        var query = from cheep in _dbContext.Cheeps
+            where cheep.Author.AuthorId == authorId
+            select new CheepDTO
+            {
+                Author = cheep.Author.Name,
+                Text = cheep.Text,
+                TimeStamp = cheep.TimeStamp.ToString()
+            };
+        
+        var result = await query.ToListAsync();
+        return result;
     }
 }

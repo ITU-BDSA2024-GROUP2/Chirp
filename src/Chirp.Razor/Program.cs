@@ -6,7 +6,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddSingleton<ICheepService, CheepService>();
-builder.Services.AddSingleton<DBFacade>(); // Skal denne fjernes???
 builder.Services.AddScoped<ICheepRepository, CheepRepository>();
 
 string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
