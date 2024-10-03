@@ -2,26 +2,28 @@ using Chirp.Razor;
 
 public interface ICheepService
 {
-    public List<CheepViewModel> GetCheeps(int pageNumber, int pageSize);
-    public List<CheepViewModel> GetCheepsFromAuthor(string author, int pageNumber, int pageSize);
+    public Task<List<CheepDTO>> GetCheeps(int pageNumber, int pageSize);
+    public Task<List<CheepDTO>> GetCheepsFromAuthor(string author, int pageNumber, int pageSize);
 }
 
 public class CheepService : ICheepService
 {
-    private readonly DBFacade _dbFacade;
-    public CheepService(DBFacade dbFacade)
+    private readonly ICheepRepository _cheepRepository;  // Injecting the repository
+
+    public CheepService(ICheepRepository cheepRepository)
     {
-        _dbFacade = dbFacade;
+        _cheepRepository = cheepRepository;
     }
-    public List<CheepViewModel> GetCheeps(int pageNumber, int pageSize)
+    
+    public async Task<List<CheepDTO>> GetCheeps(int pageNumber, int pageSize)
     {
-        List<CheepViewModel> cheeps = _dbFacade.ReadCheeps(pageNumber, pageSize);
-        return cheeps;
+        List<CheepDTO> cheeps = await _cheepRepository.GetCheeps(pageNumber, pageSize);
+        return cheeps;  
     }
 
-    public List<CheepViewModel> GetCheepsFromAuthor(string author, int pageNumber, int pageSize)
+    public async Task<List<CheepDTO>> GetCheepsFromAuthor(string author, int pageNumber, int pageSize)
     {
-        List<CheepViewModel> cheeps = _dbFacade.ReadCheepsFromAuthor(author, pageNumber, pageSize);
+        List<CheepDTO> cheeps = await _cheepRepository.GetCheepsFromAuthor(author,pageNumber,pageSize);
         return cheeps;
     }
 

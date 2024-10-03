@@ -1,4 +1,4 @@
-using System.Data;
+/*using System.Data;
 using System.Reflection;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.FileProviders;
@@ -45,7 +45,7 @@ public class DBFacade
         }
     }
     
-    public List<CheepViewModel> ReadCheeps(int pageNumber, int pageSize) 
+    public List<CheepDTO> ReadCheeps(int pageNumber, int pageSize) 
     {
         var queryString = @"SELECT u.username, m.text, m.pub_date
                             FROM message m
@@ -68,10 +68,10 @@ public class DBFacade
         {
             Console.WriteLine($"An error occured: {e.Message}");
         }
-        return new List<CheepViewModel>();
+        return new List<CheepDTO>();
     }
 
-    public List<CheepViewModel> ReadCheepsFromAuthor(string author, int pageNumber, int pageSize)
+    public List<CheepDTO> ReadCheepsFromAuthor(string author, int pageNumber, int pageSize)
     {
         var queryString = @"SELECT u.username, m.text, m.pub_date
                                 FROM message m
@@ -96,7 +96,7 @@ public class DBFacade
         {
             Console.WriteLine($"An error occured: {e.Message}");
         }
-        return new List<CheepViewModel>();
+        return new List<CheepDTO>();
     }
     
     public void ExecuteNonQuery(string nonQueryString)
@@ -112,9 +112,9 @@ public class DBFacade
         }
     }
 
-    public List<CheepViewModel> ExecuteQuery(string queryString, Dictionary<string, object>? parameters = null)
+    public List<CheepDTO> ExecuteQuery(string queryString, Dictionary<string, object>? parameters = null)
     {
-        List<CheepViewModel> cheeps = new List<CheepViewModel>();
+        List<CheepDTO> cheeps = new List<CheepDTO>();
 
         
         using (var connection = new SqliteConnection($"Data Source={_sqlDbFilePath}"))
@@ -154,4 +154,4 @@ public class DBFacade
         var cheep = CheepViewModel.CreateCheep(author, message, pubDate);
         return cheep;
     }
-}
+}*/

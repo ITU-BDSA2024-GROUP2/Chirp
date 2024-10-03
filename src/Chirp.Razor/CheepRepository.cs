@@ -11,8 +11,10 @@ public class CheepRepository : ICheepRepository
         _dbContext = dbContext;
     }
     
-    public async Task<List<CheepDTO>> GetCheeps()
-    {
+    public async Task<List<CheepDTO>> GetCheeps(int pageNumber, int pageSize)
+    {   
+        int offset = (pageNumber - 1) * pageSize;
+        
         var query = from cheep in _dbContext.Cheeps
             select new CheepDTO
             {
@@ -21,14 +23,28 @@ public class CheepRepository : ICheepRepository
                 TimeStamp = cheep.TimeStamp.ToString()
             };
         
-        var result = await query.ToListAsync();
-        return result;
+        query = query.Skip(offset).Take(pageSize);
+        
+        try
+        {
+            var result = await query.ToListAsync();
+            return result;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+            return new List<CheepDTO>();    
+        }
     }
 
-    public async Task<List<CheepDTO>> GetCheepsFromAuthor(int authorId)
+    public async Task<List<CheepDTO>> GetCheepsFromAuthor(string author, int pageNumber, int pageSize)
     {
+        int offset = (pageNumber - 1) * pageSize;
+        int authorId = await ConvertAuthorToId(author);
+        
         var query = from cheep in _dbContext.Cheeps
             where cheep.Author.AuthorId == authorId
+            orderby cheep.TimeStamp descending
             select new CheepDTO
             {
                 Author = cheep.Author.Name,
@@ -36,7 +52,35 @@ public class CheepRepository : ICheepRepository
                 TimeStamp = cheep.TimeStamp.ToString()
             };
         
-        var result = await query.ToListAsync();
-        return result;
+        query = query.Skip(offset).Take(pageSize);
+        
+        try
+        {
+            var result = await query.ToListAsync();
+            return result;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+            return new List<CheepDTO>();    
+        }
+    }
+
+    public async Task<int> ConvertAuthorToId(string author)
+    {
+        var list = await (from a in _dbContext.Authors where a.Name == author select a).ToListAsync(); //lav liste af authors med dette navn
+
+        if (list.Count == 0)
+        {
+            throw new Exception($"Author {author} is not found");
+        }
+
+        if (list.Count == 1)
+        {
+           return list.First().AuthorId; 
+        }
+        
+        throw new Exception($"Flere brugere med dette navn {author}");
+        
     }
 }
