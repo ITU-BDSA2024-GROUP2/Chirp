@@ -29,6 +29,12 @@ app.UseRouting();
 
 app.MapRazorPages();
 
+using (var scope = app.Services.CreateScope())
+{
+    var chirpContext = scope.ServiceProvider.GetRequiredService<ChirpDBContext>();
+    DbInitializer.SeedDatabase(chirpContext);
+}
+
 app.Run();
 
 public partial class Program { }
