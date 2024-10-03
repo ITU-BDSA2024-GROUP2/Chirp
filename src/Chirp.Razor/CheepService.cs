@@ -1,6 +1,6 @@
 using Chirp.Razor;
 
-public interface ICheepService
+public interface ICheepService 
 {
     public Task<List<CheepDTO>> GetCheeps(int pageNumber, int pageSize);
     public Task<List<CheepDTO>> GetCheepsFromAuthor(string author, int pageNumber, int pageSize);
@@ -8,7 +8,7 @@ public interface ICheepService
 
 public class CheepService : ICheepService
 {
-    private readonly ICheepRepository _cheepRepository;  // Injecting the repository
+    private readonly ICheepRepository _cheepRepository; //Er dette en dependency, der går imod 1.b?
 
     public CheepService(ICheepRepository cheepRepository)
     {
