@@ -5,7 +5,7 @@ namespace Chirp.Razor;
 public class CheepRepository : ICheepRepository
 {
     private readonly ChirpDBContext _dbContext;
-    private int pageSize;
+    private const int pageSize = 32;
     
     public CheepRepository(ChirpDBContext dbContext)
     {
