@@ -24,7 +24,7 @@ public class CheepRepository : ICheepRepository
         var result = await query.ToListAsync();
         return result;
     }
-
+    
     public async Task<List<CheepDTO>> GetCheepsFromAuthor(string authorName)
     {
         var query = from cheep in _dbContext.Cheeps
