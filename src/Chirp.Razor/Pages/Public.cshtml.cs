@@ -19,7 +19,7 @@ public class PublicModel : PageModel
     {
         var currentPage = page ?? 1;
         
-        Cheeps = await _service.GetCheeps();
+        Cheeps = await _service.GetCheeps(currentPage);
         return Page();
     }
 }
