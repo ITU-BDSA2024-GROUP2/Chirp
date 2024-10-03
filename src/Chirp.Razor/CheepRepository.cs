@@ -66,7 +66,9 @@ public class CheepRepository : ICheepRepository
         }
     }
 
-    public async Task<int> ConvertAuthorToId(string author)
+    //På nuværende tidspunkt bruger frontenddelen kun navne, hvorfor denne funktion er nødvendig. i linket f.eks.
+    //Antager det er at foretrække at linket måske skal anvende id istedet, hvor denne funktion så kan fjernes.
+    public async Task<int> ConvertAuthorToId(string author) 
     {
         var list = await (from a in _dbContext.Authors where a.Name == author select a).ToListAsync(); //lav liste af authors med dette navn
 
