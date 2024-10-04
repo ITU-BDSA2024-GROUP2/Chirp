@@ -15,8 +15,4 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SQLite" Version="8.0.8" />
   </ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Include="data/**/*" />
-  </ItemGroup>
-
 </Project>
