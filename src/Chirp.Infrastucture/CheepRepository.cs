@@ -47,20 +47,28 @@ public class CheepRepository : ICheepRepository
         return result;
     }
     
-    public async Task<int> CreateAuthor(AuthorDTO author)
+    public async Task<Author> CreateAuthor(AuthorDTO author)
     {
-        Author newAuthor = new() {Name = author.Name, Email = author.Email};
-        var queryResult = await _dbContext.Authors.AddAsync(newAuthor); // does not write to the database!
+        // Check if author already exists
+        var existingAuthor = await _dbContext.Authors.FirstOrDefaultAsync(a => a.Name == author.Name || a.Email == author.Email);
+        
+        if (existingAuthor != null)
+        {
+            Author newAuthor = new() { Name = author.Name, Email = author.Email };
+            var queryResult = await _dbContext.Authors.AddAsync(newAuthor); // does not write to the database!
 
-        await _dbContext.SaveChangesAsync(); // persist the changes in the database
-        return queryResult.Entity.AuthorId;
+            await _dbContext.SaveChangesAsync(); // persist the changes in the database
+            return queryResult.Entity;
+        }
+
+        return existingAuthor;
     }
     
-    public async Task<Author> FindAuthor(string auhtorName, string auhtorEmail)
+    public async Task<Author> FindAuthor(string authorName, string authorEmail)
     {
         var query = from author in _dbContext.Authors
-            where (string.IsNullOrEmpty(auhtorName) || author.Name.ToLower().Contains(auhtorName.ToLower())) &&
-                  (string.IsNullOrEmpty(auhtorEmail) || author.Email.ToLower().Contains(auhtorEmail.ToLower()))
+            where (string.IsNullOrEmpty(authorName) || author.Name.ToLower().Contains(authorName.ToLower())) &&
+                  (string.IsNullOrEmpty(authorEmail) || author.Email.ToLower().Contains(authorEmail.ToLower()))
                   select author;
 
         var result = await query.Distinct().FirstOrDefaultAsync();
