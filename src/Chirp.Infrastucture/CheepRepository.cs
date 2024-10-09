@@ -64,7 +64,7 @@ public class CheepRepository : ICheepRepository
         return existingAuthor;
     }
     
-    public async Task<Cheep> CreateCheep(CheepDTO cheepDTO, AuthorDTO authorDTO)
+    public async Task<Cheep> CreateCheep(CheepDTO cheepDTO, AuthorDTO authorDTO) // Måske fjern authorDTO
     {
         var author = await FindAuthor(authorDTO.Name, authorDTO.Email);
 
