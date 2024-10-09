@@ -4,7 +4,7 @@ using System.Reflection;
 
 public class DBFacadeTests
 {
-   /* private DBFacade _dbFacade;
+    private DBFacade _dbFacade;
     
     public DBFacadeTests() {
         using var connection = new SqliteConnection("Filename=:memory:");
@@ -110,5 +110,5 @@ public class DBFacadeTests
             INSERT INTO message (author_id, text, pub_date) VALUES (1, 'Test cheep 1', 1696021094);
             INSERT INTO message (author_id, text, pub_date) VALUES (2, 'Test cheep 2', 1696021194);";
         _dbFacade.ExecuteNonQuery(insertMessageSql);
-    }*/
+    }
 }
