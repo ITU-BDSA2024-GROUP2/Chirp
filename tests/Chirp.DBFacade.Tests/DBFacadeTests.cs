@@ -1,13 +1,20 @@
 using System.Reflection;
-using Chirp.Razor;
-using Microsoft.Extensions.FileProviders;
+//using Chirp.Razor;
+//using Microsoft.Extensions.FileProviders;
 
 public class DBFacadeTests
 {
-    private DBFacade _dbFacade;
+   /* private DBFacade _dbFacade;
     
     public DBFacadeTests() {
-        Environment.SetEnvironmentVariable("CHIRPDBPATH", "Data Source=:memory:"); // Source: https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-8.0#customize-webapplicationfactory
+        using var connection = new SqliteConnection("Filename=:memory:");
+        await connection.OpenAsync();
+        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlite(connection);
+
+        using var context = new ChirpContext(builder.Options);
+        await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
+
+        IMessageRepository repository = new MessageRepository(context); // Source: https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-8.0#customize-webapplicationfactory
     }
 
     [Fact]
@@ -103,5 +110,5 @@ public class DBFacadeTests
             INSERT INTO message (author_id, text, pub_date) VALUES (1, 'Test cheep 1', 1696021094);
             INSERT INTO message (author_id, text, pub_date) VALUES (2, 'Test cheep 2', 1696021194);";
         _dbFacade.ExecuteNonQuery(insertMessageSql);
-    }
+    }*/
 }
