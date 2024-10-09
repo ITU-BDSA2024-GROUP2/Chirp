@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+
 namespace Chirp.Razor;
 
 public class Author
