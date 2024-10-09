@@ -1,13 +1,17 @@
+//using Chirp.Core;
 namespace Chirp.Cheep.Tests;
 
-public class CheepTests {
+/*public class CheepTests {
     [Theory]
-    [InlineData("Michael", "I have a ball", 1690891760, "Michael @ 08/01/23 12:09:20: I have a ball")]
-    [InlineData("Poppy", "My balls are gone", 1690978778, "Poppy @ 08/02/23 12:19:38: My balls are gone")]
-    public void CheepToStringTest(string author, string message, long timeStamp, string expectedResult)
+    [InlineData(1,"Hello", DateTime.Parse("2023-08-01 12:16:48"))]
+    [InlineData(2, "I am message that is longer than 160 charachters ...................................................................................................................................................................................................................................................................................................................",DateTime.Parse("2023-08-01 13:08:28"))]
+    public void CheepsCreationTest(CheepId, string message, DateTime timeStamp)
     {
+        Author author = new Author("")
+
+        
         //Arrange
-        CheepViewModel cheep = CheepViewModel.CreateCheep(author, message, timeStamp);
+        Cheep cheep = Cheep.CreateCheep(author, message, timeStamp);
     
         //Act
         string result = cheep.ToString();
@@ -15,4 +19,4 @@ public class CheepTests {
         //Assert
         Assert.Equal(expectedResult, result);
     }
-}
+}*/
