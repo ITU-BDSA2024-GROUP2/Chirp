@@ -55,4 +55,16 @@ public class CheepRepository : ICheepRepository
         await _dbContext.SaveChangesAsync(); // persist the changes in the database
         return queryResult.Entity.AuthorId;
     }
+    
+    public async Task<Author> FindAuthor(string auhtorName, string auhtorEmail)
+    {
+        var query = from author in _dbContext.Authors
+            where (string.IsNullOrEmpty(auhtorName) || author.Name.ToLower().Contains(auhtorName.ToLower())) &&
+                  (string.IsNullOrEmpty(auhtorEmail) || author.Email.ToLower().Contains(auhtorEmail.ToLower()))
+                  select author;
+
+        var result = await query.Distinct().FirstOrDefaultAsync();
+
+        return result;
+    }
 }
