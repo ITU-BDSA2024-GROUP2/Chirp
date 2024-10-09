@@ -18,10 +18,11 @@ public class CheepRepository : ICheepRepository
 
         var query = (from cheep in _dbContext.Cheeps
             orderby cheep.TimeStamp descending
+            where cheep.Author != null && cheep.Text != null
             select new CheepDTO
             {
-                Author = cheep.Author.Name,
-                Text = cheep.Text,
+                Author = cheep.Author!.Name,
+                Text = cheep.Text!,
                 TimeStamp = cheep.TimeStamp.ToString("MM'/'dd'/'yy H':'mm':'ss")
             }).Skip(offset).Take(pageSize);
         
@@ -35,11 +36,11 @@ public class CheepRepository : ICheepRepository
 
         var query = (from cheep in _dbContext.Cheeps
             orderby cheep.TimeStamp descending
-            where cheep.Author.Name == authorName
+            where cheep.Author.Name == authorName && cheep.Author != null && cheep.Text != null
             select new CheepDTO
             {
-                Author = cheep.Author.Name,
-                Text = cheep.Text,
+                Author = cheep.Author!.Name,
+                Text = cheep.Text!,
                 TimeStamp = cheep.TimeStamp.ToString("MM'/'dd'/'yy H':'mm':'ss")
             }).Skip(offset).Take(pageSize);
         var result = await query.ToListAsync();
