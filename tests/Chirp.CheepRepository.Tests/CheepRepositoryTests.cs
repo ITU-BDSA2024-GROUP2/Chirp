@@ -1,4 +1,3 @@
-using System.Reflection;
 using Chirp.Razor;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -33,7 +32,7 @@ public class CheepRepositoryTests
          ICheepRepository repository = new Razor.CheepRepository(context); // Source: https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-8.0#customize-webapplicationfactory
 
         // Act
-        var cheeps = repository.GetCheeps(1).Result;
+        var cheeps = await repository.GetCheeps(1);
         
         // Assert
         Assert.Empty(cheeps);
@@ -55,7 +54,7 @@ public class CheepRepositoryTests
         ICheepRepository repository = new Razor.CheepRepository(context); // Source: https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-8.0#customize-webapplicationfactory
         
         // Act
-        var cheeps = repository.GetCheeps(1).Result;
+        var cheeps = await repository.GetCheeps(1);
         
         // Assert
         Assert.NotEmpty(cheeps);
@@ -73,9 +72,9 @@ public class CheepRepositoryTests
     }
 
     [Theory]
-    [InlineData("John Doe", 1, 10, "I am alive")]
-    [InlineData("Mary Doe", 1, 10, "I am also here")]
-    public async Task ReadCheepsFromAuthor_Returns_Cheeps_For_Existing_Author(string author, int pageNumber, int pageSize, string expectedText)
+    [InlineData("John Doe", "I am alive")]
+    [InlineData("Mary Doe", "I am also here")]
+    public async Task ReadCheepsFromAuthor_Returns_Cheeps_For_Existing_Author(string author, string expectedText)
     {
         // Arrange
         await using var connection = new SqliteConnection("Filename=:memory:");
@@ -89,7 +88,8 @@ public class CheepRepositoryTests
         ICheepRepository repository = new Razor.CheepRepository(context); // Source: https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-8.0#customize-webapplicationfactory
         
         // Act
-        var cheeps = repository.GetCheepsFromAuthor(author,1).Result;
+        var cheeps = await repository.GetCheepsFromAuthor(author,1);
+      
         
         // Assert
         Assert.NotNull(cheeps);
@@ -113,7 +113,7 @@ public class CheepRepositoryTests
         ICheepRepository repository = new Razor.CheepRepository(context); // Source: https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-8.0#customize-webapplicationfactory
         
         // Act
-        var cheeps = repository.GetCheepsFromAuthor("NonExistentAuthor",1).Result;
+        var cheeps = await repository.GetCheepsFromAuthor("NonExistentAuthor",1);
         
         // Assert
         Assert.Empty(cheeps);
