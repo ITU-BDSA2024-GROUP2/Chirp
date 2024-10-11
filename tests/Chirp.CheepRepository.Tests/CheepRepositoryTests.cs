@@ -113,6 +113,26 @@ public class CheepRepositoryTests
         var fetchedCheep = cheeps.First();
         Assert.Equal("I am alive", fetchedCheep.Text);
         Assert.Equal("John Doe", fetchedCheep.Author);
+    }               
+
+    [Fact]
+    public async Task test_FindAuthor()
+    {
+        // Arrange
+        var authorDto = new AuthorDTO { Name = "John Doe", Email = "jndo@itu.dk" };
+
+        _dbContext.Authors.Add(new Author { Name = "John Doe", Email = "jndo@itu.dk" });
+        await _dbContext.SaveChangesAsync();
+
+        ICheepRepository cheepRepository = new Razor.CheepRepository(_dbContext);
+    
+        // Act
+        var author = await cheepRepository.FindAuthor(authorDto);
+
+        // Assert
+        Assert.NotNull(author);
+        Assert.Equal("John Doe", author.Name);
+        Assert.Equal("jndo@itu.dk", author.Email);
     }
     
 
