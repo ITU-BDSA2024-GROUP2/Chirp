@@ -90,6 +90,31 @@ public class CheepRepositoryTests
         Assert.Empty(cheeps);
     }
     
+    [Fact]
+    public async Task CreateCheep()
+    {
+        // Arrange
+        var authorDto = new AuthorDTO { Name = "John Doe", Email = "jndo@itu.dk" };
+        var cheepDto = new CheepDTO {Author = authorDto.Name, Text = "I am alive", TimeStamp = DateTime.UtcNow.ToString("MM'/'dd'/'yy H':'mm':'ss") };
+        
+        ICheepRepository cheepRepository = new Razor.CheepRepository(_dbContext);
+    
+        // Act
+        var createdCheep = await cheepRepository.CreateCheep(cheepDto, authorDto);
+        
+        // Assert
+        Assert.NotNull(createdCheep);
+        Assert.Equal("I am alive", createdCheep.Text);
+        Assert.Equal("John Doe", createdCheep.Author.Name);
+        
+        var cheeps = await cheepRepository.GetCheeps(1);
+        Assert.Single(cheeps); 
+        
+        var fetchedCheep = cheeps.First();
+        Assert.Equal("I am alive", fetchedCheep.Text);
+        Assert.Equal("John Doe", fetchedCheep.Author);
+    }
+    
 
     private async Task PopulateDatabase(ChirpDBContext context)
     {
