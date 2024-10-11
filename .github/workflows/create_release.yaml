@@ -30,31 +30,31 @@ jobs:
       
       # Publish for Linux
     - name: Publish Linux
-      run: dotnet publish src/Chirp.CLI/Chirp.CLI.csproj -r linux-x64 -o publish/linux-x64
+      run: dotnet publish src/Chirp.Web/Chirp.Web.csproj -r linux-x64 -o publish/linux-x64
       
       # Zip Linux artifacts
     - name: Zip Linux Artifacts
-      run: zip -r Chirp_CLI_linux-x64.zip publish/linux-x64
+      run: zip -r Chirp_linux-x64.zip publish/linux-x64
       
       # Publish for Windows
     - name: Publish Windows
-      run: dotnet publish src/Chirp.CLI/Chirp.CLI.csproj -r win-x64 -o publish/win-x64
+      run: dotnet publish src/Chirp.Web/Chirp.Web.csproj -r win-x64 -o publish/win-x64
       
       # Zip Windows artifacts
     - name: Zip Windows Artifacts
-      run: zip -r Chirp_CLI_win-x64.zip publish/win-x64
+      run: zip -r Chirp_win-x64.zip publish/win-x64
       
       # Publish for MacOS x64
     - name: Publish MacOS x64
-      run: dotnet publish src/Chirp.CLI/Chirp.CLI.csproj -r osx-x64 -o publish/osx-x64
+      run: dotnet publish src/Chirp.Web/Chirp.Web.csproj -r osx-x64 -o publish/osx-x64
       
       # Zip MacOS x64 artifacts
     - name: Zip MacOS x64 Artifacts
-      run: zip -r Chirp_CLI_osx-x64.zip publish/osx-x64
+      run: zip -r Chirp_osx-x64.zip publish/osx-x64
       
       # Publish for MacOS ARM
     - name: Publish MacOS ARM
-      run: dotnet publish src/Chirp.CLI/Chirp.CLI.csproj -r osx-arm64 -o publish/osx-arm64
+      run: dotnet publish src/Chirp.Web/Chirp.Web.csproj -r osx-arm64 -o publish/osx-arm64
       
       # Zip MacOS ARM artifacts
     - name: Zip MacOS ARM Artifacts
@@ -65,9 +65,9 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
         files: |
-          Chirp_CLI_linux-x64.zip
-          Chirp_CLI_win-x64.zip
-          Chirp_CLI_osx-x64.zip
-          Chirp_CLI_osx-arm64.zip
+          Chirp_linux-x64.zip
+          Chirp_win-x64.zip
+          Chirp_osx-x64.zip
+          Chirp_osx-arm64.zip
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
