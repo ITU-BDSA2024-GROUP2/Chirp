@@ -1,13 +1,20 @@
 using System.Reflection;
-using Chirp.Razor;
-using Microsoft.Extensions.FileProviders;
+//using Chirp.Razor;
+//using Microsoft.Extensions.FileProviders;
 
 public class DBFacadeTests
 {
     private DBFacade _dbFacade;
     
     public DBFacadeTests() {
-        Environment.SetEnvironmentVariable("CHIRPDBPATH", "Data Source=:memory:"); // Source: https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-8.0#customize-webapplicationfactory
+        using var connection = new SqliteConnection("Filename=:memory:");
+        await connection.OpenAsync();
+        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlite(connection);
+
+        using var context = new ChirpContext(builder.Options);
+        await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
+
+        IMessageRepository repository = new MessageRepository(context); // Source: https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-8.0#customize-webapplicationfactory
     }
 
     [Fact]
