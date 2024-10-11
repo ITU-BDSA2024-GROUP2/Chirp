@@ -75,11 +75,11 @@ public class CheepRepository : ICheepRepository
         return queryResult.Entity;
     }
     
-    public async Task<Author> FindAuthor(AuthorDTO authorDTO)
+    public async Task<Author> FindAuthor(AuthorDTO authorDto)
     {
         var query = from author in _dbContext.Authors
-            where (string.IsNullOrEmpty(authorDTO.Name) || author.Name.ToLower().Contains(authorDTO.Name.ToLower())) &&
-                  (string.IsNullOrEmpty(authorDTO.Email) || author.Email.ToLower().Contains(authorDTO.Email.ToLower()))
+            where (string.IsNullOrEmpty(authorDto.Name) || author.Name.ToLower().Contains(authorDto.Name.ToLower())) &&
+                  (string.IsNullOrEmpty(authorDto.Email) || author.Email.ToLower().Contains(authorDto.Email.ToLower()))
                   select author;
 
         var result = await query.Distinct().FirstOrDefaultAsync();
