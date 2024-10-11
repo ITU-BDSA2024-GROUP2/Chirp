@@ -6,18 +6,24 @@ namespace Chirp.CheepRepository.Tests;
 
 public class CheepRepositoryTests
 {
+    private readonly ChirpDBContext _dbContext;
+    private readonly SqliteConnection _connection;
+    public CheepRepositoryTests()
+    {
+        _connection = new SqliteConnection("DataSource=:memory:");
+        _connection.Open();
+        
+        var builder = new DbContextOptionsBuilder<ChirpDBContext>().UseSqlite(_connection);
+        _dbContext = new ChirpDBContext(builder.Options);
+        
+        _dbContext.Database.EnsureCreated();
+    }
+    
     [Fact]
     public async Task IsThereACheepRepository()
     {
         // Arrange
-        await using var connection = new SqliteConnection("Filename=:memory:");
-        await connection.OpenAsync();
-        
-        var builder = new DbContextOptionsBuilder<ChirpDBContext>().UseSqlite(connection);
-
-        await using var context = new ChirpDBContext(builder.Options);
-        await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
-         ICheepRepository repository = new Razor.CheepRepository(context); // Source: https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-8.0#customize-webapplicationfactory
+         ICheepRepository repository = new Razor.CheepRepository(_dbContext);
 
         // Act
         var cheeps = await repository.GetCheeps(1);
@@ -31,15 +37,8 @@ public class CheepRepositoryTests
     public async Task ReadCheepsFromCheepRepositoryTest()
     {
         // Arrange
-        await using var connection = new SqliteConnection("Filename=:memory:");
-        await connection.OpenAsync();
-        
-        var builder = new DbContextOptionsBuilder<ChirpDBContext>().UseSqlite(connection);
-
-        await using var context = new ChirpDBContext(builder.Options);
-        await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
-        await PopulateDatabase(context);
-        ICheepRepository repository = new Razor.CheepRepository(context); // Source: https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-8.0#customize-webapplicationfactory
+        PopulateDatabase(_dbContext);
+        ICheepRepository repository = new Razor.CheepRepository(_dbContext);
         
         // Act
         var cheeps = await repository.GetCheeps(1);
@@ -64,15 +63,8 @@ public class CheepRepositoryTests
     public async Task ReadCheepsFromAuthor_Returns_Cheeps_For_Existing_Author(string author, string expectedText)
     {
         // Arrange
-        await using var connection = new SqliteConnection("Filename=:memory:");
-        await connection.OpenAsync();
-        
-        var builder = new DbContextOptionsBuilder<ChirpDBContext>().UseSqlite(connection);
-
-        await using var context = new ChirpDBContext(builder.Options);
-        await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
-        await PopulateDatabase(context);
-        ICheepRepository repository = new Razor.CheepRepository(context); // Source: https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-8.0#customize-webapplicationfactory
+        await PopulateDatabase(_dbContext);
+        ICheepRepository repository = new Razor.CheepRepository(_dbContext);
         
         // Act
         var cheeps = await repository.GetCheepsFromAuthor(author,1);
@@ -88,21 +80,28 @@ public class CheepRepositoryTests
     public async Task ReadCheepsFromAuthor_Returns_Empty_For_NonExistent_Author()
     {
         // Arrange
-        await using var connection = new SqliteConnection("Filename=:memory:");
-        await connection.OpenAsync();
-        
-        var builder = new DbContextOptionsBuilder<ChirpDBContext>().UseSqlite(connection);
-
-        await using var context = new ChirpDBContext(builder.Options);
-        await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
-        await PopulateDatabase(context);
-        ICheepRepository repository = new Razor.CheepRepository(context); // Source: https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-8.0#customize-webapplicationfactory
+        await PopulateDatabase(_dbContext);
+        ICheepRepository repository = new Razor.CheepRepository(_dbContext);
         
         // Act
         var cheeps = await repository.GetCheepsFromAuthor("NonExistentAuthor",1);
         
         // Assert
         Assert.Empty(cheeps);
+    }
+
+    [Fact]
+    public async Task CreateAuthor_Stores_New_Author_In_Database()
+    {
+        // Arrange
+        ICheepRepository repository = new Razor.CheepRepository(_dbContext);
+        
+        // Act
+        AuthorDTO authorDto = new AuthorDTO()
+        var author = repository.CreateAuthor()
+        
+        // Assert
+        
     }
 
     private async Task PopulateDatabase(ChirpDBContext context)
@@ -142,5 +141,12 @@ public class CheepRepositoryTests
         await context.Cheeps.AddAsync(cheep1);
         await context.Cheeps.AddAsync(cheep2);
         await context.SaveChangesAsync();
+    }
+    
+    public void Dispose()
+    {
+        // Dispose of the in-memory SQLite connection
+        _dbContext.Dispose();
+        _connection.Dispose();
     }
 }
