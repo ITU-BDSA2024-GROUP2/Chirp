@@ -47,14 +47,14 @@ public class CheepRepository : ICheepRepository
         return result;
     }
     
-    public async Task<Author> CreateAuthor(AuthorDTO author)
+    public async Task<Author> CreateAuthor(AuthorDTO authorDto)
     {
         // Check if author already exists
-        var existingAuthor = await _dbContext.Authors.FirstOrDefaultAsync(a => a.Name == author.Name || a.Email == author.Email);
+        var existingAuthor = await FindAuthor(authorDto);
         
-        if (existingAuthor != null)
+        if (existingAuthor == null)
         {
-            Author newAuthor = new() { Name = author.Name, Email = author.Email };
+            Author newAuthor = new() { Name = authorDto.Name, Email = authorDto.Email };
             var queryResult = await _dbContext.Authors.AddAsync(newAuthor); // does not write to the database!
 
             await _dbContext.SaveChangesAsync(); // persist the changes in the database
@@ -66,12 +66,7 @@ public class CheepRepository : ICheepRepository
     
     public async Task<Cheep> CreateCheep(CheepDTO cheepDto, AuthorDTO authorDto) // Måske fjern authorDTO
     {
-        var author = await FindAuthor(authorDto.Name, authorDto.Email);
-
-        if (author == null)
-        {
-            author = await CreateAuthor(new AuthorDTO { Name = authorDto.Name, Email = authorDto.Email });
-        }
+        var author = await CreateAuthor(authorDto);
         
         Cheep newCheep = new() { Text = cheepDto.Text, TimeStamp = DateTime.UtcNow, Author = author, AuthorId = author.AuthorId };
         var queryResult = await _dbContext.Cheeps.AddAsync(newCheep); // does not write to the database!
@@ -80,11 +75,11 @@ public class CheepRepository : ICheepRepository
         return queryResult.Entity;
     }
     
-    public async Task<Author> FindAuthor(string authorName, string authorEmail)
+    public async Task<Author> FindAuthor(AuthorDTO authorDTO)
     {
         var query = from author in _dbContext.Authors
-            where (string.IsNullOrEmpty(authorName) || author.Name.ToLower().Contains(authorName.ToLower())) &&
-                  (string.IsNullOrEmpty(authorEmail) || author.Email.ToLower().Contains(authorEmail.ToLower()))
+            where (string.IsNullOrEmpty(authorDTO.Name) || author.Name.ToLower().Contains(authorDTO.Name.ToLower())) &&
+                  (string.IsNullOrEmpty(authorDTO.Email) || author.Email.ToLower().Contains(authorDTO.Email.ToLower()))
                   select author;
 
         var result = await query.Distinct().FirstOrDefaultAsync();
