@@ -20,8 +20,8 @@ public class CheepRepository : ICheepRepository
             orderby cheep.TimeStamp descending
             select new CheepDTO
             {
-                Author = cheep.Author.Name,
-                Text = cheep.Text,
+                Author = cheep.Author!.Name,
+                Text = cheep.Text!,
                 TimeStamp = cheep.TimeStamp.ToString("MM'/'dd'/'yy H':'mm':'ss")
             }).Skip(offset).Take(pageSize);
         
@@ -35,11 +35,11 @@ public class CheepRepository : ICheepRepository
 
         var query = (from cheep in _dbContext.Cheeps
             orderby cheep.TimeStamp descending
-            where cheep.Author.Name == authorName
+            where cheep.Author!.Name == authorName
             select new CheepDTO
             {
-                Author = cheep.Author.Name,
-                Text = cheep.Text,
+                Author = cheep.Author!.Name,
+                Text = cheep.Text!,
                 TimeStamp = cheep.TimeStamp.ToString("MM'/'dd'/'yy H':'mm':'ss")
             }).Skip(offset).Take(pageSize);
         var result = await query.ToListAsync();
@@ -83,8 +83,8 @@ public class CheepRepository : ICheepRepository
     public async Task<Author> FindAuthor(string authorName, string authorEmail)
     {
         var query = from author in _dbContext.Authors
-            where (string.IsNullOrEmpty(authorName) || author.Name.ToLower().Contains(authorName.ToLower())) &&
-                  (string.IsNullOrEmpty(authorEmail) || author.Email.ToLower().Contains(authorEmail.ToLower()))
+            where (string.IsNullOrEmpty(authorName) || author.Name!.ToLower().Contains(authorName.ToLower())) &&
+                  (string.IsNullOrEmpty(authorEmail) || author.Email!.ToLower().Contains(authorEmail.ToLower()))
                   select author;
 
         var result = await query.Distinct().FirstOrDefaultAsync();
