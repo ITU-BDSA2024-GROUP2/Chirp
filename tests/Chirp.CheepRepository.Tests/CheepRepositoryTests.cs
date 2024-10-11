@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Chirp.Razor;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -97,11 +98,44 @@ public class CheepRepositoryTests
         ICheepRepository repository = new Razor.CheepRepository(_dbContext);
         
         // Act
-        AuthorDTO authorDto = new AuthorDTO()
-        var author = repository.CreateAuthor()
+        AuthorDTO authorDto = new AuthorDTO
+        {
+            Name = "John Doe",
+            Email = "john.doe@example.com",
+        };
+        var createdAuthor = await repository.CreateAuthor(authorDto);
+        var foundAuthor = await repository.FindAuthor(authorDto);
+
+        // Assert
+        Assert.NotNull(createdAuthor);
+        Assert.Equal(authorDto.Name, createdAuthor.Name);
+        Assert.Equal(authorDto.Email, createdAuthor.Email);
+        
+        Assert.NotNull(foundAuthor);
+        Assert.Equal(authorDto.Name, foundAuthor.Name);
+        Assert.Equal(authorDto.Email, foundAuthor.Email);
+    }
+    
+    [Fact]
+    public async Task CreateCheep_ThrowsException_WhenTextExceeds160Characters()
+    {
+        // Arrange
+        ICheepRepository repository = new Razor.CheepRepository(_dbContext);
+        var cheepDto = new CheepDTO
+        {
+            Text = new string('a', 161),
+            Author = "John Doe",
+            TimeStamp = "01/02/24 3:04:05",
+        };
+        var authorDto = new AuthorDTO
+        {
+            Name = "John Doe",
+            Email = "john.doe@example.com",
+        };
         
         // Assert
-        
+        var exception = Assert.ThrowsAsync<ValidationException>(() => repository.CreateCheep(cheepDto, authorDto));
+        Assert.Equal("Cheep is invalid: Cheeps can't be longer than 160 characters.", exception.Result.Message);
     }
 
     private async Task PopulateDatabase(ChirpDBContext context)
