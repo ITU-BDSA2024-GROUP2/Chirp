@@ -6,18 +6,6 @@ namespace Chirp.CheepRepository.Tests;
 
 public class CheepRepositoryTests
 {
-    /*private async Task EstablishConnectionToDatabaseAsync()
-    {
-        await using var connection = new SqliteConnection("Filename=:memory:");
-        await connection.OpenAsync();
-        
-        var builder = new DbContextOptionsBuilder<ChirpDBContext>().UseSqlite(connection);
-
-        using var context = new ChirpDBContext(builder.Options);
-        await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
-        ICheepRepository repository = new Razor.CheepRepository(context); // Source: https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-8.0#customize-webapplicationfactory
-
-    }*/
     [Fact]
     public async Task IsThereACheepRepository()
     {
@@ -27,7 +15,7 @@ public class CheepRepositoryTests
         
         var builder = new DbContextOptionsBuilder<ChirpDBContext>().UseSqlite(connection);
 
-        using var context = new ChirpDBContext(builder.Options);
+        await using var context = new ChirpDBContext(builder.Options);
         await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
          ICheepRepository repository = new Razor.CheepRepository(context); // Source: https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-8.0#customize-webapplicationfactory
 
@@ -48,7 +36,7 @@ public class CheepRepositoryTests
         
         var builder = new DbContextOptionsBuilder<ChirpDBContext>().UseSqlite(connection);
 
-        using var context = new ChirpDBContext(builder.Options);
+        await using var context = new ChirpDBContext(builder.Options);
         await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
         await PopulateDatabase(context);
         ICheepRepository repository = new Razor.CheepRepository(context); // Source: https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-8.0#customize-webapplicationfactory
@@ -59,7 +47,6 @@ public class CheepRepositoryTests
         // Assert
         Assert.NotEmpty(cheeps);
         Assert.Equal(2,cheeps.Count());
-        
         
         Assert.Equal("John Doe", cheeps[1].Author);
         Assert.Equal("I am alive", cheeps[1].Text);
@@ -82,14 +69,13 @@ public class CheepRepositoryTests
         
         var builder = new DbContextOptionsBuilder<ChirpDBContext>().UseSqlite(connection);
 
-        using var context = new ChirpDBContext(builder.Options);
+        await using var context = new ChirpDBContext(builder.Options);
         await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
         await PopulateDatabase(context);
         ICheepRepository repository = new Razor.CheepRepository(context); // Source: https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-8.0#customize-webapplicationfactory
         
         // Act
         var cheeps = await repository.GetCheepsFromAuthor(author,1);
-      
         
         // Assert
         Assert.NotNull(cheeps);
@@ -107,7 +93,7 @@ public class CheepRepositoryTests
         
         var builder = new DbContextOptionsBuilder<ChirpDBContext>().UseSqlite(connection);
 
-        using var context = new ChirpDBContext(builder.Options);
+        await using var context = new ChirpDBContext(builder.Options);
         await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
         await PopulateDatabase(context);
         ICheepRepository repository = new Razor.CheepRepository(context); // Source: https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-8.0#customize-webapplicationfactory
@@ -117,13 +103,12 @@ public class CheepRepositoryTests
         
         // Assert
         Assert.Empty(cheeps);
-        
     }
 
     private async Task PopulateDatabase(ChirpDBContext context)
     {
-        DateTime specificDate1 = new DateTime(2024, 1, 2, 3, 4, 5);
-        DateTime specificDate2 = new DateTime(2024, 2, 3, 4, 5, 6);
+        var specificDate1 = new DateTime(2024, 1, 2, 3, 4, 5);
+        var specificDate2 = new DateTime(2024, 2, 3, 4, 5, 6);
         ICollection<Cheep> authorCheeps1 = new List<Cheep>();
         ICollection<Cheep> authorCheeps2 = new List<Cheep>();
         
@@ -141,7 +126,6 @@ public class CheepRepositoryTests
             Email = "email2",
             Cheeps = authorCheeps2
         };
-        
         var cheep1 = new Cheep { 
             CheepId = 1, 
             Text = "I am alive", 
@@ -159,5 +143,4 @@ public class CheepRepositoryTests
         await context.Cheeps.AddAsync(cheep2);
         await context.SaveChangesAsync();
     }
-  
 }
