@@ -116,7 +116,7 @@ public class CheepRepositoryTests
     }               
 
     [Fact]
-    public async Task test_FindAuthor()
+    public async Task FindAuthor()
     {
         // Arrange
         var authorDto = new AuthorDTO { Name = "John Doe", Email = "jndo@itu.dk" };
