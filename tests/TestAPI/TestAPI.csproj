@@ -22,8 +22,6 @@
     <Using Include="Xunit" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\Chirp.Razor\Chirp.Razor.csproj" />
-  </ItemGroup>
+  
 
 </Project>

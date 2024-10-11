@@ -61,19 +61,19 @@ public class CheepRepository : ICheepRepository
             return queryResult.Entity;
         }
 
-        return existingAuthor;
+        return existingAuthor!;
     }
     
-    public async Task<Cheep> CreateCheep(CheepDTO cheepDTO, AuthorDTO authorDTO) // Måske fjern authorDTO
+    public async Task<Cheep> CreateCheep(CheepDTO cheepDto, AuthorDTO authorDto) // Måske fjern authorDTO
     {
-        var author = await FindAuthor(authorDTO.Name, authorDTO.Email);
+        var author = await FindAuthor(authorDto.Name, authorDto.Email);
 
         if (author == null)
         {
-            author = await CreateAuthor(new AuthorDTO { Name = authorDTO.Name, Email = authorDTO.Email });
+            author = await CreateAuthor(new AuthorDTO { Name = authorDto.Name, Email = authorDto.Email });
         }
         
-        Cheep newCheep = new() { Text = cheepDTO.Text, TimeStamp = DateTime.UtcNow, Author = author, AuthorId = author.AuthorId };
+        Cheep newCheep = new() { Text = cheepDto.Text, TimeStamp = DateTime.UtcNow, Author = author, AuthorId = author.AuthorId };
         var queryResult = await _dbContext.Cheeps.AddAsync(newCheep); // does not write to the database!
 
         await _dbContext.SaveChangesAsync(); // persist the changes in the database
