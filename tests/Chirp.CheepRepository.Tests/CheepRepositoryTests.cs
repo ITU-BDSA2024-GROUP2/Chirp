@@ -89,20 +89,7 @@ public class CheepRepositoryTests
         // Assert
         Assert.Empty(cheeps);
     }
-
-    [Fact]
-    public async Task CreateAuthor_Stores_New_Author_In_Database()
-    {
-        // Arrange
-        ICheepRepository repository = new Razor.CheepRepository(_dbContext);
-        
-        // Act
-        AuthorDTO authorDto = new AuthorDTO()
-        var author = repository.CreateAuthor()
-        
-        // Assert
-        
-    }
+    
 
     private async Task PopulateDatabase(ChirpDBContext context)
     {
