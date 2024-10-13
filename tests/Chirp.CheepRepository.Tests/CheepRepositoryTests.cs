@@ -1,6 +1,5 @@
 using Chirp.Core;
 using Chirp.Infrastucture;
-using Chirp.Razor;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,7 +18,7 @@ public class CheepRepositoryTests
 
         await using var context = new ChirpDBContext(builder.Options);
         await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
-         ICheepRepository repository = new Razor.CheepRepository(context); // Source: https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-8.0#customize-webapplicationfactory
+         ICheepRepository repository = new Infrastucture.CheepRepository(context); // Source: https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-8.0#customize-webapplicationfactory
 
         // Act
         var cheeps = await repository.GetCheeps(1);
@@ -41,7 +40,7 @@ public class CheepRepositoryTests
         await using var context = new ChirpDBContext(builder.Options);
         await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
         await PopulateDatabase(context);
-        ICheepRepository repository = new Razor.CheepRepository(context); // Source: https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-8.0#customize-webapplicationfactory
+        ICheepRepository repository = new Infrastucture.CheepRepository(context); // Source: https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-8.0#customize-webapplicationfactory
         
         // Act
         var cheeps = await repository.GetCheeps(1);
@@ -74,7 +73,7 @@ public class CheepRepositoryTests
         await using var context = new ChirpDBContext(builder.Options);
         await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
         await PopulateDatabase(context);
-        ICheepRepository repository = new Razor.CheepRepository(context); // Source: https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-8.0#customize-webapplicationfactory
+        ICheepRepository repository = new Infrastucture.CheepRepository(context); // Source: https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-8.0#customize-webapplicationfactory
         
         // Act
         var cheeps = await repository.GetCheepsFromAuthor(author,1);
@@ -98,7 +97,7 @@ public class CheepRepositoryTests
         await using var context = new ChirpDBContext(builder.Options);
         await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
         await PopulateDatabase(context);
-        ICheepRepository repository = new Razor.CheepRepository(context); // Source: https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-8.0#customize-webapplicationfactory
+        ICheepRepository repository = new Infrastucture.CheepRepository(context); // Source: https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-8.0#customize-webapplicationfactory
         
         // Act
         var cheeps = await repository.GetCheepsFromAuthor("NonExistentAuthor",1);
