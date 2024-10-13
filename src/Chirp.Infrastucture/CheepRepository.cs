@@ -1,6 +1,7 @@
+using Chirp.Core;
 using Microsoft.EntityFrameworkCore;
 
-namespace Chirp.Razor;
+namespace Chirp.Infrastucture;
 
 public class CheepRepository : ICheepRepository
 {
@@ -80,7 +81,7 @@ public class CheepRepository : ICheepRepository
         var query = from author in _dbContext.Authors
             where (string.IsNullOrEmpty(authorDto.Name) || author.Name.ToLower().Contains(authorDto.Name.ToLower())) &&
                   (string.IsNullOrEmpty(authorDto.Email) || author.Email.ToLower().Contains(authorDto.Email.ToLower()))
-                  select author;
+            select author;
 
         var result = await query.Distinct().FirstOrDefaultAsync();
 

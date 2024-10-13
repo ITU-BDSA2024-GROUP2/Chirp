@@ -1,4 +1,7 @@
-using Chirp.Razor;
+using Chirp.Core;
+
+namespace Chirp.Infrastucture;
+
 public class CheepService : ICheepService
 {
 
