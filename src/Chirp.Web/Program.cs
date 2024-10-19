@@ -1,5 +1,5 @@
 using Chirp.Core;
-using Chirp.Infrastucture;
+using Chirp.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +11,7 @@ builder.Services.AddScoped<ICheepRepository, CheepRepository>();
 
 string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlite(connectionString));
+
 
 
 var app = builder.Build();
@@ -39,4 +40,4 @@ using (var scope = app.Services.CreateScope())
 
 app.Run();
 
-public partial class Program { }
+public partial class Program {}
