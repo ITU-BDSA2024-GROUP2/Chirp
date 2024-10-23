@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Chirp.Core;
 
-public class Author : IdentityUser<int>
+public class Author : IdentityUser
 {
     public int AuthorId { get; set; }
     [Required]
