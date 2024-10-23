@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Chirp.Core;
 using Microsoft.EntityFrameworkCore;
 
@@ -67,9 +68,23 @@ public class CheepRepository : ICheepRepository
     
     public async Task<Cheep> CreateCheep(CheepDTO cheepDto, AuthorDTO authorDto) // Måske fjern authorDTO
     {
-        var author = await CreateAuthor(authorDto);
+        var author = await CreateAuthor(authorDto); // returns author if already existing
         
-        Cheep newCheep = new() { Text = cheepDto.Text, TimeStamp = DateTime.UtcNow, Author = author, AuthorId = author.AuthorId };
+        Cheep newCheep = new()
+        {
+            Text = cheepDto.Text, 
+            TimeStamp = DateTime.UtcNow, 
+            Author = author, 
+            AuthorId = author.AuthorId
+        };
+        
+        var validationResults = newCheep.Validate();
+        if (validationResults.Any())
+        {
+            throw new ValidationException("Cheep is invalid: " +
+                                          string.Join(", ", validationResults.Select(v => v.ErrorMessage)));
+        }
+        
         var queryResult = await _dbContext.Cheeps.AddAsync(newCheep); // does not write to the database!
 
         await _dbContext.SaveChangesAsync(); // persist the changes in the database

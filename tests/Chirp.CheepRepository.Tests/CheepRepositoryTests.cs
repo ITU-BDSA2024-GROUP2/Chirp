@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Chirp.Core;
 using Chirp.Infrastructure;
 using Microsoft.Data.Sqlite;
@@ -7,18 +8,24 @@ namespace Chirp.CheepRepository.Tests;
 
 public class CheepRepositoryTests
 {
+    private readonly ChirpDBContext _dbContext;
+    private readonly SqliteConnection _connection;
+    public CheepRepositoryTests()
+    {
+        _connection = new SqliteConnection("DataSource=:memory:");
+        _connection.Open();
+        
+        var builder = new DbContextOptionsBuilder<ChirpDBContext>().UseSqlite(_connection);
+        _dbContext = new ChirpDBContext(builder.Options);
+        
+        _dbContext.Database.EnsureCreated();
+    }
+    
     [Fact]
     public async Task IsThereACheepRepository()
     {
         // Arrange
-        await using var connection = new SqliteConnection("Filename=:memory:");
-        await connection.OpenAsync();
-        
-        var builder = new DbContextOptionsBuilder<ChirpDBContext>().UseSqlite(connection);
-
-        await using var context = new ChirpDBContext(builder.Options);
-        await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
-         ICheepRepository repository = new Infrastructure.CheepRepository(context); // Source: https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-8.0#customize-webapplicationfactory
+         ICheepRepository repository = new Infrastructure.CheepRepository(_dbContext);
 
         // Act
         var cheeps = await repository.GetCheeps(1);
@@ -32,15 +39,8 @@ public class CheepRepositoryTests
     public async Task ReadCheepsFromCheepRepositoryTest()
     {
         // Arrange
-        await using var connection = new SqliteConnection("Filename=:memory:");
-        await connection.OpenAsync();
-        
-        var builder = new DbContextOptionsBuilder<ChirpDBContext>().UseSqlite(connection);
-
-        await using var context = new ChirpDBContext(builder.Options);
-        await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
-        await PopulateDatabase(context);
-        ICheepRepository repository = new Infrastructure.CheepRepository(context); // Source: https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-8.0#customize-webapplicationfactory
+        PopulateDatabase(_dbContext);
+        ICheepRepository repository = new Infrastructure.CheepRepository(_dbContext);
         
         // Act
         var cheeps = await repository.GetCheeps(1);
@@ -65,15 +65,8 @@ public class CheepRepositoryTests
     public async Task ReadCheepsFromAuthor_Returns_Cheeps_For_Existing_Author(string author, string expectedText)
     {
         // Arrange
-        await using var connection = new SqliteConnection("Filename=:memory:");
-        await connection.OpenAsync();
-        
-        var builder = new DbContextOptionsBuilder<ChirpDBContext>().UseSqlite(connection);
-
-        await using var context = new ChirpDBContext(builder.Options);
-        await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
-        await PopulateDatabase(context);
-        ICheepRepository repository = new Infrastructure.CheepRepository(context); // Source: https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-8.0#customize-webapplicationfactory
+        await PopulateDatabase(_dbContext);
+        ICheepRepository repository = new Infrastructure.CheepRepository(_dbContext);
         
         // Act
         var cheeps = await repository.GetCheepsFromAuthor(author,1);
@@ -89,21 +82,61 @@ public class CheepRepositoryTests
     public async Task ReadCheepsFromAuthor_Returns_Empty_For_NonExistent_Author()
     {
         // Arrange
-        await using var connection = new SqliteConnection("Filename=:memory:");
-        await connection.OpenAsync();
-        
-        var builder = new DbContextOptionsBuilder<ChirpDBContext>().UseSqlite(connection);
-
-        await using var context = new ChirpDBContext(builder.Options);
-        await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
-        await PopulateDatabase(context);
-        ICheepRepository repository = new Infrastructure.CheepRepository(context); // Source: https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-8.0#customize-webapplicationfactory
+        await PopulateDatabase(_dbContext);
+        ICheepRepository repository = new Infrastructure.CheepRepository(_dbContext);
         
         // Act
         var cheeps = await repository.GetCheepsFromAuthor("NonExistentAuthor",1);
         
         // Assert
         Assert.Empty(cheeps);
+    }
+
+    [Fact]
+    public async Task CreateAuthor_Stores_New_Author_In_Database()
+    {
+        // Arrange
+        ICheepRepository repository = new Infrastructure.CheepRepository(_dbContext);
+        
+        // Act
+        AuthorDTO authorDto = new AuthorDTO
+        {
+            Name = "John Doe",
+            Email = "john.doe@example.com",
+        };
+        var createdAuthor = await repository.CreateAuthor(authorDto);
+        var foundAuthor = await repository.FindAuthor(authorDto);
+
+        // Assert
+        Assert.NotNull(createdAuthor);
+        Assert.Equal(authorDto.Name, createdAuthor.Name);
+        Assert.Equal(authorDto.Email, createdAuthor.Email);
+        
+        Assert.NotNull(foundAuthor);
+        Assert.Equal(authorDto.Name, foundAuthor.Name);
+        Assert.Equal(authorDto.Email, foundAuthor.Email);
+    }
+    
+    [Fact]
+    public async Task CreateCheep_ThrowsException_WhenTextExceeds160Characters()
+    {
+        // Arrange
+        ICheepRepository repository = new Infrastructure.CheepRepository(_dbContext);
+        var cheepDto = new CheepDTO
+        {
+            Text = new string('a', 161),
+            Author = "John Doe",
+            TimeStamp = "01/02/24 3:04:05",
+        };
+        var authorDto = new AuthorDTO
+        {
+            Name = "John Doe",
+            Email = "john.doe@example.com",
+        };
+        
+        // Assert
+        var exception = Assert.ThrowsAsync<ValidationException>(() => repository.CreateCheep(cheepDto, authorDto));
+        Assert.Equal("Cheep is invalid: Cheeps can't be longer than 160 characters.", exception.Result.Message);
     }
 
     private async Task PopulateDatabase(ChirpDBContext context)
@@ -143,5 +176,12 @@ public class CheepRepositoryTests
         await context.Cheeps.AddAsync(cheep1);
         await context.Cheeps.AddAsync(cheep2);
         await context.SaveChangesAsync();
+    }
+    
+    public void Dispose()
+    {
+        // Dispose of the in-memory SQLite connection
+        _dbContext.Dispose();
+        _connection.Dispose();
     }
 }
