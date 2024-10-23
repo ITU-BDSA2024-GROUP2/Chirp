@@ -42,7 +42,7 @@ app.MapRazorPages();
 using (var scope = app.Services.CreateScope())
 {
     var chirpContext = scope.ServiceProvider.GetRequiredService<ChirpDBContext>();
-    chirpContext.Database.EnsureCreated();
+    chirpContext.Database.Migrate();
     DbInitializer.SeedDatabase(chirpContext);
 }
 
