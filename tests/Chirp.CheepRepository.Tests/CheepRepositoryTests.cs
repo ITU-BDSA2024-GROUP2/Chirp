@@ -118,6 +118,50 @@ public class CheepRepositoryTests
     }
     
     [Fact]
+    public async Task CreateCheep()
+    {
+        // Arrange
+        var authorDto = new AuthorDTO { Name = "John Doe", Email = "jndo@itu.dk" };
+        var cheepDto = new CheepDTO {Author = authorDto.Name, Text = "I am alive", TimeStamp = DateTime.UtcNow.ToString("MM'/'dd'/'yy H':'mm':'ss") };
+        
+        ICheepRepository cheepRepository = new Infrastructure.CheepRepository(_dbContext);
+    
+        // Act
+        var createdCheep = await cheepRepository.CreateCheep(cheepDto, authorDto);
+        
+        // Assert
+        Assert.NotNull(createdCheep);
+        Assert.Equal("I am alive", createdCheep.Text);
+        Assert.Equal("John Doe", createdCheep.Author.Name);
+        
+        var cheeps = await cheepRepository.GetCheeps(1);
+        Assert.Single(cheeps); 
+        
+        var fetchedCheep = cheeps.First();
+        Assert.Equal("I am alive", fetchedCheep.Text);
+        Assert.Equal("John Doe", fetchedCheep.Author);
+    }     
+    
+    [Fact]
+    public async Task FindAuthor()
+    {
+        // Arrange
+        var authorDto = new AuthorDTO { Name = "John Doe", Email = "email1" };
+
+        await PopulateDatabase(_dbContext);
+
+        ICheepRepository cheepRepository = new Infrastructure.CheepRepository(_dbContext);
+    
+        // Act
+        var author = await cheepRepository.FindAuthor(authorDto);
+
+        // Assert
+        Assert.NotNull(author);
+        Assert.Equal("John Doe", author.Name);
+        Assert.Equal("email1", author.Email);
+    }
+    
+    [Fact]
     public async Task CreateCheep_ThrowsException_WhenTextExceeds160Characters()
     {
         // Arrange
