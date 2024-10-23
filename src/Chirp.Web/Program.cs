@@ -13,7 +13,7 @@ builder.Services.AddScoped<ICheepRepository, CheepRepository>();
 string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlite(connectionString));
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<Author>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ChirpDBContext>();
 
 
@@ -42,7 +42,7 @@ app.MapRazorPages();
 using (var scope = app.Services.CreateScope())
 {
     var chirpContext = scope.ServiceProvider.GetRequiredService<ChirpDBContext>();
-    chirpContext.Database.EnsureCreated();
+    chirpContext.Database.Migrate();
     DbInitializer.SeedDatabase(chirpContext);
 }
 
