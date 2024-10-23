@@ -28,7 +28,7 @@ builder.Services.AddAuthentication(options =>
         options.RequireAuthenticatedSignIn = true;
     })
     .AddCookie()
-    .AddGitHub(o =>
+    .AddGitHub(o => 
     {
         //o.ClientId = builder.Configuration["authentication_github_clientId"] ?? string.Empty;
         //o.ClientSecret = builder.Configuration["authentication_github_clientSecret"] ?? string.Empty;
