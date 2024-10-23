@@ -6,6 +6,7 @@
     <link rel="icon" type="image/png" href="/favicon/favicon.ico">
 </head>
 <body>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 <div class=page>
     <h1> <a href="/"><img src="/images/icon1.png" alt="Icon1"/></a>Chirp!</h1>
     
@@ -15,7 +16,7 @@
             <div>
                 <a href="/@(User.Identity.Name)">my timeline</a> |
                 <a href="/">public timeline</a> |
-                <a ... >logout [@(User.Identity.Name)]</a>
+                <a ...>logout [@(User.Identity.Name)]</a>
             </div>
         }
         else
@@ -23,7 +24,7 @@
             <div>
                 <a href="/">public timeline</a> |
                 <a ... >register</a> |
-                <a ... >login</a>
+                <a href="/signin-github">login</a>
             </div>
         }
     </div>
