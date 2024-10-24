@@ -19,12 +19,18 @@
             </div>
         }
         else
-        {
-            <div>
-                <a href="/">public timeline</a> |
-                <a ... >register</a> |
-                <a ... >login</a>
-            </div>
+        {   
+            var currentUrl = Context.Request.Path;
+            
+            if (currentUrl != "/register" && currentUrl != "/login")
+            {
+                <div>
+                    <a href="/">public timeline</a> |
+                    <a href="/register">register</a> |
+                    <a href="/login">login</a>
+                </div>
+            }
+            
         }
     </div>
     
