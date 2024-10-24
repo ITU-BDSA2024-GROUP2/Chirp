@@ -9,6 +9,7 @@ public class Cheep
     [StringLength(160, ErrorMessage = "Cheeps can't be longer than 160 characters.")]
     public string? Text { get; set; }
     public DateTime TimeStamp { get; set; }
+    [Required]
     public Author? Author { get; set; }
     
     public IEnumerable<ValidationResult> Validate()
