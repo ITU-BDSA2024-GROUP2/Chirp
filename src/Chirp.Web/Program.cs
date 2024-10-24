@@ -34,7 +34,6 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthentication();
-
 app.UseAuthorization();
 
 app.MapRazorPages();
@@ -45,6 +44,7 @@ using (var scope = app.Services.CreateScope())
     chirpContext.Database.Migrate();
     DbInitializer.SeedDatabase(chirpContext);
 }
+
 
 app.Run();
 
