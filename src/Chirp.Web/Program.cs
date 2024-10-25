@@ -1,6 +1,6 @@
 using Chirp.Core;
 using Chirp.Infrastructure;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,7 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddScoped<ICheepService, CheepService>();
 builder.Services.AddScoped<ICheepRepository, CheepRepository>();
-builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
+
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession();
 
 string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlite(connectionString));
@@ -17,8 +19,20 @@ builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlite(conne
 builder.Services.AddDefaultIdentity<Author>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ChirpDBContext>();
 
-
-
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = "GitHub";
+        options.RequireAuthenticatedSignIn = true;
+    })
+    .AddCookie()
+    .AddGitHub(o =>
+    {
+        o.ClientId = builder.Configuration["authentication_github_clientId"] ?? string.Empty;
+        o.ClientSecret = builder.Configuration["authentication_github_clientSecret"] ?? string.Empty;
+        o.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    }); 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -34,18 +48,24 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-//app.UseAuthentication();
+app.UseAuthentication();
 app.UseAuthorization();
+app.UseSession();
+
+app.UseCookiePolicy(new CookiePolicyOptions()
+{
+    MinimumSameSitePolicy = SameSiteMode.Lax
+});
 
 app.MapRazorPages();
+app.MapControllers();
 
 using (var scope = app.Services.CreateScope())
 {
     var chirpContext = scope.ServiceProvider.GetRequiredService<ChirpDBContext>();
-    chirpContext.Database.Migrate();
+    chirpContext.Database.EnsureCreated();
     DbInitializer.SeedDatabase(chirpContext);
 }
-
 
 app.Run();
 
