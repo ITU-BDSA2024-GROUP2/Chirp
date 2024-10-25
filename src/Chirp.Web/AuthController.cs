@@ -10,5 +10,12 @@ public class AuthController : Controller
         // This will trigger the GitHub OAuth flow
         return Challenge(new AuthenticationProperties { RedirectUri = "/" }, "GitHub");
     }
-
+    
+    [Route("logout")]
+    [HttpPost]
+    public async Task<IActionResult> Logout(string returnUrl = "/")
+    {
+        await HttpContext.SignOutAsync();
+        return LocalRedirect(returnUrl);
+    }
 }
