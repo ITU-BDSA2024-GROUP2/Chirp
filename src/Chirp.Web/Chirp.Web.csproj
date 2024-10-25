@@ -26,7 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <AdditionalFiles Include="Areas\Identity\Pages\Login.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
