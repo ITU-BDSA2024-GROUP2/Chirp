@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Chirp.Core;
 using Chirp.Infrastructure;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
@@ -100,14 +101,16 @@ public class CheepRepositoryTests
         var cheepDto = new CheepDTO {Author = authorDto.Name, Text = "I am alive", TimeStamp = DateTime.UtcNow.ToString("MM'/'dd'/'yy H':'mm':'ss") };
         
         ICheepRepository cheepRepository = new Infrastructure.CheepRepository(_dbContext);
+        IAuthorRepository authorRepository = new Infrastructure.AuthorRepository(_dbContext);
     
         // Act
+        var createdAuthor = await authorRepository.CreateAuthor(authorDto);
         var createdCheep = await cheepRepository.CreateCheep(cheepDto);
         
         // Assert
         Assert.NotNull(createdCheep);
         Assert.Equal("I am alive", createdCheep.Text);
-        Assert.Equal("John Doe", createdCheep.Author.UserName);
+        Assert.Equal("John Doe", createdAuthor.UserName);
         
         var cheeps = await cheepRepository.GetCheeps(1);
         Assert.Single(cheeps); 
@@ -121,7 +124,10 @@ public class CheepRepositoryTests
     public async Task CreateCheep_ThrowsException_WhenTextExceeds160Characters()
     {
         // Arrange
+        IAuthorRepository authorRepository = new Infrastructure.AuthorRepository(_dbContext);
         ICheepRepository repository = new Infrastructure.CheepRepository(_dbContext);
+
+        // Act
         var cheepDto = new CheepDTO
         {
             Text = new string('a', 161),
@@ -133,6 +139,7 @@ public class CheepRepositoryTests
             Name = "John Doe",
             Email = "john.doe@example.com",
         };
+        var CreateAuthor = authorRepository.CreateAuthor(authorDto);
         
         // Assert
         var exception = Assert.ThrowsAsync<ValidationException>(() => repository.CreateCheep(cheepDto));
