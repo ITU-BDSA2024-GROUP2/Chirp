@@ -45,13 +45,15 @@ public class AuthorRepositoryTest
         await PopulateDatabase(_dbContext);
 
         ICheepRepository cheepRepository = new Infrastructure.CheepRepository(_dbContext);
+        IAuthorRepository authorRepository = new Infrastructure.AuthorRepository(_dbContext);
     
         // Act
-        var author = await cheepRepository.FindAuthor(authorDto);
+        var CreatedAuthor = await authorRepository.FindAuthor(authorDto);
+        var author = await cheepRepository.FindAuthorByName(CreatedAuthor.UserName);
 
         // Assert
         Assert.NotNull(author);
-        Assert.Equal("John Doe", author.Name);
+        Assert.Equal("John Doe", author.UserName);
         Assert.Equal("email1", author.Email);
     }
 
@@ -60,22 +62,23 @@ public class AuthorRepositoryTest
         var specificDate1 = new DateTime(2024, 1, 2, 3, 4, 5);
         var specificDate2 = new DateTime(2024, 2, 3, 4, 5, 6);
         ICollection<Cheep> authorCheeps1 = new List<Cheep>();
-        ICollection<Cheep> authorCheeps2 = new List<Cheep>();
+        IAuthorRepository authorRepository = new Infrastructure.AuthorRepository(_dbContext);
         
-        var author1 = new Author
+        
+        var authorDTO1 = new AuthorDTO
         {
-            AuthorId = 10, 
             Name = "John Doe", 
             Email = "email1",
-            Cheeps = authorCheeps1
         };
-        var author2 = new Author
+        var authorDTO2 = new AuthorDTO
         {
-            AuthorId = 20, 
             Name = "Mary Doe", 
             Email = "email2",
-            Cheeps = authorCheeps2
         };
+
+        var author1 = await authorRepository.CreateAuthor(authorDTO1);
+        var author2 = await authorRepository.CreateAuthor(authorDTO2);
+
         var cheep1 = new Cheep { 
             CheepId = 1, 
             Text = "I am alive", 
