@@ -102,12 +102,12 @@ public class CheepRepositoryTests
         ICheepRepository cheepRepository = new Infrastructure.CheepRepository(_dbContext);
     
         // Act
-        var createdCheep = await cheepRepository.CreateCheep(cheepDto, authorDto);
+        var createdCheep = await cheepRepository.CreateCheep(cheepDto);
         
         // Assert
         Assert.NotNull(createdCheep);
         Assert.Equal("I am alive", createdCheep.Text);
-        Assert.Equal("John Doe", createdCheep.Author.Name);
+        Assert.Equal("John Doe", createdCheep.Author.UserName);
         
         var cheeps = await cheepRepository.GetCheeps(1);
         Assert.Single(cheeps); 
@@ -135,7 +135,7 @@ public class CheepRepositoryTests
         };
         
         // Assert
-        var exception = Assert.ThrowsAsync<ValidationException>(() => repository.CreateCheep(cheepDto, authorDto));
+        var exception = Assert.ThrowsAsync<ValidationException>(() => repository.CreateCheep(cheepDto));
         Assert.Equal("Cheep is invalid: Cheeps can't be longer than 160 characters.", exception.Result.Message);
     }
 
@@ -144,22 +144,23 @@ public class CheepRepositoryTests
         var specificDate1 = new DateTime(2024, 1, 2, 3, 4, 5);
         var specificDate2 = new DateTime(2024, 2, 3, 4, 5, 6);
         ICollection<Cheep> authorCheeps1 = new List<Cheep>();
-        ICollection<Cheep> authorCheeps2 = new List<Cheep>();
+        IAuthorRepository authorRepository = new Infrastructure.AuthorRepository(_dbContext);
         
-        var author1 = new Author
+        
+        var authorDTO1 = new AuthorDTO
         {
-            AuthorId = 10, 
             Name = "John Doe", 
             Email = "email1",
-            Cheeps = authorCheeps1
         };
-        var author2 = new Author
+        var authorDTO2 = new AuthorDTO
         {
-            AuthorId = 20, 
             Name = "Mary Doe", 
             Email = "email2",
-            Cheeps = authorCheeps2
         };
+
+        var author1 = await authorRepository.CreateAuthor(authorDTO1);
+        var author2 = await authorRepository.CreateAuthor(authorDTO2);
+
         var cheep1 = new Cheep { 
             CheepId = 1, 
             Text = "I am alive", 
