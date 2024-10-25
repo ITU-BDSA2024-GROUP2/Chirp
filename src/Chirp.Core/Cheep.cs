@@ -12,8 +12,6 @@ public class Cheep
     [Required]
     public Author? Author { get; set; }
     
-    public int AuthorId { get; set; }
-    
     public IEnumerable<ValidationResult> Validate()
     {
         var validationResults = new List<ValidationResult>();

@@ -1,9 +1,11 @@
 using Chirp.Core;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Chirp.Infrastructure;
 
-public class ChirpDBContext : DbContext
+public class ChirpDBContext : IdentityDbContext<Author>
 {
     public DbSet<Cheep> Cheeps { get; set; }
 
@@ -19,7 +21,7 @@ public class ChirpDBContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.Entity<Author>()
-            .HasIndex(c => c.Name)
+            .HasIndex(c => c.UserName)
             .IsUnique();
         modelBuilder.Entity<Author>()
             .HasIndex(c => c.Email)

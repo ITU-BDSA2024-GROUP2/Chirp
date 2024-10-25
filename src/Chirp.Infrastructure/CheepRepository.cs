@@ -22,7 +22,7 @@ public class CheepRepository : ICheepRepository
             orderby cheep.TimeStamp descending
             select new CheepDTO
             {
-                Author = cheep.Author.Name,
+                Author = cheep.Author.UserName,
                 Text = cheep.Text,
                 TimeStamp = cheep.TimeStamp.ToString("MM'/'dd'/'yy H':'mm':'ss")
             }).Skip(offset).Take(pageSize);
@@ -37,10 +37,10 @@ public class CheepRepository : ICheepRepository
 
         var query = (from cheep in _dbContext.Cheeps
             orderby cheep.TimeStamp descending
-            where cheep.Author.Name == authorName
+            where cheep.Author.UserName == authorName
             select new CheepDTO
             {
-                Author = cheep.Author.Name,
+                Author = cheep.Author.UserName,
                 Text = cheep.Text,
                 TimeStamp = cheep.TimeStamp.ToString("MM'/'dd'/'yy H':'mm':'ss")
             }).Skip(offset).Take(pageSize);
@@ -49,33 +49,15 @@ public class CheepRepository : ICheepRepository
         return result;
     }
     
-    public async Task<Author> CreateAuthor(AuthorDTO authorDto)
+    public async Task<Cheep> CreateCheep(CheepDTO cheepDto)
     {
-        // Check if author already exists
-        var existingAuthor = await FindAuthor(authorDto);
-        
-        if (existingAuthor == null)
-        {
-            Author newAuthor = new() { Name = authorDto.Name, Email = authorDto.Email };
-            var queryResult = await _dbContext.Authors.AddAsync(newAuthor); // does not write to the database!
-
-            await _dbContext.SaveChangesAsync(); // persist the changes in the database
-            return queryResult.Entity;
-        }
-
-        return existingAuthor!;
-    }
-    
-    public async Task<Cheep> CreateCheep(CheepDTO cheepDto, AuthorDTO authorDto) // Måske fjern authorDTO
-    {
-        var author = await CreateAuthor(authorDto); // returns author if already existing
+        Author author = await FindAuthorByName(cheepDto.Author);
         
         Cheep newCheep = new()
         {
             Text = cheepDto.Text, 
             TimeStamp = DateTime.UtcNow, 
-            Author = author, 
-            AuthorId = author.AuthorId
+            Author = author,
         };
         
         var validationResults = newCheep.Validate();
@@ -90,16 +72,20 @@ public class CheepRepository : ICheepRepository
         await _dbContext.SaveChangesAsync(); // persist the changes in the database
         return queryResult.Entity;
     }
-    
-    public async Task<Author> FindAuthor(AuthorDTO authorDto)
+
+    public async Task<Author> FindAuthorByName(string name)
     {
         var query = from author in _dbContext.Authors
-            where (string.IsNullOrEmpty(authorDto.Name) || author.Name.ToLower().Contains(authorDto.Name.ToLower())) &&
-                  (string.IsNullOrEmpty(authorDto.Email) || author.Email.ToLower().Contains(authorDto.Email.ToLower()))
+            where (author.UserName == name)
             select author;
 
-        var result = await query.Distinct().FirstOrDefaultAsync();
+        var foundAuthor = await query.FirstOrDefaultAsync();
 
-        return result;
+        if (foundAuthor == null)
+        {
+            throw new ValidationException($"Author {name} does not exist.");
+        }
+
+        return foundAuthor;
     }
 }
