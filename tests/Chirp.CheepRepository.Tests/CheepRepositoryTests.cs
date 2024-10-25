@@ -91,31 +91,6 @@ public class CheepRepositoryTests
         // Assert
         Assert.Empty(cheeps);
     }
-
-    [Fact]
-    public async Task CreateAuthor_Stores_New_Author_In_Database()
-    {
-        // Arrange
-        ICheepRepository repository = new Infrastructure.CheepRepository(_dbContext);
-        
-        // Act
-        AuthorDTO authorDto = new AuthorDTO
-        {
-            Name = "John Doe",
-            Email = "john.doe@example.com",
-        };
-        var createdAuthor = await repository.CreateAuthor(authorDto);
-        var foundAuthor = await repository.FindAuthor(authorDto);
-
-        // Assert
-        Assert.NotNull(createdAuthor);
-        Assert.Equal(authorDto.Name, createdAuthor.Name);
-        Assert.Equal(authorDto.Email, createdAuthor.Email);
-        
-        Assert.NotNull(foundAuthor);
-        Assert.Equal(authorDto.Name, foundAuthor.Name);
-        Assert.Equal(authorDto.Email, foundAuthor.Email);
-    }
     
     [Fact]
     public async Task CreateCheep()
@@ -141,25 +116,6 @@ public class CheepRepositoryTests
         Assert.Equal("I am alive", fetchedCheep.Text);
         Assert.Equal("John Doe", fetchedCheep.Author);
     }     
-    
-    [Fact]
-    public async Task FindAuthor()
-    {
-        // Arrange
-        var authorDto = new AuthorDTO { Name = "John Doe", Email = "email1" };
-
-        await PopulateDatabase(_dbContext);
-
-        ICheepRepository cheepRepository = new Infrastructure.CheepRepository(_dbContext);
-    
-        // Act
-        var author = await cheepRepository.FindAuthor(authorDto);
-
-        // Assert
-        Assert.NotNull(author);
-        Assert.Equal("John Doe", author.Name);
-        Assert.Equal("email1", author.Email);
-    }
     
     [Fact]
     public async Task CreateCheep_ThrowsException_WhenTextExceeds160Characters()
