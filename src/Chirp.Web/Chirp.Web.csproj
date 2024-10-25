@@ -14,6 +14,19 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="Areas\.DS_Store" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="Areas\Identity\Pages\Login.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\Login.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\Register.cshtml" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
