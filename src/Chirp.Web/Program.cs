@@ -19,20 +19,14 @@ builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlite(conne
 builder.Services.AddDefaultIdentity<Author>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ChirpDBContext>();
 
-builder.Services.AddAuthentication(options =>
-    {
-        options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-        options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-        options.DefaultChallengeScheme = "GitHub";
-        options.RequireAuthenticatedSignIn = true;
-    })
+builder.Services.AddAuthentication()
     .AddCookie()
     .AddGitHub(o =>
     {
         o.ClientId = builder.Configuration["authentication_github_clientId"] ?? string.Empty;
         o.ClientSecret = builder.Configuration["authentication_github_clientSecret"] ?? string.Empty;
-        o.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     }); 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
