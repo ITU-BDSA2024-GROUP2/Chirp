@@ -9,8 +9,6 @@ public class PublicModel : PageModel
     private readonly ICheepService _service;
     public List<CheepDTO> Cheeps { get; set; }
 
-    private const int pageSize = 32;
-
     public PublicModel(ICheepService service)
     {
         _service = service;

@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using Chirp.Core
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<Author> SignInManager
+@inject UserManager<Author> UserManager
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <title>@ViewData["Title"]</title>
@@ -8,31 +13,7 @@
 <body>
 <div class=page>
     <h1> <a href="/"><img src="/images/icon1.png" alt="Icon1"/></a>Chirp!</h1>
-    
-    <div class=navigation>
-        @if (User.Identity.IsAuthenticated)
-        {
-            <div>
-                <a href="/@(User.Identity.Name)">my timeline</a> |
-                <a href="/">public timeline</a> |
-                <a ... >logout [@(User.Identity.Name)]</a>
-            </div>
-        }
-        else
-        {   
-            var currentUrl = Context.Request.Path;
-            
-            if (currentUrl != "/register" && currentUrl != "/login")
-            {
-                <div>
-                    <a href="/">public timeline</a> |
-                    <a href="/register">register</a> |
-                    <a href="/login">login</a>
-                </div>
-            }
-            
-        }
-    </div>
+    @await Html.PartialAsync("_LoginPartial")
     
     <div class=body>
             @RenderBody()
