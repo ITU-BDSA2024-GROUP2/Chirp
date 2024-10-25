@@ -1,4 +1,5 @@
-﻿using Chirp.Core;
+﻿#nullable disable //fjern null warning
+using Chirp.Core;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 

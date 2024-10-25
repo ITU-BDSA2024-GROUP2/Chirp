@@ -1,3 +1,4 @@
+#nullable disable //fjern null warning
 using System.ComponentModel.DataAnnotations;
 using Chirp.Core;
 using Microsoft.EntityFrameworkCore;
