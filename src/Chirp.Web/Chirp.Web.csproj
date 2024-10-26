@@ -31,6 +31,8 @@
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\Login.cshtml" />
     <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\Register.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\Manage\_ManageNav.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\Manage\_ViewImports.cshtml" />
   </ItemGroup>
 
   <PropertyGroup>
