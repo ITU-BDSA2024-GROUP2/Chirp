@@ -7,7 +7,7 @@
     @if (User.Identity.IsAuthenticated)
     {
         <div>
-            <a href="/@(User.Claims.FirstOrDefault(x => x.Type == "Full Name")?.Value)">my timeline</a> |
+            <a href="/@(User.Identity.Name)">my timeline</a> |
             <a href="/">public timeline</a> |
             <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index">manage account</a> |
             <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post" style="display:inline;">

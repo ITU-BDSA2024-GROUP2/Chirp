@@ -4,6 +4,8 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Encodings.Web;
+using System.Threading.Tasks;
 using Chirp.Core;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -56,11 +58,11 @@ namespace Chirp.Web.Areas.Identity.Pages.Account.Manage
             /// </summary>
             [Required]
             [DataType(DataType.Text)]
-            [StringLength(64, ErrorMessage = "The name must be at most 64 characters long.")]
-            [RegularExpression(@"^[a-zA-ZæøåÆØÅ\s]*$", ErrorMessage = "The name can only contain letters and spaces.")]
-            [Display(Name = "Full name")]
-            public string Name { get; set; }
-                
+            [StringLength(32, ErrorMessage = "The user name can be no longer than 32 characters.")]
+            [RegularExpression(@"^[a-zA-Z0-9æøåÆØÅ_\-\s]*$", ErrorMessage = "The username can only contain letters, numbers, hyphens, underscores, and spaces.")]
+            [Display(Name = "User name")]
+            public string UserName { get; set; }
+            
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
@@ -75,8 +77,8 @@ namespace Chirp.Web.Areas.Identity.Pages.Account.Manage
 
             Input = new InputModel
             {
-                Name = user.Name,
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                UserName = userName
             };
         }
 
@@ -117,12 +119,16 @@ namespace Chirp.Web.Areas.Identity.Pages.Account.Manage
                 }
             }
             
-            if (Input.Name != user.Name)
+            if (Input.UserName != user.UserName)
             {
-                user.Name = Input.Name;
+                var setUserNameResult = await _userManager.SetUserNameAsync(user, Input.UserName);
+                if (!setUserNameResult.Succeeded)
+                {
+                    StatusMessage = "Unexpected error when trying to set username.";
+                    return RedirectToPage();
+                }
             }
-            
-            await _userManager.UpdateAsync(user);
+
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";
             return RedirectToPage();

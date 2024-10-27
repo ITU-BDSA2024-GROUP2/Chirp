@@ -23,7 +23,7 @@ public class CheepRepository : ICheepRepository
             orderby cheep.TimeStamp descending
             select new CheepDTO
             {
-                Author = cheep.Author.Name,
+                Author = cheep.Author.UserName,
                 Text = cheep.Text,
                 TimeStamp = cheep.TimeStamp.ToString("MM'/'dd'/'yy H':'mm':'ss")
             }).Skip(offset).Take(pageSize);
@@ -38,10 +38,10 @@ public class CheepRepository : ICheepRepository
 
         var query = (from cheep in _dbContext.Cheeps
             orderby cheep.TimeStamp descending
-            where cheep.Author.Name == authorName
+            where cheep.Author.UserName == authorName
             select new CheepDTO
             {
-                Author = cheep.Author.Name,
+                Author = cheep.Author.UserName,
                 Text = cheep.Text,
                 TimeStamp = cheep.TimeStamp.ToString("MM'/'dd'/'yy H':'mm':'ss")
             }).Skip(offset).Take(pageSize);
@@ -77,7 +77,7 @@ public class CheepRepository : ICheepRepository
     public async Task<Author> FindAuthorByName(string name)
     {
         var query = from author in _dbContext.Authors
-            where (author.Name == name)
+            where (author.UserName == name)
             select author;
 
         var foundAuthor = await query.FirstOrDefaultAsync();

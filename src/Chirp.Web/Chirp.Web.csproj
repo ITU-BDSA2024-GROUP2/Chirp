@@ -33,6 +33,7 @@
     <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\Register.cshtml" />
     <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\Manage\_ManageNav.cshtml" />
     <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\Manage\_ViewImports.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\Manage\Index.cshtml" />
   </ItemGroup>
 
   <PropertyGroup>

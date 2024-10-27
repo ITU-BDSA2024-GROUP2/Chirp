@@ -78,10 +78,10 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
             /// </summary>
             [Required]
             [DataType(DataType.Text)]
-            [StringLength(64, ErrorMessage = "The name must be at most 64 characters long.")]
-            [RegularExpression(@"^[a-zA-ZæøåÆØÅ\s]*$", ErrorMessage = "The name can only contain letters and spaces.")]
-            [Display(Name = "Full name")]
-            public string Name { get; set; }
+            [StringLength(32, ErrorMessage = "The user name can be no longer than 32 characters.")]
+            [RegularExpression(@"^[a-zA-Z0-9æøåÆØÅ_\-\s]*$", ErrorMessage = "The username can only contain letters, numbers, hyphens, underscores, and spaces.")]
+            [Display(Name = "User name")]
+            public string UserName { get; set; }
             
             [Required]
             [EmailAddress]
@@ -123,17 +123,18 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
             {
                 var user = CreateUser();
 
-                user.Name = Input.Name;
+                user.UserName = Input.UserName;
                 
-                await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
+                await _userStore.SetUserNameAsync(user, Input.UserName, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
                 {
+                    Console.WriteLine($"Username: {Input.UserName}, Email: {Input.Email}");
                     _logger.LogInformation("User created a new account with password.");
                     
-                    var claim = new Claim("Full Name", Input.Name);
+                    var claim = new Claim("User Name", Input.UserName);
                     await _userManager.AddClaimAsync(user, claim);
 
                     var userId = await _userManager.GetUserIdAsync(user);

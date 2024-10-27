@@ -14,13 +14,13 @@ ViewData["Title"] = "Register";
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
             <div class="form-floating">
-                <label asp-for="Input.Name">Full Name</label>
-                <input asp-for="Input.Name" class="form-control" autocomplete="name" aria-required="true" placeholder="full name"/>
-                <span asp-validation-for="Input.Name" class="text-danger"></span>
+                <label asp-for="Input.UserName">User Name</label>
+                <input asp-for="Input.UserName" class="form-control" autocomplete="username" aria-required="true" placeholder="user name"/>
+                <span asp-validation-for="Input.UserName" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3">
                 <label asp-for="Input.Email">Email</label>
-                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com"/>
+                <input asp-for="Input.Email" class="form-control" autocomplete="email" aria-required="true" placeholder="name@example.com"/>
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3">
@@ -57,7 +57,19 @@ ViewData["Title"] = "Register";
                     <p>
                         @foreach (var provider in Model.ExternalLogins!)
                         {
-                        <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                            @if (provider.Name == "GitHub")
+                            {
+                                <button type="submit" class="provider-button github-button" name="provider" value="@provider.Name" title="Log in using your GitHub account">
+                                    <img src="/images/github-mark-white.svg" alt="GitHub logo" class="provider-logo" />
+                                    @provider.DisplayName
+                                </button>
+                            }
+                            else
+                            {
+                                <button type="submit" class="provider-button" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">
+                                    @provider.DisplayName
+                                </button>
+                            }
                         }
                     </p>
                 </div>

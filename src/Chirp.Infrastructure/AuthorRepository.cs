@@ -15,7 +15,7 @@ public class AuthorRepository : IAuthorRepository
     
     public async Task<Author> CreateAuthor(AuthorDTO authorDto)
     {
-        Author newAuthor = new() { Name = authorDto.Name, Email = authorDto.Email };
+        Author newAuthor = new() { UserName = authorDto.Name, Email = authorDto.Email };
         var queryResult = await _dbContext.Authors.AddAsync(newAuthor); // does not write to the database!
 
         await _dbContext.SaveChangesAsync(); // persist the changes in the database
@@ -25,7 +25,7 @@ public class AuthorRepository : IAuthorRepository
     public async Task<Author> FindAuthor(AuthorDTO authorDto)
     {
         var query = from author in _dbContext.Authors
-            where (string.IsNullOrEmpty(authorDto.Name) || author.Name.ToLower().Contains(authorDto.Name.ToLower())) &&
+            where (string.IsNullOrEmpty(authorDto.Name) || author.UserName.ToLower().Contains(authorDto.Name.ToLower())) &&
                   (string.IsNullOrEmpty(authorDto.Email) || author.Email.ToLower().Contains(authorDto.Email.ToLower()))
             select author;
 
