@@ -91,31 +91,6 @@ public class CheepRepositoryTests
         // Assert
         Assert.Empty(cheeps);
     }
-
-    [Fact]
-    public async Task CreateAuthor_Stores_New_Author_In_Database()
-    {
-        // Arrange
-        ICheepRepository repository = new Infrastructure.CheepRepository(_dbContext);
-        
-        // Act
-        AuthorDTO authorDto = new AuthorDTO
-        {
-            Name = "John Doe",
-            Email = "john.doe@example.com",
-        };
-        var createdAuthor = await repository.CreateAuthor(authorDto);
-        var foundAuthor = await repository.FindAuthor(authorDto);
-
-        // Assert
-        Assert.NotNull(createdAuthor);
-        Assert.Equal(authorDto.Name, createdAuthor.Name);
-        Assert.Equal(authorDto.Email, createdAuthor.Email);
-        
-        Assert.NotNull(foundAuthor);
-        Assert.Equal(authorDto.Name, foundAuthor.Name);
-        Assert.Equal(authorDto.Email, foundAuthor.Email);
-    }
     
     [Fact]
     public async Task CreateCheep()
@@ -125,14 +100,16 @@ public class CheepRepositoryTests
         var cheepDto = new CheepDTO {Author = authorDto.Name, Text = "I am alive", TimeStamp = DateTime.UtcNow.ToString("MM'/'dd'/'yy H':'mm':'ss") };
         
         ICheepRepository cheepRepository = new Infrastructure.CheepRepository(_dbContext);
+        IAuthorRepository authorRepository = new Infrastructure.AuthorRepository(_dbContext);
     
         // Act
-        var createdCheep = await cheepRepository.CreateCheep(cheepDto, authorDto);
+        var createdAuthor = await authorRepository.CreateAuthor(authorDto);
+        var createdCheep = await cheepRepository.CreateCheep(cheepDto);
         
         // Assert
         Assert.NotNull(createdCheep);
         Assert.Equal("I am alive", createdCheep.Text);
-        Assert.Equal("John Doe", createdCheep.Author.Name);
+        Assert.Equal("John Doe", createdAuthor.UserName);
         
         var cheeps = await cheepRepository.GetCheeps(1);
         Assert.Single(cheeps); 
@@ -143,29 +120,13 @@ public class CheepRepositoryTests
     }     
     
     [Fact]
-    public async Task FindAuthor()
-    {
-        // Arrange
-        var authorDto = new AuthorDTO { Name = "John Doe", Email = "email1" };
-
-        await PopulateDatabase(_dbContext);
-
-        ICheepRepository cheepRepository = new Infrastructure.CheepRepository(_dbContext);
-    
-        // Act
-        var author = await cheepRepository.FindAuthor(authorDto);
-
-        // Assert
-        Assert.NotNull(author);
-        Assert.Equal("John Doe", author.Name);
-        Assert.Equal("email1", author.Email);
-    }
-    
-    [Fact]
     public async Task CreateCheep_ThrowsException_WhenTextExceeds160Characters()
     {
         // Arrange
+        IAuthorRepository authorRepository = new Infrastructure.AuthorRepository(_dbContext);
         ICheepRepository repository = new Infrastructure.CheepRepository(_dbContext);
+
+        // Act
         var cheepDto = new CheepDTO
         {
             Text = new string('a', 161),
@@ -177,9 +138,10 @@ public class CheepRepositoryTests
             Name = "John Doe",
             Email = "john.doe@example.com",
         };
+        var CreateAuthor = authorRepository.CreateAuthor(authorDto);
         
         // Assert
-        var exception = Assert.ThrowsAsync<ValidationException>(() => repository.CreateCheep(cheepDto, authorDto));
+        var exception = Assert.ThrowsAsync<ValidationException>(() => repository.CreateCheep(cheepDto));
         Assert.Equal("Cheep is invalid: Cheeps can't be longer than 160 characters.", exception.Result.Message);
     }
 
@@ -188,22 +150,23 @@ public class CheepRepositoryTests
         var specificDate1 = new DateTime(2024, 1, 2, 3, 4, 5);
         var specificDate2 = new DateTime(2024, 2, 3, 4, 5, 6);
         ICollection<Cheep> authorCheeps1 = new List<Cheep>();
-        ICollection<Cheep> authorCheeps2 = new List<Cheep>();
+        IAuthorRepository authorRepository = new Infrastructure.AuthorRepository(_dbContext);
         
-        var author1 = new Author
+        
+        var authorDTO1 = new AuthorDTO
         {
-            AuthorId = 10, 
             Name = "John Doe", 
             Email = "email1",
-            Cheeps = authorCheeps1
         };
-        var author2 = new Author
+        var authorDTO2 = new AuthorDTO
         {
-            AuthorId = 20, 
             Name = "Mary Doe", 
             Email = "email2",
-            Cheeps = authorCheeps2
         };
+
+        var author1 = await authorRepository.CreateAuthor(authorDTO1);
+        var author2 = await authorRepository.CreateAuthor(authorDTO2);
+
         var cheep1 = new Cheep { 
             CheepId = 1, 
             Text = "I am alive", 
