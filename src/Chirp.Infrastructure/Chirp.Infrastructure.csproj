@@ -19,8 +19,4 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SQLite" Version="8.0.8" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Migrations\" />
-  </ItemGroup>
-
 </Project>
