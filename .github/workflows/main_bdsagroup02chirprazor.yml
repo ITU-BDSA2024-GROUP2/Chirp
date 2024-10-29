@@ -62,4 +62,7 @@ jobs:
           app-name: 'bdsagroup02chirprazor'
           slot-name: 'Production'
           package: .
+        env:
+            GitHub__ClientId: ${{ secrets.GITHUBCLIENTID }}
+            GitHub__ClientSecret: ${{ secrets.GITHUBCLIENTSECRET }}
           
