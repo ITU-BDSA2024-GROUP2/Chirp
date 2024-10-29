@@ -65,4 +65,11 @@ public class AuthorRepositoryTest
         Assert.Equal("John Doe", author.UserName);
         Assert.Equal("email1", author.Email);
     }
+
+    public void Dispose()
+    {
+        // Dispose of the in-memory SQLite connection
+        _dbContext.Dispose();
+        _connection.Dispose();
+    }
 }
