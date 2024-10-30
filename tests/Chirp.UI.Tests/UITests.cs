@@ -26,7 +26,7 @@ namespace Chirp.UI.Tests
         public async Task Test1()
         {
             await Page.GotoAsync("http://localhost:5273");
-
+            
             Assert.IsTrue(await Page.IsVisibleAsync("h1"));
         }
     }

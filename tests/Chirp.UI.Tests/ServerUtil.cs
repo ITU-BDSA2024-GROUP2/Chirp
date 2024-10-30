@@ -12,7 +12,7 @@ namespace Chirp.UI.Tests
                 StartInfo = new ProcessStartInfo
                 {
                     FileName = "dotnet",
-                    Arguments = "run --project ../../src/Chirp.Web",
+                    Arguments = "run --project ../../../../../src/Chirp.Web",
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
                     UseShellExecute = false,
