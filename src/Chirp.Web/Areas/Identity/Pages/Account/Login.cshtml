@@ -69,16 +69,16 @@
                                 {
                                     @if (provider.Name == "GitHub")
                                     {
-                                    <button type="submit" class="provider-button github-button" name="provider" value="@provider.Name" title="Log in using your GitHub account">
-                                        <img src="/images/github-mark-white.svg" alt="GitHub logo" class="provider-logo" />
-                                        @provider.DisplayName
-                                    </button>
+                                        <button type="submit" class="provider-button github-button" name="provider" value="@provider.Name" title="Log in using your GitHub account">
+                                            <img src="/images/github-mark-white.svg" alt="GitHub logo" class="provider-logo" />
+                                            @provider.DisplayName
+                                        </button>
                                     }
                                     else
                                     {
-                                    <button type="submit" class="provider-button" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">
-                                        @provider.DisplayName
-                                    </button>
+                                        <button type="submit" class="provider-button" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">
+                                            @provider.DisplayName
+                                        </button>
                                     }
                                 }
                             </p>
