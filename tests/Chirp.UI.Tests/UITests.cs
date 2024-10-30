@@ -1,15 +1,33 @@
-namespace Chirp.UI.Tests;
+using NUnit.Framework;
+using System.Diagnostics;
+using System.Threading.Tasks;
+using Microsoft.Playwright.NUnit;
 
-public class Tests
+namespace Chirp.UI.Tests
 {
-    [SetUp]
-    public void Setup()
+    public class Tests : PageTest
     {
-    }
+        private Process _serverProcess;
 
-    [Test]
-    public void Test1()
-    {
-        Assert.Pass();
+        [SetUp]
+        public async Task Setup()
+        {
+            _serverProcess = await ServerUtil.StartServer();
+        }
+
+        [TearDown]
+        public void Cleanup()
+        {
+            _serverProcess.Kill();
+            _serverProcess.Dispose();
+        }
+
+        [Test]
+        public async Task Test1()
+        {
+            await Page.GotoAsync("http://localhost:5273");
+
+            Assert.IsTrue(await Page.IsVisibleAsync("h1"));
+        }
     }
 }
