@@ -9,6 +9,9 @@ public class PublicModel : PageModel
 {
     private readonly ICheepService _service;
     public List<CheepDTO> Cheeps { get; set; }
+    
+    [BindProperty]
+    public SubmitMessageModel SubmitMessage { get; set; }
 
     public PublicModel(ICheepService service)
     {

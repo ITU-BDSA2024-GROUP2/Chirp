@@ -4,9 +4,11 @@
 {
     <div class="cheepbox">
         <h3>What's on your mind @(User.Identity.Name)?</h3>
-        <form method="post">
+        <form method="post" asp-page="SubmitMessage">
+            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
             <input style="float: left" type="text" asp-for="Message">
             <input type="submit" value="Share">
+            <span asp-validation-for="Message"></span>
         </form>
     </div>
 }

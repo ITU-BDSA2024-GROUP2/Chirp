@@ -9,6 +9,9 @@ public class UserTimelineModel : PageModel
 {
     private readonly ICheepService _service;
     public List<CheepDTO> Cheeps { get; set; }
+    
+    [BindProperty]
+    public SubmitMessageModel SubmitMessage { get; set; }
 
     public UserTimelineModel(ICheepService service)
     {
