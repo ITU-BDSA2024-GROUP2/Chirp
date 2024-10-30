@@ -83,7 +83,7 @@ label {
     transition: background-color 0.3s;
 }
 
-#registerSubmit:hover, #login-submit {
+#registerSubmit:hover, #login-submit:hover {
     background-color: #a65252;
 }
 
