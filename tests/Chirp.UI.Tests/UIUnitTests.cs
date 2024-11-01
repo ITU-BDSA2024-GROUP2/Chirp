@@ -312,5 +312,29 @@ namespace Chirp.UI.Tests
             await Expect(confirmPasswordValidationMessage).ToHaveTextAsync("The password and confirmation password do not match.");
         }
         
+        /*[Test]	
+        public async Task TestGithubLoginRedirect()
+        {
+            // Arrange
+            await Page.GotoAsync("http://localhost:5273/Identity/Account/Register");
+            
+            // Act
+            var githubButton = Page.Locator("button.provider-button.github-button");
+            await githubButton.ClickAsync();
+            
+            
+            string currentUrl = Page.Url;
+            Console.WriteLine("Current URL after redirection: " + currentUrl);
+
+            if (currentUrl.Contains("https://github.com/login"))
+            {
+                Console.WriteLine("Redirection to GitHub login page was successful!");
+            }
+            else
+            {
+                Console.WriteLine("Redirection failed or went to an unexpected URL.");
+            }
+        }*/
+        
     }
 }
