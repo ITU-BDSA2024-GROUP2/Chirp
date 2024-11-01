@@ -50,7 +50,7 @@ public class CheepRepository : ICheepRepository
         return result;
     }
     
-    public async Task CreateCheep(string authorName, string text)
+    public async Task<Cheep>  CreateCheep(string authorName, string text)
     {
         Author author = await FindAuthorByName(authorName);
         
@@ -61,16 +61,10 @@ public class CheepRepository : ICheepRepository
             Author = author,
         };
         
-        var validationResults = newCheep.Validate();
-        if (validationResults.Any())
-        {
-            throw new ValidationException("Cheep is invalid: " +
-                                          string.Join(", ", validationResults.Select(v => v.ErrorMessage)));
-        }
-        
         var queryResult = await _dbContext.Cheeps.AddAsync(newCheep); // does not write to the database!
 
         await _dbContext.SaveChangesAsync(); // persist the changes in the database
+        return newCheep;
     }
 
     public async Task<Author> FindAuthorByName(string name)

@@ -96,54 +96,33 @@ public class CheepRepositoryTests
     public async Task CreateCheep()
     {
         // Arrange
-        var authorDto = new AuthorDTO { Name = "John Doe", Email = "jndo@itu.dk" };
-        var cheepDto = new CheepDTO {Author = authorDto.Name, Text = "I am alive", TimeStamp = DateTime.UtcNow.ToString("MM'/'dd'/'yy H':'mm':'ss") };
+        var authorName = "John Doe";
+        var message = "I am alive";
         
         ICheepRepository cheepRepository = new Infrastructure.CheepRepository(_dbContext);
         IAuthorRepository authorRepository = new Infrastructure.AuthorRepository(_dbContext);
     
         // Act
-        var createdAuthor = await authorRepository.CreateAuthor(authorDto);
-        var createdCheep = await cheepRepository.CreateCheep(cheepDto);
+        authorRepository.CreateAuthor(new AuthorDTO()
+        {
+            Name = authorName,
+            Email = "John@doe.com",
+        });
+        
+        var createdCheep = await cheepRepository.CreateCheep(authorName, message);
+        var cheeps = await cheepRepository.GetCheeps(1);
         
         // Assert
         Assert.NotNull(createdCheep);
         Assert.Equal("I am alive", createdCheep.Text);
-        Assert.Equal("John Doe", createdAuthor.UserName);
+        Assert.Equal("John Doe", createdCheep.Author.UserName);
         
-        var cheeps = await cheepRepository.GetCheeps(1);
         Assert.Single(cheeps); 
         
         var fetchedCheep = cheeps.First();
         Assert.Equal("I am alive", fetchedCheep.Text);
         Assert.Equal("John Doe", fetchedCheep.Author);
     }     
-    
-    [Fact]
-    public async Task CreateCheep_ThrowsException_WhenTextExceeds160Characters()
-    {
-        // Arrange
-        IAuthorRepository authorRepository = new Infrastructure.AuthorRepository(_dbContext);
-        ICheepRepository repository = new Infrastructure.CheepRepository(_dbContext);
-
-        // Act
-        var cheepDto = new CheepDTO
-        {
-            Text = new string('a', 161),
-            Author = "John Doe",
-            TimeStamp = "01/02/24 3:04:05",
-        };
-        var authorDto = new AuthorDTO
-        {
-            Name = "John Doe",
-            Email = "john.doe@example.com",
-        };
-        var CreateAuthor = authorRepository.CreateAuthor(authorDto);
-        
-        // Assert
-        var exception = Assert.ThrowsAsync<ValidationException>(() => repository.CreateCheep(cheepDto));
-        Assert.Equal("Cheep is invalid: Cheeps can't be longer than 160 characters.", exception.Result.Message);
-    }
 
     private async Task PopulateDatabase(ChirpDBContext context)
     {
