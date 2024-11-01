@@ -72,7 +72,7 @@ label {
     color: white;
 }
 
-#registerSubmit, #loginSubmit, .provider-button {
+#registerSubmit, #login-submit, .provider-button {
     padding: 10px;
     font-size: 1.2rem;
     border: none;
@@ -83,7 +83,7 @@ label {
     transition: background-color 0.3s;
 }
 
-#registerSubmit:hover {
+#registerSubmit:hover, #login-submit:hover {
     background-color: #a65252;
 }
 

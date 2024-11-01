@@ -11,14 +11,4 @@ public class Cheep
     public DateTime TimeStamp { get; set; }
     [Required]
     public Author? Author { get; set; }
-    
-    public IEnumerable<ValidationResult> Validate()
-    {
-        var validationResults = new List<ValidationResult>();
-        var validationContext = new ValidationContext(this);
-        
-        Validator.TryValidateObject(this, validationContext, validationResults, true);
-
-        return validationResults;
-    }
 }
