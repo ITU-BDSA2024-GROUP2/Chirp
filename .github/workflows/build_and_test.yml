@@ -19,7 +19,7 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Install Playwright
-      run: pwsh bin/Debug/netX/playwright.ps1 install
+      run: pwsh bin/Debug/net8.0/playwright.ps1 install
     - name: Test
       run: |
           export GitHub__ClientId="${{ secrets.GITHUBCLIENTID }}"
