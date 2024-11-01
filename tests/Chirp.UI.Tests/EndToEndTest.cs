@@ -13,19 +13,17 @@ namespace Chirp.UI.Tests
         [SetUp]
         public async Task Setup()
         {
-            
+           
         }
 
         [TearDown]
         public void Cleanup()
         {
-            _ = DeleteUser();
+          
         }
 
-
-        
         [Test]
-        public async Task UserResgistersANewAccountAndLogsInWithNewAccount()
+        public async Task UserResgistersANewAccountAndLogsInWithNewAccountLogsOutLogsInDeletesAccount()
         {   
             //Arrange
             await Page.GotoAsync("http://localhost:5273/");
@@ -57,32 +55,13 @@ namespace Chirp.UI.Tests
             
             //Assert
             await Expect(Page.GetByText("TestUser")).ToBeVisibleAsync();
-        }
-        
-        [Test]
-        public async Task UserLogsInWithExistingAccountAndLogsOut()
-        {
-            //Arrange
-            await Page.GotoAsync("http://localhost:5273");
-            
+
             //Act
-            await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
-            await Page.GetByPlaceholder("name@example.com").ClickAsync();
-            await Page.GetByPlaceholder("name@example.com").FillAsync("test@mail.com");
-            await Page.GetByPlaceholder("password").ClickAsync();
-            await Page.GetByPlaceholder("password").FillAsync("Testpassword123!");
-            await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
             await Page.GetByRole(AriaRole.Button, new() { Name = "logout [TestUser]" }).ClickAsync();
 
             //Assert
-            
-        }
+            await Expect(Page.GetByText("login")).ToBeVisibleAsync();
 
-        public async Task DeleteUser()
-        {
-            //Arrange
-            await Page.GotoAsync("http://localhost:5273");
-            
             //Act
             await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
             await Page.GetByPlaceholder("name@example.com").ClickAsync();
@@ -96,6 +75,15 @@ namespace Chirp.UI.Tests
             await Page.GetByPlaceholder("Please enter your password.").ClickAsync();
             await Page.GetByPlaceholder("Please enter your password.").FillAsync("Testpassword123!");
             await Page.GetByRole(AriaRole.Button, new() { Name = "Delete data and close my" }).ClickAsync();
+            await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
+            await Page.GetByPlaceholder("name@example.com").ClickAsync();
+            await Page.GetByPlaceholder("name@example.com").FillAsync("test@mail.com");
+            await Page.GetByPlaceholder("password").ClickAsync();
+            await Page.GetByPlaceholder("password").FillAsync("Testpassword123!");
+            await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
+
+            //
+            //await Expect(Page.GetByText("invalid login")).ToBeVisibleAsync();
         }
     }
 }
