@@ -41,6 +41,7 @@ public class UserTimelineModel : PageModel
         }
         if (!ModelState.IsValid)
         {
+            Cheeps = await _service.GetCheeps(1);
             return Page();
         }
 

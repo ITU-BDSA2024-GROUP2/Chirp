@@ -12,7 +12,7 @@ public class PublicModel : PageModel
     public List<CheepDTO> Cheeps { get; set; }
     
     [BindProperty]
-    public CheepViewModel CheepInput { get; set; } 
+    public CheepViewModel CheepInput { get; set; }
     
     public PublicModel(ICheepService service)
     {
@@ -39,6 +39,7 @@ public class PublicModel : PageModel
         }
         if (!ModelState.IsValid)
         {
+            Cheeps = await _service.GetCheeps(1);
             return Page();
         }
 
