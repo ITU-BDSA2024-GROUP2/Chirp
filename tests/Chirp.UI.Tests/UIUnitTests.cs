@@ -11,16 +11,17 @@ namespace Chirp.UI.Tests
     {
         private Process _serverProcess;
 
-        [SetUp]
+        [OneTimeSetUp]
         public async Task Setup()
         {
-            
+            _serverProcess = await ServerUtil.StartServer();
         }
 
-        [TearDown]
+        [OneTimeTearDown]
         public void Cleanup()
         {
-            
+            _serverProcess.Kill();
+            _serverProcess.Dispose();
         }
         
         [Test]
