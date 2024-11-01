@@ -50,13 +50,13 @@ public class CheepRepository : ICheepRepository
         return result;
     }
     
-    public async Task<Cheep> CreateCheep(CheepDTO cheepDto)
+    public async Task CreateCheep(string authorName, string text)
     {
-        Author author = await FindAuthorByName(cheepDto.Author);
+        Author author = await FindAuthorByName(authorName);
         
         Cheep newCheep = new()
         {
-            Text = cheepDto.Text, 
+            Text = text,
             TimeStamp = DateTime.UtcNow, 
             Author = author,
         };
@@ -71,7 +71,6 @@ public class CheepRepository : ICheepRepository
         var queryResult = await _dbContext.Cheeps.AddAsync(newCheep); // does not write to the database!
 
         await _dbContext.SaveChangesAsync(); // persist the changes in the database
-        return queryResult.Entity;
     }
 
     public async Task<Author> FindAuthorByName(string name)
