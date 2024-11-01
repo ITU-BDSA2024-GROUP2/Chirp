@@ -114,10 +114,74 @@ namespace Chirp.UI.Tests
             await Expect(email).ToBeVisibleAsync();
             await Expect(password).ToBeVisibleAsync();
             await Expect(confirmPassword).ToBeVisibleAsync();
+
         }
         
+        [Test]
+        public async Task TestInvalidValidUserName()
+        {
+            // Arrange
+            await Page.GotoAsync("http://localhost:5273/Identity/Account/Register");
+
+            // Act
+            var nameInput = Page.Locator("input[name='Input.UserName']");
+            await nameInput.FillAsync("");
+           
+            var registerButton = Page.Locator("#registerSubmit");
+            await registerButton.ClickAsync();
+
+            // Assert
+            var usernameValidationMessage = Page.Locator("span[data-valmsg-for='Input.UserName']");
+
+            // Verify that the validation message is visible and contains the expected text
+            await Expect(usernameValidationMessage).ToBeVisibleAsync();
+            await Expect(usernameValidationMessage).ToHaveTextAsync("The User name field is required.");
+        }
         
-        /*[Test]
+        [Test]
+        public async Task TestInvalidValidEmailNoEntry()
+        {
+            // Arrange
+            await Page.GotoAsync("http://localhost:5273/Identity/Account/Register");
+
+            // Act
+            var emailInput = Page.Locator("input[name='Input.Email']");
+            await emailInput.FillAsync("");
+           
+            var registerButton = Page.Locator("#registerSubmit");
+            await registerButton.ClickAsync();
+
+            // Assert
+            var emailValidationMessage = Page.Locator("span[data-valmsg-for='Input.Email']");
+
+            // Verify that the validation message is visible and contains the expected text
+            await Expect(emailValidationMessage).ToBeVisibleAsync();
+            await Expect(emailValidationMessage).ToHaveTextAsync("The Email field is required.");
+        }
+        
+        [Test]
+        public async Task TestInvalidValidPasswordNoEntry()
+        {
+            // Arrange
+            await Page.GotoAsync("http://localhost:5273/Identity/Account/Register");
+
+            // Act
+            var passwordInput = Page.Locator("input[name='Input.Password']");
+            await passwordInput.FillAsync("");
+           
+            var registerButton = Page.Locator("#registerSubmit");
+            await registerButton.ClickAsync();
+
+            // Assert
+            var passwordValidationMessage = Page.Locator("span[data-valmsg-for='Input.Password']");
+
+            // Verify that the validation message is visible and contains the expected text
+            await Expect(passwordValidationMessage).ToBeVisibleAsync();
+            await Expect(passwordValidationMessage).ToHaveTextAsync("The Password field is required.");
+        }
+
+        /*[Test] // can't confirm this actually works,
+         because the error popup can't be captured by playwright directly
         public async Task TestValidEmail()
         {
             
@@ -154,19 +218,99 @@ namespace Chirp.UI.Tests
             await registerButton.ClickAsync();
 
             var validationMessage = Page.Locator("span[data-valmsg-for='Input.Email']");
+            Console.WriteLine("the validation message: " + validationMessage);
             await Expect(validationMessage).ToBeVisibleAsync(); 
-        }
+        }*/
         
-        [Test]	
+        /*[Test]	
         public async Task TestValidPassword()
         {
             await Page.GotoAsync("http://localhost:5273/Identity/Account/Register");
             
             var passwordInput = Page.Locator("input[name='Input.Password']");
             
-            await passwordInput.FillAsync("valid.password@example.com");
+            await passwordInput.FillAsync("validPassword@example.com");
             
         }*/
+        
+        [Test]	
+        public async Task TestInvalidValidPasswordLength()
+        {
+            // Arrange
+            await Page.GotoAsync("http://localhost:5273/Identity/Account/Register");
+            
+            var emailInput = Page.Locator("input[name='Input.Email']");
+            await emailInput.FillAsync("valid.email@example.com");
+            
+            // Act
+            var passwordInput = Page.Locator("input[name='Input.Password']");
+            await passwordInput.FillAsync("iamc");
+            var registerButton = Page.Locator("#registerSubmit");
+            await registerButton.ClickAsync();
+            
+            // Assert
+            var passwordValidationMessage = Page.Locator("span[data-valmsg-for='Input.Password']");
+
+            // Verify that the validation message is visible and contains the expected text
+            await Expect(passwordValidationMessage).ToBeVisibleAsync();
+            await Expect(passwordValidationMessage).ToHaveTextAsync("The Password must be at least 6 and at max 100 characters long.");
+        }
+        
+        [Test]	
+        public async Task TestInvalidValidPasswordListOfCriteria()
+        {
+            // Arrange
+            await Page.GotoAsync("http://localhost:5273/Identity/Account/Register");
+            
+            var nameInput = Page.Locator("input[name='Input.UserName']");
+            await nameInput.FillAsync("Jens");
+            
+            var emailInput = Page.Locator("input[name='Input.Email']");
+            await emailInput.FillAsync("valid.email@example.com");
+            
+            // Act
+            var passwordInput = Page.Locator("input[name='Input.Password']");
+            await passwordInput.FillAsync("bobthebuilder");
+            var confirmPasswordInput = Page.Locator("input[name='Input.ConfirmPassword']");
+            await confirmPasswordInput.FillAsync("bobthebuilder");
+            
+            var registerButton = Page.Locator("#registerSubmit");
+            await registerButton.ClickAsync();
+            
+            // Assert
+            var passwordErrorItems = Page.Locator("div.validation-summary-errors ul li");
+
+            // Verify that each validation message is visible and check for specific text
+            await Expect(passwordErrorItems.Nth(0)).ToHaveTextAsync("Passwords must have at least one non alphanumeric character.");
+            await Expect(passwordErrorItems.Nth(1)).ToHaveTextAsync("Passwords must have at least one digit ('0'-'9').");
+            await Expect(passwordErrorItems.Nth(2)).ToHaveTextAsync("Passwords must have at least one uppercase ('A'-'Z').");
+        }
+        
+        [Test]	
+        public async Task TestConfirmPasswordNotSameAsPassword()
+        {
+            // Arrange
+            await Page.GotoAsync("http://localhost:5273/Identity/Account/Register");
+            
+            var emailInput = Page.Locator("input[name='Input.Email']");
+            await emailInput.FillAsync("valid.email@example.com");
+            
+            // Act
+            var passwordInput = Page.Locator("input[name='Input.Password']");
+            await passwordInput.FillAsync("Valid@Password12");
+            var confirmPasswordInput = Page.Locator("input[name='Input.ConfirmPassword']");
+            await confirmPasswordInput.FillAsync("Valid@Password11");
+            
+            var registerButton = Page.Locator("#registerSubmit");
+            await registerButton.ClickAsync();
+            
+            // Assert
+            var confirmPasswordValidationMessage = Page.Locator("span[data-valmsg-for='Input.ConfirmPassword']");
+
+            // Verify that the validation message is visible and contains the expected text
+            await Expect(confirmPasswordValidationMessage).ToBeVisibleAsync();
+            await Expect(confirmPasswordValidationMessage).ToHaveTextAsync("The password and confirmation password do not match.");
+        }
         
     }
 }
