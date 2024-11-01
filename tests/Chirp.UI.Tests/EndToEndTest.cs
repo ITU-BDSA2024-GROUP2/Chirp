@@ -9,7 +9,6 @@ namespace Chirp.UI.Tests
 {
     public class EndToEndTest : PageTest
     {
-        private Process _serverProcess;
 
         [SetUp]
         public async Task Setup()
@@ -20,7 +19,7 @@ namespace Chirp.UI.Tests
         [TearDown]
         public void Cleanup()
         {
-            
+            _ = DeleteUser();
         }
 
 
@@ -79,8 +78,7 @@ namespace Chirp.UI.Tests
             
         }
 
-        [Test]
-        public async Task UserLogsInWithExistingAccountAndDeletesTheAccount()
+        public async Task DeleteUser()
         {
             //Arrange
             await Page.GotoAsync("http://localhost:5273");
@@ -98,9 +96,6 @@ namespace Chirp.UI.Tests
             await Page.GetByPlaceholder("Please enter your password.").ClickAsync();
             await Page.GetByPlaceholder("Please enter your password.").FillAsync("Testpassword123!");
             await Page.GetByRole(AriaRole.Button, new() { Name = "Delete data and close my" }).ClickAsync();
-
-            //Assert
-            
         }
     }
 }
