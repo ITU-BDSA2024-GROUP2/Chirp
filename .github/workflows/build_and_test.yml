@@ -18,10 +18,15 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
-    - name: Ensure browsers are installed
-      run: pwsh Chirp.Web/bin/Debug/net8.0/playwright.ps1 install --with-deps
     - name: Test
       run: |
           export GitHub__ClientId="${{ secrets.GITHUBCLIENTID }}"
           export GitHub__ClientSecret="${{ secrets.GITHUBCLIENTSECRET }}"
           dotnet test --no-build --verbosity normal
+    - name: Install Playwright
+      run: |
+        npm install -D playwright
+        pwsh -Command "Chirp.Web/bin/Debug/net8.0/playwright.ps1 install --with-deps"
+
+    - name: Run Playwright Tests
+      run: npx playwright test --headed
