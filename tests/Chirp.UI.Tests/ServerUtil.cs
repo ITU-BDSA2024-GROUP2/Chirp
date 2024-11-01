@@ -1,13 +1,13 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 
-namespace Chirp.UI.Tests
+/*namespace Chirp.UI.Tests
 {
     public static class ServerUtil
     {
         public static async Task<Process> StartServer()
         {
-            var serverProcess = new Process
+            /*var serverProcess = new Process
             {
                 StartInfo = new ProcessStartInfo
                 {
@@ -28,4 +28,4 @@ namespace Chirp.UI.Tests
             return serverProcess;
         }
     }
-}
+}*/
