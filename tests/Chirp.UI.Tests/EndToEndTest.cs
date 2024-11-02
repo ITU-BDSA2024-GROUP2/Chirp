@@ -124,11 +124,11 @@ namespace Chirp.UI.Tests
 
             //Act
             await Page.Locator("#Message").ClickAsync();
-            await Page.Locator("#Message").FillAsync("Hello World!");
+            await Page.Locator("#Message").FillAsync("This is a test cheep");
             await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
 
             //Assert
-            await Expect(Page.GetByText("Hello World!")).ToBeVisibleAsync();
+            await Expect(Page.GetByText("This is a test cheep")).ToBeVisibleAsync();
 
             //Act
             await Page.GetByRole(AriaRole.Link, new() { Name = "manage account" }).ClickAsync();
