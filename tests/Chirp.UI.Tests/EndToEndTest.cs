@@ -84,8 +84,8 @@ namespace Chirp.UI.Tests
             await Page.GetByPlaceholder("password").FillAsync("Testpassword123!");
             await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
 
-            //
-            //await Expect(Page.GetByText("invalid login")).ToBeVisibleAsync();
+            //Assert
+            await Expect(Page.GetByText("No user found")).ToBeVisibleAsync();
         }
 
         [Test]
@@ -144,8 +144,8 @@ namespace Chirp.UI.Tests
             await Page.GetByPlaceholder("password").FillAsync("Testpassword123!");
             await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
 
-            //
-            //await Expect(Page.GetByText("invalid login")).ToBeVisibleAsync();
+            //Assert
+            await Expect(Page.GetByText("No user found")).ToBeVisibleAsync();
         }
     }
 }
