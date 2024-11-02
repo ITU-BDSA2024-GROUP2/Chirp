@@ -2,6 +2,8 @@ using NUnit.Framework;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Chirp.Core;
+using Chirp.Infrastructure;
 using Microsoft.Playwright;
 using Microsoft.Playwright.NUnit;
 
@@ -86,6 +88,90 @@ namespace Chirp.UI.Tests
 
             //
             //await Expect(Page.GetByText("invalid login")).ToBeVisibleAsync();
+        }
+        
+        [Test]
+        public async Task CheepBoxIsVisibleWhenLoggedIn()
+        {
+            await LoginUser();
+            
+            await Page.GotoAsync("http://localhost:5273");
+
+
+            var shareButton = Page.GetByRole(AriaRole.Button, new() { Name = "Share" });
+            await Expect(shareButton).ToBeVisibleAsync();
+        }
+        
+        [Test]
+        public async Task CheepBoxIsNotVisibleWhenNotLoggedIn()
+        {
+            var isUserLoggedIn = await Page.GetByRole(AriaRole.Link, new() { Name = "my timeline" }).IsVisibleAsync();
+            if (isUserLoggedIn)
+            {
+                await Page.GetByRole(AriaRole.Button, new() { Name = "logout [username]" }).ClickAsync();
+            }
+            
+            await Page.GotoAsync("http://localhost:5273");
+
+
+            var shareButton = Page.GetByRole(AriaRole.Button, new() { Name = "Share" });
+            await Expect(shareButton).ToBeHiddenAsync();
+        }
+        
+        [Test]
+        public async Task SendingCheepShowsNewCheepOnTimeline()
+        {
+            await LoginUser();
+            
+            int randCheepId = new Random().Next();
+            
+            await Page.Locator("#Message").ClickAsync();
+            await Page.Locator("#Message").FillAsync("Cheeping cheeps on Chirp!" + randCheepId);
+            await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
+            
+            var newCheep = Page.Locator("li").Filter(new() { HasText = "username Cheeping cheeps on Chirp!" + randCheepId }).First;
+            await Expect(newCheep).ToBeVisibleAsync();
+            await Expect(newCheep).ToContainTextAsync("Cheeping cheeps on Chirp!" + randCheepId);
+        }
+        
+        [Test]
+        public async Task SendingCheepStoresCheepInDatabase()
+        {
+            
+        }
+        
+        [Test]
+        public async Task CheepboxDoesNotAllowUserToSendCheepLongerThan160Characters()
+        {
+        
+        }
+        
+        [Test]
+        public async Task SendingCheepStoresCheepForRespectiveAuthor()
+        {
+        
+        }
+        
+        public async Task LoginUser(string email = "name@example.com", string password = "Password123!")
+        {
+
+            var isUserLoggedIn = await Page.GetByRole(AriaRole.Link, new() { Name = "my timeline" }).IsVisibleAsync();
+            if (isUserLoggedIn)
+            {
+                return;
+            }
+            
+            //Arrange
+            await Page.GotoAsync("http://localhost:5273/Identity/Account/Login");
+
+            await Page.GetByPlaceholder("name@example.com").FillAsync(email);
+            await Page.GetByPlaceholder("password").FillAsync(password);
+            
+            await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
+
+            var myTimelineButton = Page.GetByRole(AriaRole.Link, new() { Name = "my timeline" });
+            await Expect(myTimelineButton).ToBeVisibleAsync();
+
         }
     }
 }
