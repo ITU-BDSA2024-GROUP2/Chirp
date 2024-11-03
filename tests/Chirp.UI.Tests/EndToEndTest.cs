@@ -94,45 +94,53 @@ namespace Chirp.UI.Tests
         [Test]
         public async Task CheepBoxIsVisibleWhenLoggedIn()
         {
+            // Arrange
             await LoginUser();
             
+            // Act
             await Page.GotoAsync("http://localhost:5273");
-
-
             var shareButton = Page.GetByRole(AriaRole.Button, new() { Name = "Share" });
+            
+            // Assert
             await Expect(shareButton).ToBeVisibleAsync();
         }
         
         [Test]
         public async Task CheepBoxIsNotVisibleWhenNotLoggedIn()
         {
+            // Arrange
             var isUserLoggedIn = await Page.GetByRole(AriaRole.Link, new() { Name = "my timeline" }).IsVisibleAsync();
             if (isUserLoggedIn)
             {
                 await Page.GetByRole(AriaRole.Button, new() { Name = "logout [username]" }).ClickAsync();
             }
             
+            // Act
             await Page.GotoAsync("http://localhost:5273");
-
-
             var shareButton = Page.GetByRole(AriaRole.Button, new() { Name = "Share" });
+            
+            // Assert
             await Expect(shareButton).ToBeHiddenAsync();
         }
         
         [Test]
         public async Task SendingCheepShowsNewCheepOnPublicTimeline()
         {
+            // Arrange
             await LoginUser();
             
             await Page.GotoAsync("http://localhost:5273");
             
             int randCheepId = new Random().Next();
             
+            // Act
             await Page.Locator("#Message").ClickAsync();
             await Page.Locator("#Message").FillAsync("Cheeping cheeps on Chirp!" + randCheepId);
             await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
             
             var newCheep = Page.Locator("li").Filter(new() { HasText = "username Cheeping cheeps on Chirp!" + randCheepId }).First;
+            
+            // Assert
             await Expect(newCheep).ToBeVisibleAsync();
             await Expect(newCheep).ToContainTextAsync("Cheeping cheeps on Chirp!" + randCheepId);
         }
@@ -140,6 +148,7 @@ namespace Chirp.UI.Tests
         [Test]
         public async Task CheepboxDoesNotAllowUserToSendCheepLongerThan160Characters()
         {
+            // Arrange
             await LoginUser();
             
             await Page.GotoAsync("http://localhost:5273");
@@ -147,6 +156,7 @@ namespace Chirp.UI.Tests
             int randCheepId = new Random().Next();
             string longCheepMessage = new string('a', 160) + randCheepId;
             
+            // Act
             await Page.Locator("#Message").ClickAsync();
             await Page.Locator("#Message").FillAsync(longCheepMessage);
             await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
@@ -155,6 +165,7 @@ namespace Chirp.UI.Tests
             
             var newCheep =  Page.Locator("li").Filter(new() { HasText = longCheepMessage.Substring(0, 160) }).First;
 
+            // Assert
             await Expect(newCheep).ToBeVisibleAsync();
             await Expect(newCheep).ToContainTextAsync(longCheepMessage.Substring(0, 160));
             string cheepText = await newCheep.InnerTextAsync();
@@ -165,35 +176,43 @@ namespace Chirp.UI.Tests
         [Test]
         public async Task CheepboxDoesNotAllowUserToSendEmptyCheeps()
         {
+            // Arrange
             await LoginUser();
             
             await Page.GotoAsync("http://localhost:5273");
             
+            // Act
             await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
             var cheepbox = Page.GetByText("Cheep cannot be empty Share");
 
+            // Assert
             await Expect(cheepbox).ToBeVisibleAsync();
         }
         
         [Test]
         public async Task SendingCheepShowCheepOnPrivateTimelineForRespectiveAuthor()
         {
+            // Arrange
             await LoginUser();
             
             await Page.GotoAsync("http://localhost:5273");
             
             int randCheepId = new Random().Next();
             
+            // Act
             await Page.Locator("#Message").ClickAsync();
             await Page.Locator("#Message").FillAsync("Cheeping cheeps on Chirp!" + randCheepId);
             await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
             
             await Page.GetByRole(AriaRole.Link, new() { Name = "my timeline" }).ClickAsync();
             var newCheep = Page.Locator("li").Filter(new() { HasText = "username Cheeping cheeps on Chirp!" + randCheepId }).First;
+            
+            // Assert
             await Expect(newCheep).ToBeVisibleAsync();
             await Expect(newCheep).ToContainTextAsync("Cheeping cheeps on Chirp!" + randCheepId);
         }
         
+        // This method can be used to prepare a test that requires a logged in user
         public async Task LoginUser(string email = "name@example.com", string password = "Password123!")
         {
 
