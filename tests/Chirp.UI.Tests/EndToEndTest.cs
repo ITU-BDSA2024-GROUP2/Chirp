@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Chirp.Core;
 using Chirp.Infrastructure;
+using Microsoft.Data.Sqlite;
 using Microsoft.Playwright;
 using Microsoft.Playwright.NUnit;
 
@@ -119,9 +120,11 @@ namespace Chirp.UI.Tests
         }
         
         [Test]
-        public async Task SendingCheepShowsNewCheepOnTimeline()
+        public async Task SendingCheepShowsNewCheepOnPublicTimeline()
         {
             await LoginUser();
+            
+            await Page.GotoAsync("http://localhost:5273");
             
             int randCheepId = new Random().Next();
             
@@ -133,23 +136,62 @@ namespace Chirp.UI.Tests
             await Expect(newCheep).ToBeVisibleAsync();
             await Expect(newCheep).ToContainTextAsync("Cheeping cheeps on Chirp!" + randCheepId);
         }
-        
-        [Test]
-        public async Task SendingCheepStoresCheepInDatabase()
-        {
-            
-        }
-        
+
         [Test]
         public async Task CheepboxDoesNotAllowUserToSendCheepLongerThan160Characters()
         {
-        
+            await LoginUser();
+            
+            await Page.GotoAsync("http://localhost:5273");
+            
+            int randCheepId = new Random().Next();
+            string longCheepMessage = new string('a', 160) + randCheepId;
+            
+            await Page.Locator("#Message").ClickAsync();
+            await Page.Locator("#Message").FillAsync(longCheepMessage);
+            await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
+            
+            await Page.GetByRole(AriaRole.Link, new() { Name = "my timeline" }).ClickAsync();
+            
+            var newCheep =  Page.Locator("li").Filter(new() { HasText = longCheepMessage.Substring(0, 160) }).First;
+
+            await Expect(newCheep).ToBeVisibleAsync();
+            await Expect(newCheep).ToContainTextAsync(longCheepMessage.Substring(0, 160));
+            string cheepText = await newCheep.InnerTextAsync();
+            Assert.That(cheepText, Does.Not.Contain(randCheepId.ToString()));
+
         }
         
         [Test]
-        public async Task SendingCheepStoresCheepForRespectiveAuthor()
+        public async Task CheepboxDoesNotAllowUserToSendEmptyCheeps()
         {
+            await LoginUser();
+            
+            await Page.GotoAsync("http://localhost:5273");
+            
+            await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
+            var cheepbox = Page.GetByText("Cheep cannot be empty Share");
+
+            await Expect(cheepbox).ToBeVisibleAsync();
+        }
         
+        [Test]
+        public async Task SendingCheepShowCheepOnPrivateTimelineForRespectiveAuthor()
+        {
+            await LoginUser();
+            
+            await Page.GotoAsync("http://localhost:5273");
+            
+            int randCheepId = new Random().Next();
+            
+            await Page.Locator("#Message").ClickAsync();
+            await Page.Locator("#Message").FillAsync("Cheeping cheeps on Chirp!" + randCheepId);
+            await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
+            
+            await Page.GetByRole(AriaRole.Link, new() { Name = "my timeline" }).ClickAsync();
+            var newCheep = Page.Locator("li").Filter(new() { HasText = "username Cheeping cheeps on Chirp!" + randCheepId }).First;
+            await Expect(newCheep).ToBeVisibleAsync();
+            await Expect(newCheep).ToContainTextAsync("Cheeping cheeps on Chirp!" + randCheepId);
         }
         
         public async Task LoginUser(string email = "name@example.com", string password = "Password123!")
