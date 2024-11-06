@@ -1,9 +1,10 @@
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.VisualStudio.TestPlatform.TestHost;
 
+
 public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
 {
-    /*private readonly WebApplicationFactory<Program> _fixture;
+    private readonly WebApplicationFactory<Program> _fixture;
     private readonly HttpClient _client;
 
     public TestAPI(WebApplicationFactory<Program> fixture)
@@ -109,5 +110,5 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
         Assert.Contains("Chirp!", content2);
         Assert.Contains($"{author}'s Timeline", content2);
         Assert.NotEqual(content1, content2);
-    }*/
+    }
 }
