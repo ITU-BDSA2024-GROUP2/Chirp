@@ -151,6 +151,25 @@ namespace Chirp.UI.Tests
             await Expect(newCheep).ToBeVisibleAsync();
             await Expect(newCheep).ToContainTextAsync("Cheeping cheeps on Chirp!" + randCheepId);
         }
+
+        [Test]
+        public async Task CheepboxIsNotVulnerableForXSSAttacks()
+        {
+            // Arrange
+            await Page.GotoAsync("http://localhost:5273");
+            
+            // Act
+            await Page.Locator("#Message").ClickAsync();
+            await Page.Locator("#Message").FillAsync("Hello, I am feeling good!<script>alert('If you see this in a popup, you are in trouble!');</script>");
+            await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
+            
+            var newCheep = Page.Locator("li").Filter(new() { HasText = "<script>alert('If you see this in a popup, you are in trouble!');</script>"}).First;
+            
+            // Assert
+            await Expect(newCheep).ToBeVisibleAsync();
+            await Expect(newCheep)
+                .ToContainTextAsync("<script>alert('If you see this in a popup, you are in trouble!');</script>");
+        }
         
         // This method can be used to prepare a test that requires a logged in user
         public async Task LoginUser(string email = "name@example.com", string password = "Password123!")
