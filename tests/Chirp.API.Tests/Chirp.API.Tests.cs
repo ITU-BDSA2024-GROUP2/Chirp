@@ -23,7 +23,29 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
         Assert.Contains("Chirp!", content);
         Assert.Contains("Public Timeline", content);
     }
+    
+    [Fact]
+    public async void CanSeeRegisterPage()
+    {
+        var response = await _client.GetAsync("/Identity/Account/Register");
+        response.EnsureSuccessStatusCode();
+        var content = await response.Content.ReadAsStringAsync();
 
+        Assert.Contains("Chirp!", content);
+        Assert.Contains("Register", content);
+    }
+
+    [Fact]
+    public async void CanSeeLoginPage()
+    {
+        var response = await _client.GetAsync("/Identity/Account/Login");
+        response.EnsureSuccessStatusCode();
+        var content = await response.Content.ReadAsStringAsync();
+
+        Assert.Contains("Chirp!", content);
+        Assert.Contains("Log in", content);
+    }
+    
     [Theory]
     [InlineData("Helge")]
     [InlineData("Adrian")]
