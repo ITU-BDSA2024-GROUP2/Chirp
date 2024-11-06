@@ -2,32 +2,36 @@ name: .NET Build and Test
 
 on:
   push:
+    branches: main
   pull_request:
+    branches: main
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
+
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.x
-        
-    - name: Restore dependencies
-      run: dotnet restore
-      
-    - name: Build
-      run: dotnet build --no-restore
-      
-    - name: Set up Playwright
-      uses: microsoft/playwright-image@v1
-      with:
-        browser-version: 'latest'
-        
-    - name: Test
-      run: |
-          export GitHub__ClientId="${{ secrets.GITHUBCLIENTID }}"
-          export GitHub__ClientSecret="${{ secrets.GITHUBCLIENTSECRET }}"
-          dotnet test --no-build --verbosity normal
+      - uses: actions/checkout@v4   
+
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.x
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore
+
+      - name: Set up Playwright
+        uses: docker/setup-qemu-action@v2
+        with:
+          platform: linux/amd64
+
+      - name: Run Tests
+        run: |
+          docker run -it --rm --ipc=host mcr.microsoft.com/playwright:latest /bin/bash
+          npm ci
+          npx playwright test
