@@ -24,9 +24,6 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
       
-    - name: Install dependencies
-      run: npm ci
-      
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
       
