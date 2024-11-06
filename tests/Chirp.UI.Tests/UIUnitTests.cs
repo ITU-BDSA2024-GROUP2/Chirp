@@ -25,6 +25,37 @@ namespace Chirp.UI.Tests
         }
         
         [Test]
+        public async Task TestAddress()
+        {   
+            //Arrange
+            bool httpsUsed = false;
+            bool httpUsed = false; 
+            
+            //Act
+            try
+            {
+                await Page.GotoAsync("https://localhost:5273");
+                httpsUsed = true;
+            }
+            catch (Exception e)
+            {
+            }
+
+            try
+            {
+                await Page.GotoAsync("http://localhost:5273");
+                httpsUsed = true;
+            }
+            catch (Exception e)
+            {
+            }
+            
+            //Assert
+            Assert.IsTrue(httpsUsed);
+            Assert.IsFalse(httpUsed);
+        }
+        
+        [Test]
         public async Task TestTitle()
         {   
             //Arrange
