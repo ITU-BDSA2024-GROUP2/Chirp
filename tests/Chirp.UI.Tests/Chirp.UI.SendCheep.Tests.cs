@@ -7,6 +7,15 @@ namespace Chirp.UI.Tests
 {
     public class Chirp_UI_SendCheep_Tests : PageTest
     {
+        public override BrowserNewContextOptions ContextOptions()
+        {
+            
+            return new BrowserNewContextOptions
+            {
+                IgnoreHTTPSErrors = true
+            };
+        }
+        
         private Process _serverProcess;
         
         [OneTimeSetUp]
