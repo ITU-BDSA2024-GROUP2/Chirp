@@ -34,6 +34,17 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
         Assert.Contains("Chirp!", content);
         Assert.Contains("Register", content);
     }
+    
+    [Fact]
+    public async void CanSeeLogoutPage()
+    {
+        var response = await _client.GetAsync("/Identity/Account/Logout");
+        response.EnsureSuccessStatusCode();
+        var content = await response.Content.ReadAsStringAsync();
+
+        Assert.Contains("Chirp!", content);
+        Assert.Contains("Log out", content);
+    }
 
     [Fact]
     public async void CanSeeLoginPage()
