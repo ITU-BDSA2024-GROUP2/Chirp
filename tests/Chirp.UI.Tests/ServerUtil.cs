@@ -21,8 +21,6 @@ namespace Chirp.UI.Tests
             };
 
             serverProcess.Start();
-
-            // Optional: Wait for server to start (depends on app startup time)
             await Task.Delay(10000); 
 
             return serverProcess;

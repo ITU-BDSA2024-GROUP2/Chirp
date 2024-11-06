@@ -31,7 +31,7 @@ namespace Chirp.UI.Tests
         public async Task UserResgistersANewAccountAndLogsInWithNewAccountLogsOutLogsInDeletesAccount()
         {   
             //Arrange
-            await Page.GotoAsync("http://localhost:5273/");
+            await Page.GotoAsync("https://localhost:5273/");
             
             //Act
             await Page.GetByRole(AriaRole.Link, new() { Name = "register" }).ClickAsync();
@@ -95,7 +95,7 @@ namespace Chirp.UI.Tests
         public async Task UserResgistersANewAccountAndLogsInWithNewAccountWritesCheepDeletesAccount()
         {   
             //Arrange
-            await Page.GotoAsync("http://localhost:5273/");
+            await Page.GotoAsync("https://localhost:5273/");
             
             //Act
             await Page.GetByRole(AriaRole.Link, new() { Name = "register" }).ClickAsync();

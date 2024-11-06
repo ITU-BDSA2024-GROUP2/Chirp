@@ -30,7 +30,7 @@ namespace Chirp.UI.Tests
             //Arrange
             
             //Act
-            await Page.GotoAsync("http://localhost:5273");
+            await Page.GotoAsync("https://localhost:5273");
             
             //Assert
             await Expect(Page).ToHaveTitleAsync(new Regex("Chirp"));
@@ -41,7 +41,7 @@ namespace Chirp.UI.Tests
         public async Task TestClickOnUser()
         {
             //Arrange
-            await Page.GotoAsync("http://localhost:5273");
+            await Page.GotoAsync("https://localhost:5273");
             
             //Act
             var author = await Page.Locator("p a").First.InnerTextAsync();
@@ -56,7 +56,7 @@ namespace Chirp.UI.Tests
         public async Task TestClickLoginAndRegister()
         {
             //Arrange
-            await Page.GotoAsync("http://localhost:5273");
+            await Page.GotoAsync("https://localhost:5273");
             
             //Act
             var locator = Page.GetByRole(AriaRole.Link, new() { Name = "login" });
@@ -72,7 +72,7 @@ namespace Chirp.UI.Tests
         public async Task TestClickOnLogo()
         {
             //Arrange
-            await Page.GotoAsync("http://localhost:5273/Identity/Account/Login");
+            await Page.GotoAsync("https://localhost:5273/Identity/Account/Login");
             
             //Act
             var locator = Page.GetByRole(AriaRole.Link, new() { Name = "Icon1" });
@@ -86,7 +86,7 @@ namespace Chirp.UI.Tests
         public async Task TestLoginForm()
         {
             //Arrange
-            await Page.GotoAsync("http://localhost:5273/Identity/Account/Login");
+            await Page.GotoAsync("https://localhost:5273/Identity/Account/Login");
             
             //Act
             var email = Page.Locator("input[name='Input.Email']");
@@ -102,7 +102,7 @@ namespace Chirp.UI.Tests
         public async Task TestRegisterForm()
         {
             //Arrange
-            await Page.GotoAsync("http://localhost:5273/Identity/Account/Register");
+            await Page.GotoAsync("https://localhost:5273/Identity/Account/Register");
             
             //Act
             var username = Page.Locator("input[name='Input.UserName']");
@@ -122,7 +122,7 @@ namespace Chirp.UI.Tests
         public async Task TestInvalidValidUserName()
         {
             // Arrange
-            await Page.GotoAsync("http://localhost:5273/Identity/Account/Register");
+            await Page.GotoAsync("https://localhost:5273/Identity/Account/Register");
 
             // Act
             var nameInput = Page.Locator("input[name='Input.UserName']");
@@ -143,7 +143,7 @@ namespace Chirp.UI.Tests
         public async Task TestInvalidValidEmailNoEntry()
         {
             // Arrange
-            await Page.GotoAsync("http://localhost:5273/Identity/Account/Register");
+            await Page.GotoAsync("https://localhost:5273/Identity/Account/Register");
 
             // Act
             var emailInput = Page.Locator("input[name='Input.Email']");
@@ -164,7 +164,7 @@ namespace Chirp.UI.Tests
         public async Task TestInvalidValidPasswordNoEntry()
         {
             // Arrange
-            await Page.GotoAsync("http://localhost:5273/Identity/Account/Register");
+            await Page.GotoAsync("https://localhost:5273/Identity/Account/Register");
 
             // Act
             var passwordInput = Page.Locator("input[name='Input.Password']");
@@ -238,7 +238,7 @@ namespace Chirp.UI.Tests
         public async Task TestInvalidValidPasswordLength()
         {
             // Arrange
-            await Page.GotoAsync("http://localhost:5273/Identity/Account/Register");
+            await Page.GotoAsync("https://localhost:5273/Identity/Account/Register");
             
             var emailInput = Page.Locator("input[name='Input.Email']");
             await emailInput.FillAsync("valid.email@example.com");
@@ -261,7 +261,7 @@ namespace Chirp.UI.Tests
         public async Task TestInvalidValidPasswordListOfCriteria()
         {
             // Arrange
-            await Page.GotoAsync("http://localhost:5273/Identity/Account/Register");
+            await Page.GotoAsync("https://localhost:5273/Identity/Account/Register");
             
             var nameInput = Page.Locator("input[name='Input.UserName']");
             await nameInput.FillAsync("Jens");
@@ -291,7 +291,7 @@ namespace Chirp.UI.Tests
         public async Task TestConfirmPasswordNotSameAsPassword()
         {
             // Arrange
-            await Page.GotoAsync("http://localhost:5273/Identity/Account/Register");
+            await Page.GotoAsync("https://localhost:5273/Identity/Account/Register");
             
             var emailInput = Page.Locator("input[name='Input.Email']");
             await emailInput.FillAsync("valid.email@example.com");

@@ -44,7 +44,7 @@ namespace Chirp.UI.Tests
         public async Task CheepBoxIsVisibleWhenLoggedIn()
         {
             // Arrange
-            await Page.GotoAsync("http://localhost:5273");
+            await Page.GotoAsync("https://localhost:5273");
             
             // Act
             var shareButton = Page.GetByRole(AriaRole.Button, new() { Name = "Share" });
@@ -64,7 +64,7 @@ namespace Chirp.UI.Tests
             }
             
             // Act
-            await Page.GotoAsync("http://localhost:5273");
+            await Page.GotoAsync("https://localhost:5273");
             var shareButton = Page.GetByRole(AriaRole.Button, new() { Name = "Share" });
             
             // Assert
@@ -75,7 +75,7 @@ namespace Chirp.UI.Tests
         public async Task SendingCheepShowsNewCheepOnPublicTimeline()
         {
             // Arrange
-            await Page.GotoAsync("http://localhost:5273");
+            await Page.GotoAsync("https://localhost:5273");
             
             int randCheepId = new Random().Next();
             
@@ -95,7 +95,7 @@ namespace Chirp.UI.Tests
         public async Task CheepboxDoesNotAllowUserToSendCheepLongerThan160Characters()
         {
             // Arrange
-            await Page.GotoAsync("http://localhost:5273");
+            await Page.GotoAsync("https://localhost:5273");
             
             int randCheepId = new Random().Next();
             string longCheepMessage = new string('a', 160) + randCheepId;
@@ -121,7 +121,7 @@ namespace Chirp.UI.Tests
         public async Task CheepboxDoesNotAllowUserToSendEmptyCheeps()
         {
             // Arrange
-            await Page.GotoAsync("http://localhost:5273");
+            await Page.GotoAsync("https://localhost:5273");
             
             // Act
             await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
@@ -135,7 +135,7 @@ namespace Chirp.UI.Tests
         public async Task SendingCheepShowCheepOnPrivateTimelineForRespectiveAuthor()
         {
             // Arrange
-            await Page.GotoAsync("http://localhost:5273");
+            await Page.GotoAsync("https://localhost:5273");
             
             int randCheepId = new Random().Next();
             
@@ -163,7 +163,7 @@ namespace Chirp.UI.Tests
             }
             
             //Arrange
-            await Page.GotoAsync("http://localhost:5273/Identity/Account/Login");
+            await Page.GotoAsync("https://localhost:5273/Identity/Account/Login");
 
             await Page.GetByPlaceholder("name@example.com").FillAsync(email);
             await Page.GetByPlaceholder("password").FillAsync(password);
@@ -177,7 +177,7 @@ namespace Chirp.UI.Tests
         
         public async Task RegisterUser()
         {
-            await Page.GotoAsync("http://localhost:5273/");
+            await Page.GotoAsync("https://localhost:5273/");
             await Page.GetByRole(AriaRole.Link, new() { Name = "register" }).ClickAsync();
             await Page.GetByPlaceholder("user name").ClickAsync();
             
