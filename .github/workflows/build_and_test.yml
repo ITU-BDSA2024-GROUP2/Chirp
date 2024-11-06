@@ -12,6 +12,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: lts/*
       
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
@@ -23,6 +26,15 @@ jobs:
       
     - name: Build
       run: dotnet build --no-restore
+      
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps
+      
+    - name: Run Playwright tests
+      run: npx playwright test
         
     - name: Test
       run: |
