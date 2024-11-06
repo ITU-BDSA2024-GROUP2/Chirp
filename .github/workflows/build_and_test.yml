@@ -28,5 +28,7 @@ jobs:
       run: pwsh tests/Chirp.UI.Tests/bin/Debug/net8.0/playwright.ps1 install --with-deps
     
     - name: Test
-      run: 
-          dotnet test
+      run: |
+          export authentication_github_clientId="${{ secrets.GITHUBCLIENTID }}"
+          export authentication_github_clientSecret="${{ secrets.GITHUBCLIENTSECRET }}"
+          dotnet test --no-build --verbosity normal
