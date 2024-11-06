@@ -26,7 +26,7 @@ jobs:
       
       # Test
     - name: Ensure browsers are installed
-      run: pwsh tests/Chirp.UI.Tests/bin/Debug/net8.0/playwright.ps1 install --with-deps
+      run: pwsh src/Chirp.Web/bin/Debug/net8.0/playwright.ps1 install --with-deps
 
     - name: Test
       run: |
