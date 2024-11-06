@@ -10,6 +10,15 @@ namespace Chirp.UI.Tests
     public class UIUnitTests : PageTest
     {
         private Process _serverProcess;
+        
+        public override BrowserNewContextOptions ContextOptions()
+        {
+            
+            return new BrowserNewContextOptions
+            {
+                IgnoreHTTPSErrors = true
+            };
+        }
 
         [OneTimeSetUp]
         public async Task Setup()

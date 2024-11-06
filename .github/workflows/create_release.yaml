@@ -27,9 +27,9 @@ jobs:
       # Test
     - name: Test
       run: |
-          export GitHub__ClientId="${{ secrets.GITHUBCLIENTID }}"
-          export GitHub__ClientSecret="${{ secrets.GITHUBCLIENTSECRET }}"
-          dotnet test --no-build --verbosity normal
+        export authentication_github_clientId="${{ secrets.GITHUBCLIENTID }}"
+        export authentication_github_clientSecret="${{ secrets.GITHUBCLIENTSECRET }}"
+        dotnet test --no-build --verbosity normal
       
       # Publish for Linux
     - name: Publish Linux

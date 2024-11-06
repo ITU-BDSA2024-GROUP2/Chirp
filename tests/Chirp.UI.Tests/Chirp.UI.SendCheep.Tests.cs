@@ -9,6 +9,15 @@ namespace Chirp.UI.Tests
     {
         private Process _serverProcess;
         
+        public override BrowserNewContextOptions ContextOptions()
+        {
+            
+            return new BrowserNewContextOptions
+            {
+                IgnoreHTTPSErrors = true
+            };
+        }
+        
         [OneTimeSetUp]
         public async Task OneTimeSetup()
         {
