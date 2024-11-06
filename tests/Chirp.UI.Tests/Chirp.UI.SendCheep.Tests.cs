@@ -13,7 +13,6 @@ namespace Chirp.UI.Tests
         public async Task OneTimeSetup()
         {
             _serverProcess = await ServerUtil.StartServer();
-            await Task.Delay(2000);
         }
         
         [SetUp]
