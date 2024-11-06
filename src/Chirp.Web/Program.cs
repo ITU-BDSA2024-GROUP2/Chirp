@@ -14,6 +14,8 @@ builder.Services.AddScoped<ICheepRepository, CheepRepository>();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession();
 
+builder.Services.AddHsts(options => options.MaxAge = TimeSpan.FromDays(800));
+
 string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlite(connectionString));
 
