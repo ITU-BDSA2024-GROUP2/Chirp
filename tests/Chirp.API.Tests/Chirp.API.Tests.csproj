@@ -3,7 +3,6 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    
     <Nullable>enable</Nullable>
 
     <IsPackable>false</IsPackable>
@@ -25,7 +24,5 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Chirp.Web\Chirp.Web.csproj" />
   </ItemGroup>
-
-  
 
 </Project>
