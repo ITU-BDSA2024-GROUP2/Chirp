@@ -59,7 +59,7 @@ namespace Chirp.UI.Tests
             await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
             
             //Assert
-            await Expect(Page.GetByText("TestUser")).ToBeVisibleAsync();
+            await Expect(Page.GetByRole(AriaRole.Button, new() { Name = "logout [TestUser]" })).ToBeVisibleAsync();
 
             //Act
             await Page.GetByRole(AriaRole.Button, new() { Name = "logout [TestUser]" }).ClickAsync();
