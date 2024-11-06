@@ -26,9 +26,16 @@ namespace Chirp.UI.Tests
             _serverProcess.Kill();
             _serverProcess.Dispose();
         }
+        
+        [TearDown]
+        public async Task CleanupAccount()
+        {
+            await LoginUserAndDeleteUser("test@mail.com", "Testpassword123!");
+            await LoginUserAndDeleteUser("testmail@mail.com", "Testpassword123!");
+        }
 
         [Test]
-        public async Task UserResgistersANewAccountAndLogsInWithNewAccountLogsOutLogsInDeletesAccount()
+        public async Task UserRegistersANewAccountAndLogsInWithNewAccountLogsOutLogsInDeletesAccount()
         {   
             //Arrange
             await Page.GotoAsync("https://localhost:5273/");
@@ -92,7 +99,7 @@ namespace Chirp.UI.Tests
         }
 
         [Test]
-        public async Task UserResgistersANewAccountAndLogsInWithNewAccountWritesCheepDeletesAccount()
+        public async Task UserRegistersANewAccountAndLogsInWithNewAccountWritesCheepDeletesAccount()
         {   
             //Arrange
             await Page.GotoAsync("https://localhost:5273/");
@@ -149,6 +156,27 @@ namespace Chirp.UI.Tests
 
             //Assert
             await Expect(Page.GetByText("No user found")).ToBeVisibleAsync();
+        }
+        
+        public async Task LoginUserAndDeleteUser(string email, string password)
+        {
+            await Page.GotoAsync("https://localhost:5273/Identity/Account/Login");
+
+            await Page.GetByPlaceholder("name@example.com").FillAsync(email);
+            await Page.GetByPlaceholder("password").FillAsync(password);
+            
+            await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
+            
+            var isUserLoggedIn = await Page.GetByRole(AriaRole.Link, new() { Name = "my timeline" }).IsVisibleAsync();
+            if (!isUserLoggedIn)
+            {
+                return;
+            }
+            await Page.GetByRole(AriaRole.Link, new() { Name = "manage account" }).ClickAsync();
+            await Page.GetByRole(AriaRole.Link, new() { Name = "Personal data" }).ClickAsync();
+            await Page.GetByRole(AriaRole.Button, new() { Name = "Delete" }).ClickAsync();
+            await Page.GetByPlaceholder("Please enter your password.").FillAsync("Testpassword123!");
+            await Page.GetByRole(AriaRole.Button, new() { Name = "Delete data and close my" }).ClickAsync();
         }
     }
 }

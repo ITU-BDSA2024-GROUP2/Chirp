@@ -155,7 +155,7 @@ namespace Chirp.UI.Tests
         public async Task CheepboxIsNotVulnerableForXSSAttacks()
         {
             // Arrange
-            await Page.GotoAsync("http://localhost:5273");
+            await Page.GotoAsync("https://localhost:5273");
             
             // Act
             await Page.Locator("#Message").ClickAsync();
