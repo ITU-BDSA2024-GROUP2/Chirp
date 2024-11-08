@@ -178,6 +178,25 @@ namespace Chirp.UI.Tests
             await Expect(newCheep)
                 .ToContainTextAsync("<script>alert('If you see this in a popup, you are in trouble!');</script>");
         }
+
+        [Test]
+        public async Task TestSQLInjection()
+        {
+            // Arrange
+            await Page.GotoAsync("https://localhost:5273");
+            
+            // Act
+            await Page.Locator("#Message").ClickAsync();
+            await Page.Locator("#Message").FillAsync("This is a cheep'); DROP TABLE Cheeps;--");
+            await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
+            
+            var newCheep = Page.Locator("li").Filter(new() { HasText = "This is a cheep'); DROP TABLE Cheeps;--"}).First;
+            
+            // Assert
+            await Expect(newCheep).ToBeVisibleAsync();
+            await Expect(newCheep).ToContainTextAsync("This is a cheep'); DROP TABLE Cheeps;--");
+        }
+
         
         // This method can be used to prepare a test that requires a logged in user
         public async Task LoginUser(string email = "name@example.com", string password = "Password123!")
