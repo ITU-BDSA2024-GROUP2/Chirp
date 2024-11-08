@@ -48,6 +48,7 @@ namespace Chirp.UI.Tests
             }
             catch (Exception e)
             {
+                string dummy = e.Message;
             }
 
             try
@@ -57,6 +58,7 @@ namespace Chirp.UI.Tests
             }
             catch (Exception e)
             {
+                string dummy = e.Message;
             }
             
             //Assert

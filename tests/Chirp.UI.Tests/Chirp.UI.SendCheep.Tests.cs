@@ -39,7 +39,7 @@ namespace Chirp.UI.Tests
         }
         
         [OneTimeTearDown]
-        public async Task OneTimeCleanup()
+        public void OneTimeCleanup()
         {
             if (_serverProcess != null && !_serverProcess.HasExited)
             {

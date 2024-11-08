@@ -39,7 +39,7 @@ public class CheepRepositoryTests
     public async Task ReadCheepsFromCheepRepositoryTest()
     {
         // Arrange
-        PopulateDatabase(_dbContext);
+        await PopulateDatabase(_dbContext);
         ICheepRepository repository = new Infrastructure.CheepRepository(_dbContext);
         
         // Act
@@ -103,7 +103,7 @@ public class CheepRepositoryTests
         IAuthorRepository authorRepository = new Infrastructure.AuthorRepository(_dbContext);
     
         // Act
-        authorRepository.CreateAuthor(new AuthorDTO()
+        await authorRepository.CreateAuthor(new AuthorDTO()
         {
             Name = authorName,
             Email = "John@doe.com",
@@ -115,7 +115,7 @@ public class CheepRepositoryTests
         // Assert
         Assert.NotNull(createdCheep);
         Assert.Equal("I am alive", createdCheep.Text);
-        Assert.Equal("John Doe", createdCheep.Author.UserName);
+        Assert.Equal("John Doe", createdCheep.Author!.UserName);
         
         Assert.Single(cheeps); 
         
@@ -162,12 +162,5 @@ public class CheepRepositoryTests
         await context.Cheeps.AddAsync(cheep1);
         await context.Cheeps.AddAsync(cheep2);
         await context.SaveChangesAsync();
-    }
-    
-    public void Dispose()
-    {
-        // Dispose of the in-memory SQLite connection
-        _dbContext.Dispose();
-        _connection.Dispose();
     }
 }
