@@ -50,15 +50,15 @@ public class CheepRepository : ICheepRepository
         return result;
     }
     
-    public async Task<List<CheepDTO>> GetCheepsFromFollowers(string authorName, int currentPage, List<Author> authors)
+    public async Task<List<CheepDTO>> GetCheepsFromFollowers(string authorName, int currentPage, List<Author> follows)
     {
         int offset = (currentPage - 1) * pageSize;
         
-        //authors.Add(AuthorRepository.FindAuthor(authorName));
+        //follows.Add(AuthorRepository.FindAuthor(authorName));
         
         var query = (from cheep in _dbContext.Cheeps
             orderby cheep.TimeStamp descending
-            where authors.Contains(cheep.Author)
+            where follows.Contains(cheep.Author)
             select new CheepDTO
             {
                 Author = cheep.Author.UserName,

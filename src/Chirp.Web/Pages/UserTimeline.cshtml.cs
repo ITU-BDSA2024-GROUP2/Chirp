@@ -24,9 +24,16 @@ public class UserTimelineModel : PageModel
     public async Task<ActionResult> OnGet(string author,[FromQuery] int? page)
     {
         int currentPage = page ?? 1;
-        
-        Cheeps = await _service.GetCheepsFromAuthor(author, currentPage);
+        if (User.Identity!.Name == author)
+        {
+            Cheeps = await _service.GetCheepsFromFollowers(author!, currentPage, new List<Author>());
+        } 
+        else
+        {
+            Cheeps = await _service.GetCheepsFromAuthor(author, currentPage);
+        }
         return Page();
+        
     }
     
     public async Task<IActionResult> OnPost()
