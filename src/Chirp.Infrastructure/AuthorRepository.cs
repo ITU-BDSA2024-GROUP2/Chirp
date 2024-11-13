@@ -22,16 +22,27 @@ public class AuthorRepository : IAuthorRepository
         return queryResult.Entity;
     }
     
-    public async Task<Author> FindAuthor(AuthorDTO authorDto)
+    public async Task<Author> FindAuthor(string authorName)
     {
         var query = from author in _dbContext.Authors
-            where (string.IsNullOrEmpty(authorDto.Name) || author.UserName.ToLower().Contains(authorDto.Name.ToLower())) &&
-                  (string.IsNullOrEmpty(authorDto.Email) || author.Email.ToLower().Contains(authorDto.Email.ToLower()))
+            where (author.UserName == authorName)
             select author;
 
         var result = await query.Distinct().FirstOrDefaultAsync();
 
+        if (result == null)
+        {
+            throw new InvalidOperationException($"Author with name '{authorName}' was not found.");
+        }
+
         return result;
     }
-    
+
+    public async Task<List<Author>> GetFollowingAuthors(string authorName)
+    {
+        var foundAuthor = await FindAuthor(authorName);
+        var following = foundAuthor.Following.ToList();
+
+        return following;
+    }
 }
