@@ -9,28 +9,33 @@ namespace Chirp.Web.Pages;
 
 public class UserTimelineModel : PageModel
 {
-    private readonly ICheepService _service;
+    private readonly ICheepService _cheepService;
+    private readonly IAuthorRepository _authorRepository;
+    
+    public Dictionary<string, bool> _followerMap = new Dictionary<string, bool>();
     public List<CheepDTO> Cheeps { get; set; }
 
     [BindProperty]
     public CheepViewModel CheepInput { get; set; } 
 
 
-    public UserTimelineModel(ICheepService service)
+    public UserTimelineModel(ICheepService cheepService, IAuthorRepository authorRepository)
     {
-        _service = service;
+        _cheepService = cheepService;
+        _authorRepository = authorRepository;
     }
 
     public async Task<ActionResult> OnGet(string author,[FromQuery] int? page)
     {
         int currentPage = page ?? 1;
-        if (User.Identity!.Name == author)
+        Cheeps = await _cheepService.GetCheepsFromFollowers(author, currentPage);
+        
+        if (User.Identity.IsAuthenticated)
         {
-            Cheeps = await _service.GetCheepsFromFollowers(author!, currentPage, new List<Author>());
-        } 
-        else
-        {
-            Cheeps = await _service.GetCheepsFromAuthor(author, currentPage);
+            foreach (var cheep in Cheeps)
+            {
+                var isfollowing =  _followerMap[cheep.Author] = await IsFollowing(User.Identity.Name, cheep.Author);
+            }
         }
         return Page();
         
@@ -48,11 +53,32 @@ public class UserTimelineModel : PageModel
         }
         if (!ModelState.IsValid)
         {
-            Cheeps = await _service.GetCheeps(1);
+            Cheeps = await _cheepService.GetCheeps(1);
             return Page();
         }
 
-        await _service.CreateCheep(User.Identity.Name, CheepInput.Message);
+        await _cheepService.CreateCheep(User.Identity.Name, CheepInput.Message);
         return RedirectToPage("UserTimeline");
+    }
+    
+    public async Task<IActionResult> OnPostFollow(string authorName)
+    {
+        await _authorRepository.Follow(User.Identity.Name, authorName);
+        
+        _followerMap[authorName] = true;
+        return RedirectToPage("UserTimeline");
+    }
+    
+    public async Task<IActionResult> OnPostUnfollow(string authorName)
+    {
+        await _authorRepository.Unfollow(User.Identity.Name, authorName);
+        
+        _followerMap[authorName] = false;
+        return RedirectToPage("UserTimeline");
+    }
+
+    public async Task<bool> IsFollowing(string userName, string authorName)
+    {
+        return await _authorRepository.IsFollowing(userName, authorName);
     }
 }
