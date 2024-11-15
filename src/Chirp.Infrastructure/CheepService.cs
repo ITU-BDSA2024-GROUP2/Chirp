@@ -23,9 +23,9 @@ public class CheepService : ICheepService
         return cheeps;
     }
 
-    public async Task<List<CheepDTO>> GetCheepsFromFollowers(string authorName, int currentPage, List<Author> follows)
+    public async Task<List<CheepDTO>> GetCheepsFromFollowers(string userName, int currentPage)
     {
-        var cheeps = await _cheepRepository.GetCheepsFromFollowers(authorName, currentPage, follows);
+        var cheeps = await _cheepRepository.GetCheepsFromFollowers(userName, currentPage);
         return cheeps;
     }
 

@@ -11,8 +11,8 @@ public class UserTimelineModel : PageModel
 {
     private readonly ICheepService _cheepService;
     private readonly IAuthorRepository _authorRepository;
-    
-    public Dictionary<string, bool> _followerMap = new Dictionary<string, bool>();
+
+    public Dictionary<string, bool> FollowerMap;
     public List<CheepDTO> Cheeps { get; set; }
 
     [BindProperty]
@@ -23,6 +23,7 @@ public class UserTimelineModel : PageModel
     {
         _cheepService = cheepService;
         _authorRepository = authorRepository;
+        FollowerMap = new Dictionary<string, bool>();
     }
 
     public async Task<ActionResult> OnGet(string author,[FromQuery] int? page)
@@ -34,7 +35,7 @@ public class UserTimelineModel : PageModel
         {
             foreach (var cheep in Cheeps)
             {
-                var isfollowing =  _followerMap[cheep.Author] = await IsFollowing(User.Identity.Name, cheep.Author);
+                var isfollowing =  FollowerMap[cheep.Author] = await IsFollowing(User.Identity.Name, cheep.Author);
             }
         }
         return Page();
@@ -65,7 +66,7 @@ public class UserTimelineModel : PageModel
     {
         await _authorRepository.Follow(User.Identity.Name, authorName);
         
-        _followerMap[authorName] = true;
+        FollowerMap[authorName] = true;
         return RedirectToPage("UserTimeline");
     }
     
@@ -73,8 +74,8 @@ public class UserTimelineModel : PageModel
     {
         await _authorRepository.Unfollow(User.Identity.Name, authorName);
         
-        _followerMap[authorName] = false;
-        return RedirectToPage("UserTimeline");
+        FollowerMap[authorName] = false;
+        return RedirectToPage("UserTimeline ");
     }
 
     public async Task<bool> IsFollowing(string userName, string authorName)

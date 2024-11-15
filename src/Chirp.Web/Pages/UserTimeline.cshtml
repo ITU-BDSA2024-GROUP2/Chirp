@@ -24,7 +24,7 @@
                         <small>&mdash; @cheep.TimeStamp</small>
                         @if (User.Identity!.IsAuthenticated && User.Identity.Name != cheep.Author)
                         {
-                            @if(Model._followerMap[cheep.Author] == false) 
+                            @if(Model.FollowerMap.ContainsKey(cheep.Author) && Model.FollowerMap[cheep.Author] == false) 
                             { 
                                 <form method="post" asp-page-handler="Follow">
                                 <input type="hidden" name="authorName" value="@cheep.Author" />

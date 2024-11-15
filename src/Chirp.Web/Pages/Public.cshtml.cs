@@ -13,7 +13,7 @@ public class PublicModel : PageModel
 {
     private readonly ICheepService _cheepService;
     private readonly IAuthorRepository _authorRepository;
-    public Dictionary<string, bool> _followerMap = new Dictionary<string, bool>();
+    public Dictionary<string, bool> FollowerMap;
     
     public List<CheepDTO> Cheeps { get; set; }
     
@@ -24,6 +24,7 @@ public class PublicModel : PageModel
     {
         _cheepService = cheepService;
         _authorRepository = authorRepository;
+        FollowerMap = new Dictionary<string, bool>();
 
     }
 
@@ -37,7 +38,7 @@ public class PublicModel : PageModel
         {
             foreach (var cheep in Cheeps)
             {
-                var isfollowing =  _followerMap[cheep.Author] = await IsFollowing(User.Identity.Name, cheep.Author);
+                FollowerMap[cheep.Author] = await IsFollowing(User.Identity.Name, cheep.Author);
             }
         }
         
@@ -68,7 +69,7 @@ public class PublicModel : PageModel
     {
         await _authorRepository.Follow(User.Identity.Name, authorName);
         
-        _followerMap[authorName] = true;
+        FollowerMap[authorName] = true;
         return RedirectToPage("Public");
     }
     
@@ -76,7 +77,7 @@ public class PublicModel : PageModel
     {
         await _authorRepository.Unfollow(User.Identity.Name, authorName);
         
-        _followerMap[authorName] = false;
+        FollowerMap[authorName] = false;
         return RedirectToPage("Public");
     }
 
