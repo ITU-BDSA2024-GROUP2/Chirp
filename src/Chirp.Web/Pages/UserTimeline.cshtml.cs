@@ -9,7 +9,7 @@ namespace Chirp.Web.Pages;
 
 public class UserTimelineModel : PageModel
 {
-    private readonly ICheepService _cheepService;
+    private readonly ICheepRepository _cheepRepository;
     private readonly IAuthorRepository _authorRepository;
 
     public Dictionary<string, bool> FollowerMap;
@@ -19,9 +19,9 @@ public class UserTimelineModel : PageModel
     public CheepViewModel CheepInput { get; set; } 
 
 
-    public UserTimelineModel(ICheepService cheepService, IAuthorRepository authorRepository)
+    public UserTimelineModel(ICheepRepository cheepRepository, IAuthorRepository authorRepository)
     {
-        _cheepService = cheepService;
+        _cheepRepository = cheepRepository;
         _authorRepository = authorRepository;
         FollowerMap = new Dictionary<string, bool>();
     }
@@ -29,7 +29,7 @@ public class UserTimelineModel : PageModel
     public async Task<ActionResult> OnGet(string author,[FromQuery] int? page)
     {
         int currentPage = page ?? 1;
-        Cheeps = await _cheepService.GetCheepsFromFollowers(author, currentPage);
+        Cheeps = await _cheepRepository.GetCheepsFromFollowers(author, currentPage);
         
         if (User.Identity.IsAuthenticated)
         {
@@ -54,11 +54,11 @@ public class UserTimelineModel : PageModel
         }
         if (!ModelState.IsValid)
         {
-            Cheeps = await _cheepService.GetCheeps(1);
+            Cheeps = await _cheepRepository.GetCheeps(1);
             return Page();
         }
 
-        await _cheepService.CreateCheep(User.Identity.Name, CheepInput.Message);
+        await _cheepRepository.CreateCheep(User.Identity.Name, CheepInput.Message);
         return RedirectToPage("UserTimeline");
     }
     

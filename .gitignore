@@ -7,6 +7,7 @@
 .env
 
 # User-specific files
+*.db
 *.rsuser
 *.suo
 *.user
