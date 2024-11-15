@@ -67,4 +67,10 @@ public class PublicModel : PageModel
         return RedirectToPage("Public");
     }
     
+    public async Task<IActionResult> OnPostUnfollow(string unfollowedAuthor)
+    {
+        await _authorRepository.Unfollow(User.Identity.Name,unfollowedAuthor);
+        return RedirectToPage("Public");
+    }
+    
 }

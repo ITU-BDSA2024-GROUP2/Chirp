@@ -23,17 +23,17 @@
                         <small>&mdash; @cheep.TimeStamp</small>
                         @if (User.Identity!.IsAuthenticated && User.Identity.Name != cheep.Author)
                         {   
-                            @if (1 == 1)
+                            @if (1 == 2)
                             {
                                 <form method="post" asp-page-handler="Follow">
                                 <input type="hidden" name="followedAuthor" value="@cheep.Author" />
                                 <button type="submit">Follow</button>
                                 </form>
                             } 
-                            else if (2 == 3) 
+                            else if (1 == 1) 
                             {
                                 <form method="post" asp-page-handler="Unfollow">
-                                <input type="hidden" name="cheepId" value="" />
+                                <input type="hidden" name="unfollowedAuthor" value="@cheep.Author" />
                                 <button type="submit">Unfollow</button>
                                 </form>
                             }
