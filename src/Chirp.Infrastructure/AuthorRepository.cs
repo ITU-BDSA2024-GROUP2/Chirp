@@ -38,11 +38,73 @@ public class AuthorRepository : IAuthorRepository
         return result;
     }
 
-    public async Task<List<Author>> GetFollowingAuthors(string authorName)
+    public async Task Follow(string followingUserName, string followedUserName)
+    {
+        var followingAuthor = await FindAuthor(followingUserName);
+        var followedAuthor = await FindAuthor(followedUserName);
+        
+        if (followingAuthor == null || followedAuthor == null)
+        {
+            throw new ArgumentException("One or both authors do not exist.");
+        }
+        
+        if (!followingAuthor.Following.Contains(followedAuthor))
+        {
+            followingAuthor.Following.Add(followedAuthor);
+        }
+
+        if (!followedAuthor.Followers.Contains(followingAuthor))
+        {
+            followedAuthor.Followers.Add(followingAuthor);
+        }
+        
+        await _dbContext.SaveChangesAsync();
+    }
+    
+    public async Task Unfollow(string unfollowingUserName, string unfollowedUserName)
+    {
+        var unfollowingAuthor = await FindAuthor(unfollowingUserName);
+        var unfollowedAuthor = await FindAuthor(unfollowedUserName);
+        
+        if (unfollowingAuthor == null || unfollowedAuthor == null)
+        {
+            throw new ArgumentException("One or both authors do not exist.");
+        }
+        
+        if (unfollowingAuthor.Following.Contains(unfollowedAuthor))
+        {
+            unfollowingAuthor.Following.Remove(unfollowedAuthor);
+        }
+
+        if (unfollowedAuthor.Followers.Contains(unfollowingAuthor))
+        {
+            unfollowedAuthor.Followers.Remove(unfollowingAuthor);
+        }
+        
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task<List<Author>> GetFollowing(string authorName)
     {
         var foundAuthor = await FindAuthor(authorName);
         var following = foundAuthor.Following.ToList();
 
         return following;
+    }
+
+    public async Task<List<Author>> GetFollowers(string authorName)
+    {
+        var foundAuthor = await FindAuthor(authorName);
+        var followers = foundAuthor.Followers.ToList();
+        
+        return followers;
+    }
+
+    public async Task<bool> IsFollowing(string authorName, string otherAuthor)
+    {
+        var foundOtherAuthor = await FindAuthor(otherAuthor);
+        var following = await GetFollowing(authorName);
+        
+        return following.Contains(foundOtherAuthor);
     }
 }
