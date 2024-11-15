@@ -38,74 +38,57 @@ public class AuthorRepository : IAuthorRepository
         return result;
     }
 
-    public async Task Follow(string followingUserName, string followedUserName)
+    public async Task Follow(string userName, string authorName)
     {
-        var followingAuthor = await FindAuthor(followingUserName);
-        var followedAuthor = await FindAuthor(followedUserName);
+        var user = await FindAuthor(userName);
+        var author = await FindAuthor(authorName);
         
-        if (followingAuthor == null || followedAuthor == null)
+        if (user == null || author == null)
         {
             throw new ArgumentException("One or both authors do not exist.");
         }
         
-        if (!followingAuthor.Following.Contains(followedAuthor))
+        if (!user.Following.Contains(author))
         {
-            followingAuthor.Following.Add(followedAuthor);
+            user.Following.Add(author);
         }
 
-        if (!followedAuthor.Followers.Contains(followingAuthor))
+        if (!author.Followers.Contains(user))
         {
-            followedAuthor.Followers.Add(followingAuthor);
+            author.Followers.Add(user);
         }
         
         await _dbContext.SaveChangesAsync();
     }
     
-    public async Task Unfollow(string unfollowingUserName, string unfollowedUserName)
+    public async Task Unfollow(string userName, string authorName)
     {
-        var unfollowingAuthor = await FindAuthor(unfollowingUserName);
-        var unfollowedAuthor = await FindAuthor(unfollowedUserName);
+        var user = await FindAuthor(userName);
+        var author = await FindAuthor(authorName);
         
-        if (unfollowingAuthor == null || unfollowedAuthor == null)
+        if (user == null || author == null)
         {
             throw new ArgumentException("One or both authors do not exist.");
         }
         
-        if (unfollowingAuthor.Following.Contains(unfollowedAuthor))
+        if (user.Following.Contains(author))
         {
-            unfollowingAuthor.Following.Remove(unfollowedAuthor);
+            user.Following.Remove(author);
         }
 
-        if (unfollowedAuthor.Followers.Contains(unfollowingAuthor))
+        if (author.Followers.Contains(user))
         {
-            unfollowedAuthor.Followers.Remove(unfollowingAuthor);
+            author.Followers.Remove(user);
         }
         
         await _dbContext.SaveChangesAsync();
-    }
-
-    public async Task<List<Author>> GetFollowing(string authorName)
-    {
-        var foundAuthor = await FindAuthor(authorName);
-        var following = foundAuthor.Following.ToList();
-
-        return following;
-    }
-
-    public async Task<List<Author>> GetFollowers(string authorName)
-    {
-        var foundAuthor = await FindAuthor(authorName);
-        var followers = foundAuthor.Followers.ToList();
-        
-        return followers;
     }
 
     public async Task<bool> IsFollowing(string userName, string authorName)
     {
         var author = await FindAuthor(authorName);
         var user = await FindAuthor(userName);
-
-
+        
         return user.Following.Contains(author);
     }
 }

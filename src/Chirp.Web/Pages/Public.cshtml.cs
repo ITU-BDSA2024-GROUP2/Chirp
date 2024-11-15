@@ -16,8 +16,6 @@ public class PublicModel : PageModel
     
     public List<CheepDTO> Cheeps { get; set; }
     
-    public List<Author> Following { get; set; }
-    
     [BindProperty]
     public CheepViewModel CheepInput { get; set; }
     
@@ -33,11 +31,6 @@ public class PublicModel : PageModel
         var currentPage = page ?? 1;
         
         Cheeps = await _cheepService.GetCheeps(currentPage);
-
-        if (User.Identity.IsAuthenticated)
-        {
-            Following = await _authorRepository.GetFollowing(User.Identity.Name);
-        }
             
         return Page();
     }
