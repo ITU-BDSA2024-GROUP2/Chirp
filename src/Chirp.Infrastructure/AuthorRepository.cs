@@ -100,11 +100,11 @@ public class AuthorRepository : IAuthorRepository
         return followers;
     }
 
-    public async Task<bool> IsFollowing(string authorName, string otherAuthor)
+    public async Task<bool> IsFollowing(string followingUserName, string followedUserName)
     {
-        var foundOtherAuthor = await FindAuthor(otherAuthor);
-        var following = await GetFollowing(authorName);
+        var foundFollowedUserName = await FindAuthor(followedUserName);
+        var following = await GetFollowing(followingUserName);
         
-        return following.Contains(foundOtherAuthor);
+        return following.Contains(foundFollowedUserName);
     }
 }
