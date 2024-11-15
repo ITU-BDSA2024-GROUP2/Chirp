@@ -1,5 +1,6 @@
 ﻿#nullable disable //fjern null warning
 using System.ComponentModel.DataAnnotations;
+using Azure.Identity;
 using Chirp.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -71,6 +72,11 @@ public class PublicModel : PageModel
     {
         await _authorRepository.Unfollow(User.Identity.Name,unfollowedAuthor);
         return RedirectToPage("Public");
+    }
+
+    public async Task<bool> isFollowing(string username, string author)
+    {
+        return await _authorRepository.IsFollowing(username, author);
     }
     
 }
