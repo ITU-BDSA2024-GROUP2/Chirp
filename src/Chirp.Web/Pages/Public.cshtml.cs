@@ -13,6 +13,7 @@ public class PublicModel : PageModel
 {
     private readonly ICheepService _cheepService;
     private readonly IAuthorRepository _authorRepository;
+    public Dictionary<string, bool> _followerMap = new Dictionary<string, bool>();
     
     public List<CheepDTO> Cheeps { get; set; }
     
@@ -31,7 +32,15 @@ public class PublicModel : PageModel
         var currentPage = page ?? 1;
         
         Cheeps = await _cheepService.GetCheeps(currentPage);
-            
+        
+        if (User.Identity.IsAuthenticated)
+        {
+            foreach (var cheep in Cheeps)
+            {
+                var isfollowing =  _followerMap[cheep.Author] = await IsFollowing(User.Identity.Name, cheep.Author);
+            }
+        }
+        
         return Page();
     }
     
@@ -55,21 +64,25 @@ public class PublicModel : PageModel
         return RedirectToPage("Public");
     }
 
-    public async Task<IActionResult> OnPostFollow(string followedAuthor)
+    public async Task<IActionResult> OnPostFollow(string authorName)
     {
-        await _authorRepository.Follow(User.Identity.Name,followedAuthor);
+        await _authorRepository.Follow(User.Identity.Name, authorName);
+        
+        _followerMap[authorName] = true;
         return RedirectToPage("Public");
     }
     
     public async Task<IActionResult> OnPostUnfollow(string authorName)
     {
-        await _authorRepository.Unfollow(User.Identity.Name,authorName);
+        await _authorRepository.Unfollow(User.Identity.Name, authorName);
+        
+        _followerMap[authorName] = false;
         return RedirectToPage("Public");
     }
 
-    public async Task<bool> IsFollowing(string username, string authorName)
+    public async Task<bool> IsFollowing(string userName, string authorName)
     {
-        return await _authorRepository.IsFollowing(username, authorName);
+        return await _authorRepository.IsFollowing(userName, authorName);
     }
     
 }

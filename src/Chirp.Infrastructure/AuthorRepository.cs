@@ -25,10 +25,13 @@ public class AuthorRepository : IAuthorRepository
     public async Task<Author> FindAuthor(string authorName)
     {
         var query = from author in _dbContext.Authors
+                .Include(a => a.Following)
+                .Include(a => a.Followers)
             where (author.UserName == authorName)
             select author;
 
         var result = await query.Distinct().FirstOrDefaultAsync();
+
 
         if (result == null)
         {
@@ -42,11 +45,6 @@ public class AuthorRepository : IAuthorRepository
     {
         var user = await FindAuthor(userName);
         var author = await FindAuthor(authorName);
-        
-        if (user == null || author == null)
-        {
-            throw new ArgumentException("One or both authors do not exist.");
-        }
         
         if (!user.Following.Contains(author))
         {
@@ -65,11 +63,6 @@ public class AuthorRepository : IAuthorRepository
     {
         var user = await FindAuthor(userName);
         var author = await FindAuthor(authorName);
-        
-        if (user == null || author == null)
-        {
-            throw new ArgumentException("One or both authors do not exist.");
-        }
         
         if (user.Following.Contains(author))
         {
