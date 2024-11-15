@@ -58,8 +58,8 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
     }
     
     [Theory]
-    [InlineData("Helge")]
-    [InlineData("Adrian")]
+    [InlineData("Jacqualine Gilcoine")]
+    [InlineData("Johnnie Calixto")]
     public async void CanSeePrivateTimeline(string author)
     {
         var response = await _client.GetAsync($"/{author}");
@@ -106,8 +106,8 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
     }
     
     [Theory]
-    [InlineData("Helge")]
-    [InlineData("Adrian")]
+    [InlineData("Jacqualine Gilcoine")]
+    [InlineData("Johnnie Calixto")]
     public async void PrivateTimelinePage1SameAsPrivateDefault(string author)
     {
         var responseHomePage = await _client.GetAsync($"/{author}");
@@ -126,8 +126,8 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
     }
     
     [Theory]
-    [InlineData("Helge")]
-    [InlineData("Adrian")]
+    [InlineData("Jacqualine Gilcoine")]
+    [InlineData("Johnnie Calixto")]
     public async void PrivateTimelinePage4NotSameAsPrivateDefault(string author)
     {
         var responseHomePage = await _client.GetAsync($"/{author}");
