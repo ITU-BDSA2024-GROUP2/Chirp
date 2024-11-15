@@ -11,7 +11,7 @@ namespace Chirp.Web.Pages;
 
 public class PublicModel : PageModel
 {
-    private readonly ICheepService _cheepService;
+    private readonly ICheepRepository _cheepRepository;
     private readonly IAuthorRepository _authorRepository;
     public Dictionary<string, bool> FollowerMap;
     
@@ -20,9 +20,9 @@ public class PublicModel : PageModel
     [BindProperty]
     public CheepViewModel CheepInput { get; set; }
     
-    public PublicModel(ICheepService cheepService, IAuthorRepository authorRepository)
+    public PublicModel(ICheepRepository cheepRepository, IAuthorRepository authorRepository)
     {
-        _cheepService = cheepService;
+        _cheepRepository = cheepRepository;
         _authorRepository = authorRepository;
         FollowerMap = new Dictionary<string, bool>();
 
@@ -32,7 +32,7 @@ public class PublicModel : PageModel
     {
         var currentPage = page ?? 1;
         
-        Cheeps = await _cheepService.GetCheeps(currentPage);
+        Cheeps = await _cheepRepository.GetCheeps(currentPage);
         
         if (User.Identity.IsAuthenticated)
         {
@@ -57,11 +57,11 @@ public class PublicModel : PageModel
         }
         if (!ModelState.IsValid)
         {
-            Cheeps = await _cheepService.GetCheeps(1);
+            Cheeps = await _cheepRepository.GetCheeps(1);
             return Page();
         }
 
-        await _cheepService.CreateCheep(User.Identity.Name, CheepInput.Message);
+        await _cheepRepository.CreateCheep(User.Identity.Name, CheepInput.Message);
         return RedirectToPage("Public");
     }
 
