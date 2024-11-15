@@ -66,4 +66,40 @@ public class AuthorRepositoryTest
         Assert.Equal("John Doe", author.UserName);
         Assert.Equal("email1", author.Email);
     }
+
+    [Fact]
+    public async Task IsFollowing()
+    {
+        // Arrange
+        var authorDto = new AuthorDTO { Name = "John Doe", Email = "email1" };
+        var authorDto2 = new AuthorDTO { Name = "Not John Doe", Email = "gmail" };
+        IAuthorRepository authorRepository = new Infrastructure.AuthorRepository(_dbContext);
+        
+        // Act
+        await authorRepository.CreateAuthor(authorDto);
+        await authorRepository.CreateAuthor(authorDto2);
+        await authorRepository.Follow(authorDto.Name, authorDto2.Name);
+        
+        // Assert
+        Assert.True(await authorRepository.IsFollowing(authorDto.Name, authorDto2.Name));
+        Assert.False(await authorRepository.IsFollowing(authorDto2.Name, authorDto.Name));
+    }
+    
+    [Fact]
+    public async Task UnFollowing()
+    {
+        // Arrange
+        var authorDto = new AuthorDTO { Name = "John Doe", Email = "email1" };
+        var authorDto2 = new AuthorDTO { Name = "Not John Doe", Email = "gmail" };
+        IAuthorRepository authorRepository = new Infrastructure.AuthorRepository(_dbContext);
+        
+        // Act
+        await authorRepository.CreateAuthor(authorDto);
+        await authorRepository.CreateAuthor(authorDto2);
+        await authorRepository.Follow(authorDto.Name, authorDto2.Name);
+        await authorRepository.Unfollow(authorDto.Name, authorDto2.Name);
+        
+        // Assert
+        Assert.False(await authorRepository.IsFollowing(authorDto.Name, authorDto2.Name));
+    }
 }
