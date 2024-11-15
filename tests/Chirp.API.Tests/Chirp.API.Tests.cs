@@ -63,6 +63,12 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
     public async void CanSeePrivateTimeline(string author)
     {
         var response = await _client.GetAsync($"/{author}");
+        
+        if (!response.IsSuccessStatusCode)
+        {
+            var errorContent = await response.Content.ReadAsStringAsync();
+            throw new Exception($"API Error: {response.StatusCode}, {errorContent}");
+        }
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
 
