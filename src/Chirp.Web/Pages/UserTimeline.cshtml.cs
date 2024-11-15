@@ -75,7 +75,7 @@ public class UserTimelineModel : PageModel
         await _authorRepository.Unfollow(User.Identity.Name, authorName);
         
         FollowerMap[authorName] = false;
-        return RedirectToPage("UserTimeline ");
+        return RedirectToPage("UserTimeline");
     }
 
     public async Task<bool> IsFollowing(string userName, string authorName)
