@@ -24,17 +24,17 @@
                         <small>&mdash; @cheep.TimeStamp</small>
                         @if (User.Identity!.IsAuthenticated && User.Identity.Name != cheep.Author)
                         {   
-                            @if(!await Model.isFollowing(User.Identity.Name, cheep.Author))
+                            @if(!await Model.IsFollowing(User.Identity.Name, cheep.Author))
                             {
                                 <form method="post" asp-page-handler="Follow">
-                                <input type="hidden" name="followedAuthor" value="@cheep.Author" />
+                                <input type="hidden" name="authorName" value="@cheep.Author" />
                                 <button type="submit">Follow</button>
                                 </form>
                             } 
                             else 
                             {
                                 <form method="post" asp-page-handler="Unfollow">
-                                <input type="hidden" name="unfollowedAuthor" value="@cheep.Author" />
+                                <input type="hidden" name="authorName" value="@cheep.Author" />
                                 <button type="submit">Unfollow</button>
                                 </form>
                             }

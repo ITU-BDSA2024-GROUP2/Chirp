@@ -68,15 +68,15 @@ public class PublicModel : PageModel
         return RedirectToPage("Public");
     }
     
-    public async Task<IActionResult> OnPostUnfollow(string unfollowedAuthor)
+    public async Task<IActionResult> OnPostUnfollow(string authorName)
     {
-        await _authorRepository.Unfollow(User.Identity.Name,unfollowedAuthor);
+        await _authorRepository.Unfollow(User.Identity.Name,authorName);
         return RedirectToPage("Public");
     }
 
-    public async Task<bool> isFollowing(string username, string author)
+    public async Task<bool> IsFollowing(string username, string authorName)
     {
-        return await _authorRepository.IsFollowing(username, author);
+        return await _authorRepository.IsFollowing(username, authorName);
     }
     
 }
