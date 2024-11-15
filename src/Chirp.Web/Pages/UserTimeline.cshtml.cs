@@ -35,7 +35,7 @@ public class UserTimelineModel : PageModel
         {
             foreach (var cheep in Cheeps)
             {
-                var isfollowing =  FollowerMap[cheep.Author] = await IsFollowing(User.Identity.Name, cheep.Author);
+                FollowerMap[cheep.Author] = await IsFollowing(User.Identity.Name, cheep.Author);
             }
         }
         return Page();
