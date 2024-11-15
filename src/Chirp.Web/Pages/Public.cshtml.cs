@@ -1,15 +1,18 @@
 ﻿#nullable disable //fjern null warning
 using System.ComponentModel.DataAnnotations;
 using Chirp.Core;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.VisualBasic;
 
 namespace Chirp.Web.Pages;
 
 public class PublicModel : PageModel
 {
     private readonly ICheepService _cheepService;
-    private readonly IAuthorService _authorService;
+    private readonly IAuthorRepository _authorRepository;
+    
     public List<CheepDTO> Cheeps { get; set; }
     
     public List<Author> Following { get; set; }
@@ -17,10 +20,10 @@ public class PublicModel : PageModel
     [BindProperty]
     public CheepViewModel CheepInput { get; set; }
     
-    public PublicModel(ICheepService cheepService, IAuthorService authorService)
+    public PublicModel(ICheepService cheepService, IAuthorRepository authorRepository)
     {
         _cheepService = cheepService;
-        _authorService = authorService;
+        _authorRepository = authorRepository;
 
     }
 
@@ -32,7 +35,7 @@ public class PublicModel : PageModel
 
         if (User.Identity.IsAuthenticated)
         {
-            Following = await _authorService.GetFollowingAuthors(User.Identity.Name);
+            Following = await _authorRepository.GetFollowing(User.Identity.Name);
         }
             
         return Page();
@@ -55,6 +58,12 @@ public class PublicModel : PageModel
         }
 
         await _cheepService.CreateCheep(User.Identity.Name, CheepInput.Message);
+        return RedirectToPage("Public");
+    }
+
+    public async Task<IActionResult> OnPostFollow(string followedAuthor)
+    {
+        await _authorRepository.Follow(User.Identity.Name,followedAuthor);
         return RedirectToPage("Public");
     }
     
