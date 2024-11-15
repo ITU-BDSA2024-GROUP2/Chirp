@@ -4,9 +4,9 @@ public interface IAuthorRepository
 {
     public Task<Author> CreateAuthor(AuthorDTO authorDto);
     public Task<Author> FindAuthor(string authorName);
-    public Task Follow(string followingUserName, string followedUserName);
+    public Task Follow(string userName, string authorName);
     
-    public Task Unfollow(string unfollowingUserName, string unfollowedUserName);
+    public Task Unfollow(string userName, string authorName);
 
     public Task<Boolean> IsFollowing(string userName, string authorName);
 
