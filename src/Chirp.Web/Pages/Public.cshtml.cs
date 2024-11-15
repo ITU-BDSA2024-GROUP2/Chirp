@@ -57,4 +57,5 @@ public class PublicModel : PageModel
         await _cheepService.CreateCheep(User.Identity.Name, CheepInput.Message);
         return RedirectToPage("Public");
     }
+    
 }

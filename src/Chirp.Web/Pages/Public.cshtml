@@ -21,6 +21,23 @@
                         </strong>
                         @cheep.Text
                         <small>&mdash; @cheep.TimeStamp</small>
+                        @if (User.Identity!.IsAuthenticated && User.Identity.Name != cheep.Author)
+                        {   
+                            @if (true)
+                            {
+                                <form method="post" asp-page-handler="Follow">
+                                <input type="hidden" name="cheepId" value="" />
+                                <button type="submit">Follow</button>
+                                </form>
+                                } 
+                            else 
+                            {
+                                <form method="post" asp-page-handler="Unfollow">
+                                <input type="hidden" name="cheepId" value="" />
+                                <button type="submit">Unfollow</button>
+                                </form>
+                            }
+                        }
                     </p>
                 </li>
             }
