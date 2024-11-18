@@ -1,5 +1,7 @@
+using System.Security.Claims;
 using Chirp.Core;
 using Chirp.Infrastructure;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
@@ -21,8 +23,8 @@ builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlite(conne
 
 builder.Services.AddDefaultIdentity<Author>(options =>
     {
-        options.SignIn.RequireConfirmedAccount = true;
-        options.User.RequireUniqueEmail = true;
+        options.SignIn.RequireConfirmedAccount = false;
+        options.User.RequireUniqueEmail = false; // Turned off because username is unique
     })
     .AddEntityFrameworkStores<ChirpDBContext>();
 
@@ -32,6 +34,7 @@ builder.Services.AddAuthentication()
     {
         o.ClientId = builder.Configuration["authentication_github_clientId"] ?? string.Empty;
         o.ClientSecret = builder.Configuration["authentication_github_clientSecret"] ?? string.Empty;
+        o.ClaimActions.MapJsonKey(ClaimTypes.Name, "name");
     }); 
 
 var app = builder.Build();

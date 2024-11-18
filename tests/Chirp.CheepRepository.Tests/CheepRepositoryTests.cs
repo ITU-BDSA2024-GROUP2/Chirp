@@ -3,6 +3,8 @@ using Chirp.Core;
 using Chirp.Infrastructure;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Xunit.Abstractions;
+using Xunit.Sdk;
 
 namespace Chirp.CheepRepository.Tests;
 
@@ -10,8 +12,10 @@ public class CheepRepositoryTests
 {
     private readonly ChirpDBContext _dbContext;
     private readonly SqliteConnection _connection;
-    public CheepRepositoryTests()
+    private readonly ITestOutputHelper _output;
+    public CheepRepositoryTests(ITestOutputHelper output)
     {
+        _output = output;
         _connection = new SqliteConnection("DataSource=:memory:");
         _connection.Open();
         
@@ -122,7 +126,56 @@ public class CheepRepositoryTests
         var fetchedCheep = cheeps.First();
         Assert.Equal("I am alive", fetchedCheep.Text);
         Assert.Equal("John Doe", fetchedCheep.Author);
-    }     
+    }
+    
+    [Fact]
+    public async Task CreateCheep_ShouldThrowException_WhenMessageIsEmpty()
+    {
+        // Arrange
+        var authorName = "John Doe";
+        var emptyMessage = ""; 
+        ICheepRepository cheepRepository = new Infrastructure.CheepRepository(_dbContext);
+        IAuthorRepository authorRepository = new Infrastructure.AuthorRepository(_dbContext);
+
+        await authorRepository.CreateAuthor(new AuthorDTO()
+        {
+            Name = authorName,
+            Email = "John@doe.com",
+        });
+
+        // Act & Assert
+        var exception = await Assert.ThrowsAsync<ArgumentException>(
+            () => cheepRepository.CreateCheep(authorName, emptyMessage)
+        );
+
+        _output.WriteLine($"Caught exception: {exception.Message}");
+
+        Assert.Equal("Cheep text cannot be empty.", exception.Message);
+    }
+    
+    [Fact]
+    public async Task CreateCheep_ShouldThrowException_WhenMessageExceeds160Characters()
+    {
+        // Arrange
+        var authorName = "John Doe";
+        var longMessage = new string('A', 161);
+        ICheepRepository cheepRepository = new Infrastructure.CheepRepository(_dbContext);
+        IAuthorRepository authorRepository = new Infrastructure.AuthorRepository(_dbContext);
+
+        await authorRepository.CreateAuthor(new AuthorDTO()
+        {
+            Name = authorName,
+            Email = "John@doe.com",
+        });
+
+        // Act & Assert
+        var exception = await Assert.ThrowsAsync<ArgumentException>(
+            () => cheepRepository.CreateCheep(authorName, longMessage)
+        );
+        
+        _output.WriteLine($"Caught exception: {exception.Message}");
+        Assert.Equal("Cheep text cannot exceed 160 characters.", exception.Message);
+    }
 
     private async Task PopulateDatabase(ChirpDBContext context)
     {

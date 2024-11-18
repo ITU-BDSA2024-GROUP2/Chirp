@@ -233,7 +233,7 @@ namespace Chirp.UI.Tests
             await Page.GetByLabel("Confirm Password").FillAsync("Password123!");
             await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
             
-            await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" }).ClickAsync();
+            //await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" }).ClickAsync();
         }
 
         public async Task DeleteUser()
