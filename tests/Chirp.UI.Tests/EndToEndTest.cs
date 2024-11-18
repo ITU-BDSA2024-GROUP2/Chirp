@@ -2,6 +2,7 @@ using NUnit.Framework;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Azure;
 using Chirp.Core;
 using Chirp.Infrastructure;
 using Microsoft.Data.Sqlite;
@@ -44,7 +45,7 @@ namespace Chirp.UI.Tests
         }
 
         [Test]
-        public async Task UserRegistersANewAccountAndLogsInWithNewAccountLogsOutLogsInDeletesAccount()
+        public async Task UserRegistersANewAccountIsDirectlySignedInLogsOutAndLogsInWithNewAccountLogsOutLogsInDeletesAccount()
         {   
             //Arrange
             await Page.GotoAsync("https://localhost:5273/");
@@ -60,12 +61,9 @@ namespace Chirp.UI.Tests
             await Page.GetByLabel("Confirm Password").ClickAsync();
             await Page.GetByLabel("Confirm Password").FillAsync("Testpassword123!");
             await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
-
-            //Assert
-            //await Expect(Page.GetByText("Register confirmation")).ToBeVisibleAsync();
-
+            
             //Act
-            //await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" }).ClickAsync();
+            await  Page.GetByText("logout").ClickAsync();
             await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
             await Page.GetByPlaceholder("name@example.com").ClickAsync();
             await Page.GetByPlaceholder("name@example.com").FillAsync("test@mail.com");
@@ -124,12 +122,9 @@ namespace Chirp.UI.Tests
             await Page.GetByLabel("Confirm Password").ClickAsync();
             await Page.GetByLabel("Confirm Password").FillAsync("Testpassword123!");
             await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
-
-            //Assert
-            //await Expect(Page.GetByText("Register confirmation")).ToBeVisibleAsync();
-
+            await  Page.GetByText("logout").ClickAsync();
+            
             //Act
-            //await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" }).ClickAsync();
             await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
             await Page.GetByPlaceholder("name@example.com").ClickAsync();
             await Page.GetByPlaceholder("name@example.com").FillAsync("testmail@mail.com");
