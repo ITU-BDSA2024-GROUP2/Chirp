@@ -24,7 +24,7 @@ builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlite(conne
 builder.Services.AddDefaultIdentity<Author>(options =>
     {
         options.SignIn.RequireConfirmedAccount = false;
-        options.User.RequireUniqueEmail = false;
+        options.User.RequireUniqueEmail = false; // Turned off because username is unique
     })
     .AddEntityFrameworkStores<ChirpDBContext>();
 
