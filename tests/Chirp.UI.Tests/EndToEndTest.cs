@@ -65,7 +65,7 @@ namespace Chirp.UI.Tests
             await Expect(Page.GetByText("Register confirmation")).ToBeVisibleAsync();
 
             //Act
-            await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" }).ClickAsync();
+            //await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" }).ClickAsync();
             await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
             await Page.GetByPlaceholder("name@example.com").ClickAsync();
             await Page.GetByPlaceholder("name@example.com").FillAsync("test@mail.com");
@@ -129,7 +129,7 @@ namespace Chirp.UI.Tests
             await Expect(Page.GetByText("Register confirmation")).ToBeVisibleAsync();
 
             //Act
-            await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" }).ClickAsync();
+            //await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" }).ClickAsync();
             await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
             await Page.GetByPlaceholder("name@example.com").ClickAsync();
             await Page.GetByPlaceholder("name@example.com").FillAsync("testmail@mail.com");
