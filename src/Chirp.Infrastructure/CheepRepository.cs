@@ -71,8 +71,16 @@ public class CheepRepository : ICheepRepository
     
     public async Task<Cheep>  CreateCheep(string authorName, string text)
     {
-        Author author = await FindAuthorByName(authorName);
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            throw new ArgumentException("Cheep text cannot be empty.");
+        }
+        if (text.Length > 160)
+        {
+            throw new ArgumentException("Cheep text cannot exceed 160 characters.");
+        }
         
+        Author author = await FindAuthorByName(authorName);
         Cheep newCheep = new()
         {
             Text = text,
