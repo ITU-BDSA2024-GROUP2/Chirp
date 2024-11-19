@@ -27,15 +27,17 @@
                             @if(Model.FollowerMap.ContainsKey(cheep.Author) && Model.FollowerMap[cheep.Author] == false)
                             {
                                 <form method="post" asp-page-handler="Follow">
-                                <input type="hidden" name="authorName" value="@cheep.Author" />
-                                <button type="submit">Follow</button>
+                                    <input type="hidden" name="page" value="@Request.Query["page"]" />
+                                    <input type="hidden" name="authorName" value="@cheep.Author"/>
+                                    <button type="submit">Follow</button>
                                 </form>
                             } 
                             else 
                             {
                                 <form method="post" asp-page-handler="Unfollow">
-                                <input type="hidden" name="authorName" value="@cheep.Author" />
-                                <button type="submit">Unfollow</button>
+                                    <input type="hidden" name="page" value="@Request.Query["page"]" />
+                                    <input type="hidden" name="authorName" value="@cheep.Author"/>
+                                    <button type="submit">Unfollow</button>
                                 </form>
                             }
                         }

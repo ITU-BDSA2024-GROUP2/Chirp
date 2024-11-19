@@ -13,6 +13,7 @@ public class UserTimelineModel : PageModel
     private readonly IAuthorRepository _authorRepository;
 
     public Dictionary<string, bool> FollowerMap;
+    private int _currentPage;
     public List<CheepDTO> Cheeps { get; set; }
 
     [BindProperty]
@@ -26,18 +27,12 @@ public class UserTimelineModel : PageModel
         FollowerMap = new Dictionary<string, bool>();
     }
 
-    public async Task<ActionResult> OnGet(string author,[FromQuery] int? page)
+    public async Task<ActionResult> OnGet(string author, [FromQuery] int? page)
     {
-        int currentPage = page ?? 1;
-        Cheeps = await _cheepRepository.GetCheepsFromFollowers(author, currentPage);
+        _currentPage = page ?? 1;
         
-        if (User.Identity.IsAuthenticated)
-        {
-            foreach (var cheep in Cheeps)
-            {
-                FollowerMap[cheep.Author] = await IsFollowing(User.Identity.Name, cheep.Author);
-            }
-        }
+        await PopulateCheepsAndFollowers(_currentPage);
+        
         return Page();
         
     }
@@ -46,40 +41,57 @@ public class UserTimelineModel : PageModel
     {
         if (string.IsNullOrWhiteSpace(CheepInput.Message))
         {
-            ModelState.AddModelError("CheepInput.Message", "Message cannot be empty.");
+            ModelState.AddModelError("Message", "Message cannot be empty.");
         }
         else if (CheepInput.Message.Length > 160)
         {
-            ModelState.AddModelError("CheepInput.Message", "Message cannot be more 160 characters.");
+            ModelState.AddModelError("Message", "Message cannot be more 160 characters.");
         }
         if (!ModelState.IsValid)
         {
-            Cheeps = await _cheepRepository.GetCheeps(1);
+            await PopulateCheepsAndFollowers(_currentPage);
             return Page();
         }
 
         await _cheepRepository.CreateCheep(User.Identity.Name, CheepInput.Message);
-        return RedirectToPage("UserTimeline");
+        return RedirectToPage("UserTimeline", new { page = _currentPage });
     }
     
-    public async Task<IActionResult> OnPostFollow(string authorName)
+    public async Task<IActionResult> OnPostFollow(string author, string authorName, int? page)
     {
+        _currentPage = page ?? 1;
+        
         await _authorRepository.Follow(User.Identity.Name, authorName);
         
         FollowerMap[authorName] = true;
-        return RedirectToPage("UserTimeline");
+        return LocalRedirect($"/{author}?page={_currentPage}");
     }
     
-    public async Task<IActionResult> OnPostUnfollow(string authorName)
+    public async Task<IActionResult> OnPostUnfollow(string author, string authorName, int? page)
     {
+        _currentPage = page ?? 1;
+        
         await _authorRepository.Unfollow(User.Identity.Name, authorName);
         
         FollowerMap[authorName] = false;
-        return RedirectToPage("UserTimeline");
+        return LocalRedirect($"/{author}?page={_currentPage}");
     }
 
     public async Task<bool> IsFollowing(string userName, string authorName)
     {
         return await _authorRepository.IsFollowing(userName, authorName);
+    }
+    
+    private async Task PopulateCheepsAndFollowers(int page)
+    {
+        Cheeps = await _cheepRepository.GetCheeps(page);
+
+        if (User.Identity.IsAuthenticated)
+        {
+            foreach (var cheep in Cheeps)
+            {
+                FollowerMap[cheep.Author] = await IsFollowing(User.Identity.Name, cheep.Author);
+            }
+        }
     }
 }

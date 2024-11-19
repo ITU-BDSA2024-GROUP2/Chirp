@@ -14,6 +14,7 @@ public class PublicModel : PageModel
     private readonly ICheepRepository _cheepRepository;
     private readonly IAuthorRepository _authorRepository;
     public Dictionary<string, bool> FollowerMap;
+    private int _currentPage;
     
     public List<CheepDTO> Cheeps { get; set; }
     
@@ -30,34 +31,27 @@ public class PublicModel : PageModel
 
     public async Task<ActionResult> OnGet([FromQuery] int? page)
     {
-        var currentPage = page ?? 1;
+        _currentPage = page ?? 1;
         
-        Cheeps = await _cheepRepository.GetCheeps(currentPage);
-        
-        if (User.Identity.IsAuthenticated)
-        {
-            foreach (var cheep in Cheeps)
-            {
-                FollowerMap[cheep.Author] = await IsFollowing(User.Identity.Name, cheep.Author);
-            }
-        }
+        await PopulateCheepsAndFollowers(_currentPage);
         
         return Page();
     }
     
     public async Task<IActionResult> OnPost()
     {
+        
         if (string.IsNullOrWhiteSpace(CheepInput.Message))
         {
-            ModelState.AddModelError("CheepInput.Message", "Message cannot be empty.");
+            ModelState.AddModelError("Message", "Message cannot be empty.");
         }
         else if (CheepInput.Message.Length > 160)
         {
-            ModelState.AddModelError("CheepInput.Message", "Message cannot be more 160 characters.");
+            ModelState.AddModelError("Message", "Message cannot be more 160 characters.");
         }
         if (!ModelState.IsValid)
         {
-            Cheeps = await _cheepRepository.GetCheeps(1);
+            await PopulateCheepsAndFollowers(_currentPage);
             return Page();
         }
 
@@ -65,20 +59,27 @@ public class PublicModel : PageModel
         return RedirectToPage("Public");
     }
 
-    public async Task<IActionResult> OnPostFollow(string authorName)
+    public async Task<IActionResult> OnPostFollow(string authorName, int? page)
     {
+        Console.WriteLine($"Incoming page parameter: {page}");
+        _currentPage = page ?? 1;
+        
         await _authorRepository.Follow(User.Identity.Name, authorName);
         
         FollowerMap[authorName] = true;
-        return RedirectToPage("Public");
+        Console.WriteLine($"Current page after assignment: {_currentPage}");
+        return LocalRedirect($"/?page={_currentPage}");
     }
     
-    public async Task<IActionResult> OnPostUnfollow(string authorName)
+    public async Task<IActionResult> OnPostUnfollow(string authorName, int? page)
     {
+        _currentPage = page ?? 1;
+        
         await _authorRepository.Unfollow(User.Identity.Name, authorName);
         
         FollowerMap[authorName] = false;
-        return RedirectToPage("Public");
+        Console.WriteLine(_currentPage);
+        return LocalRedirect($"/?page={_currentPage}");
     }
 
     public async Task<bool> IsFollowing(string userName, string authorName)
@@ -86,4 +87,16 @@ public class PublicModel : PageModel
         return await _authorRepository.IsFollowing(userName, authorName);
     }
     
+    private async Task PopulateCheepsAndFollowers(int page)
+    {
+        Cheeps = await _cheepRepository.GetCheeps(page);
+
+        if (User.Identity.IsAuthenticated)
+        {
+            foreach (var cheep in Cheeps)
+            {
+                FollowerMap[cheep.Author] = await IsFollowing(User.Identity.Name, cheep.Author);
+            }
+        }
+    }
 }
