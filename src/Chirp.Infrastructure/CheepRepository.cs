@@ -23,6 +23,7 @@ public class CheepRepository : ICheepRepository
             orderby cheep.TimeStamp descending
             select new CheepDTO
             {
+                Id = cheep.CheepId.ToString(),
                 Author = cheep.Author.UserName,
                 Text = cheep.Text,
                 TimeStamp = cheep.TimeStamp.ToString("MM'/'dd'/'yy H':'mm':'ss")
@@ -41,6 +42,7 @@ public class CheepRepository : ICheepRepository
             where cheep.Author.UserName == authorName
             select new CheepDTO
             {
+                Id = cheep.CheepId.ToString(),
                 Author = cheep.Author.UserName,
                 Text = cheep.Text,
                 TimeStamp = cheep.TimeStamp.ToString("MM'/'dd'/'yy H':'mm':'ss")
@@ -60,6 +62,7 @@ public class CheepRepository : ICheepRepository
             where user.Following.Contains(cheep.Author) || cheep.Author.UserName == userName
             select new CheepDTO
             {
+                Id = cheep.CheepId.ToString(),
                 Author = cheep.Author.UserName,
                 Text = cheep.Text,
                 TimeStamp = cheep.TimeStamp.ToString("MM'/'dd'/'yy H':'mm':'ss")
@@ -92,6 +95,20 @@ public class CheepRepository : ICheepRepository
 
         await _dbContext.SaveChangesAsync(); // persist the changes in the database
         return newCheep;
+    }
+    
+    public async Task DeleteCheep(string cheepId)
+    {
+        Guid cheepGuid = Guid.Parse(cheepId.ToString());
+        var cheep = await _dbContext.Cheeps.FindAsync(cheepGuid);
+
+        if (cheep != null)
+        { 
+            _dbContext.Cheeps.Remove(cheep);
+        }
+        
+        await _dbContext.SaveChangesAsync();
+        
     }
 
     public async Task<Author> FindAuthorByName(string name)

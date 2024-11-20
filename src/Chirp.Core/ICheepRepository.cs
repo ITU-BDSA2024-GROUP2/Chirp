@@ -7,4 +7,5 @@ public interface ICheepRepository
     public Task<List<CheepDTO>> GetCheepsFromFollowers(string userName, int currentPage);
     public Task<Cheep> CreateCheep(string authorName, string message);
     public Task<Author> FindAuthorByName(string name);
+    public Task DeleteCheep(string cheepId);
 }
