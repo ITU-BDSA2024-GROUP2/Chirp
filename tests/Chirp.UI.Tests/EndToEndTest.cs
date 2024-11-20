@@ -183,14 +183,14 @@ namespace Chirp.UI.Tests
             var buttonLocator = Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).GetByRole(AriaRole.Button);
             string buttonText = await buttonLocator.InnerTextAsync();
             
-            Assert.AreEqual("Follow", buttonText);
+            Assert.That(buttonText, Is.EqualTo("Follow"));
             
             await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).GetByRole(AriaRole.Button).ClickAsync();
             
             var buttonLocator2 = Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).GetByRole(AriaRole.Button);
             
             string buttonText2 = await buttonLocator2.InnerTextAsync();
-            Assert.AreEqual("Unfollow", buttonText2);
+            Assert.That(buttonText2, Is.EqualTo("Unfollow"));
         }
         
         public async Task LoginUserAndDeleteUser(string email, string password)
