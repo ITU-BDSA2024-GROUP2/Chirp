@@ -122,7 +122,7 @@ namespace Chirp.UI.Tests
             await Page.GetByLabel("Confirm Password").ClickAsync();
             await Page.GetByLabel("Confirm Password").FillAsync("Testpassword123!");
             await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
-            await  Page.GetByText("logout").ClickAsync();
+            await Page.GetByText("logout").ClickAsync();
             
             //Act
             await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
@@ -160,6 +160,37 @@ namespace Chirp.UI.Tests
 
             //Assert
             await Expect(Page.GetByText("No user found")).ToBeVisibleAsync();
+        }
+        
+        
+        // Denne test skal muligvis rykkes ind i en ny test klasse?
+        [Test]
+        public async Task UserFollowsAnotherUserAndUnfollows()
+        {
+            await Page.GotoAsync("https://localhost:5273");
+            
+            await Page.GetByRole(AriaRole.Link, new() { Name = "register" }).ClickAsync();
+            await Page.GetByPlaceholder("user name").ClickAsync();
+            await Page.GetByPlaceholder("user name").FillAsync("ATestUser");
+            await Page.GetByPlaceholder("name@example.com").ClickAsync();
+            await Page.GetByPlaceholder("name@example.com").FillAsync("testmail@mail.com");
+            await Page.GetByLabel("Password", new() { Exact = true }).ClickAsync();
+            await Page.GetByLabel("Password", new() { Exact = true }).FillAsync("Testpassword123!");
+            await Page.GetByLabel("Confirm Password").ClickAsync();
+            await Page.GetByLabel("Confirm Password").FillAsync("Testpassword123!");
+            await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
+            
+            var buttonLocator = Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).GetByRole(AriaRole.Button);
+            string buttonText = await buttonLocator.InnerTextAsync();
+            
+            Assert.AreEqual("Follow", buttonText);
+            
+            await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).GetByRole(AriaRole.Button).ClickAsync();
+            
+            var buttonLocator2 = Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).GetByRole(AriaRole.Button);
+            
+            string buttonText2 = await buttonLocator2.InnerTextAsync();
+            Assert.AreEqual("Unfollow", buttonText2);
         }
         
         public async Task LoginUserAndDeleteUser(string email, string password)
