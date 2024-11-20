@@ -21,7 +21,7 @@ var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsy
         </ul>
         @{
         var emailClaim = User.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress")?.Value;
-        var usernameClaim = User.Claims.FirstOrDefault(c => c.Type == "User Name")?.Value; // Replace with actual claim type if different
+        var usernameClaim = User.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name:")?.Value; // Replace with actual claim type if different
         @if (hasExternalLogins)
         {
               
