@@ -127,6 +127,34 @@ public class CheepRepositoryTests
         Assert.Equal("I am alive", fetchedCheep.Text);
         Assert.Equal("John Doe", fetchedCheep.Author);
     }
+
+    [Fact]
+    public async Task DeleteCheepRemovesCheepFromDatabase()
+    {
+        // Arrange
+        ICheepRepository cheepRepository = new Infrastructure.CheepRepository(_dbContext);
+        IAuthorRepository authorRepository = new Infrastructure.AuthorRepository(_dbContext);
+
+        var authorName = "John Smith";
+        
+        await authorRepository.CreateAuthor(new AuthorDTO()
+        {
+            Name = authorName,
+            Email = "John@smith.com",
+        });
+        
+        var createdCheep = await cheepRepository.CreateCheep(authorName, "This cheep is to be deleted");
+        
+        // Act
+        cheepRepository.DeleteCheep(createdCheep.CheepId.ToString());
+        
+        // Assert
+        var cheeps = await cheepRepository.GetCheepsFromAuthor(authorName, 1);
+        Assert.Empty(cheeps);
+        
+        var deletedCheep = await _dbContext.Cheeps.FindAsync(createdCheep.CheepId);
+        Assert.Null(deletedCheep);
+    }
     
     [Fact]
     public async Task CreateCheep_ShouldThrowException_WhenMessageIsEmpty()
@@ -200,13 +228,13 @@ public class CheepRepositoryTests
         var author2 = await authorRepository.CreateAuthor(authorDTO2);
 
         var cheep1 = new Cheep { 
-            CheepId = 1, 
+            CheepId = new Guid(), 
             Text = "I am alive", 
             TimeStamp = specificDate1, 
             Author = author1
         };
         var cheep2 = new Cheep { 
-            CheepId = 2, 
+            CheepId = new Guid(), 
             Text = "I am also here", 
             TimeStamp = specificDate2, 
             Author = author2
