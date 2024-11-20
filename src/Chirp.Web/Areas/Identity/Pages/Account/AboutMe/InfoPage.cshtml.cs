@@ -19,13 +19,13 @@ public class InfoPage : PageModel
     
     public async Task<ActionResult> OnGet()
     {
-        var info = await _signInManager.GetExternalLoginInfoAsync();
+        /*var info = await _signInManager.GetExternalLoginInfoAsync();
         Console.WriteLine("PRINT STATEMENT START------------");
         Console.WriteLine(info.LoginProvider);
         Console.WriteLine("PRINT STATEMENT END------------");
         ProviderDisplayName = info.ProviderDisplayName;
         LoginProvider = info.LoginProvider;
-        
+        */
         return Page();
     }
 }
