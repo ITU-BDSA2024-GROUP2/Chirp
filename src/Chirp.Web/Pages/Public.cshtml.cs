@@ -1,5 +1,6 @@
 ﻿#nullable disable //fjern null warning
 using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 using Azure.Identity;
 using Chirp.Core;
 using Microsoft.AspNetCore.Authorization;
@@ -80,6 +81,12 @@ public class PublicModel : PageModel
         FollowerMap[authorName] = false;
         Console.WriteLine(_currentPage);
         return LocalRedirect($"/?page={_currentPage}");
+    }
+    
+    public async Task<IActionResult> OnPostDelete(string cheepId)
+    {
+        await _cheepRepository.DeleteCheep(cheepId);
+        return RedirectToPage("Public");
     }
 
     public async Task<bool> IsFollowing(string userName, string authorName)
