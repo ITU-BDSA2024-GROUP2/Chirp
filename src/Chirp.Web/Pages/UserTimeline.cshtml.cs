@@ -31,13 +31,13 @@ public class UserTimelineModel : PageModel
     {
         _currentPage = page ?? 1;
         
-        await PopulateCheepsAndFollowers(_currentPage);
+        await PopulateCheepsAndFollowers(author, _currentPage);
         
         return Page();
         
     }
     
-    public async Task<IActionResult> OnPost()
+    public async Task<IActionResult> OnPost(string author)
     {
         if (string.IsNullOrWhiteSpace(CheepInput.Message))
         {
@@ -49,7 +49,7 @@ public class UserTimelineModel : PageModel
         }
         if (!ModelState.IsValid)
         {
-            await PopulateCheepsAndFollowers(_currentPage);
+            await PopulateCheepsAndFollowers(author, _currentPage);
             return Page();
         }
 
@@ -82,9 +82,9 @@ public class UserTimelineModel : PageModel
         return await _authorRepository.IsFollowing(userName, authorName);
     }
     
-    private async Task PopulateCheepsAndFollowers(int page)
+    private async Task PopulateCheepsAndFollowers(string author, int page)
     {
-        Cheeps = await _cheepRepository.GetCheeps(page);
+        Cheeps = await _cheepRepository.GetCheepsFromFollowers(author, page);
 
         if (User.Identity.IsAuthenticated)
         {
