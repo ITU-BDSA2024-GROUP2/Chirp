@@ -162,14 +162,14 @@ namespace Chirp.UI.Tests
             //Assert
             await Expect(Page.GetByText("No user found")).ToBeVisibleAsync();
         }
-
-
-        // Denne test skal muligvis rykkes ind i en ny test klasse?
+        
         [Test]
         public async Task UserFollowsAnotherUserAndUnfollows()
-        {
+        {   
+            //Arrange
             await Page.GotoAsync("https://localhost:5273");
-
+            
+            //Act
             await Page.GetByRole(AriaRole.Link, new() { Name = "register" }).ClickAsync();
             await Page.GetByPlaceholder("user name").ClickAsync();
             await Page.GetByPlaceholder("user name").FillAsync("ATestUser");
@@ -180,29 +180,30 @@ namespace Chirp.UI.Tests
             await Page.GetByLabel("Confirm Password").ClickAsync();
             await Page.GetByLabel("Confirm Password").FillAsync("Testpassword123!");
             await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
-
-            var buttonLocator = Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" })
-                .GetByRole(AriaRole.Button);
+            
+            
+            var buttonLocator = Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).GetByRole(AriaRole.Button);
             string buttonText = await buttonLocator.InnerTextAsync();
-
+            
+            //Assert
             Assert.That(buttonText, Is.EqualTo("Follow"));
-
-            await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" })
-                .GetByRole(AriaRole.Button).ClickAsync();
-
-            var buttonLocator2 = Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" })
-                .GetByRole(AriaRole.Button);
-
+            
+            //Act
+            await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).GetByRole(AriaRole.Button).ClickAsync();
+            var buttonLocator2 = Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).GetByRole(AriaRole.Button);
             string buttonText2 = await buttonLocator2.InnerTextAsync();
+            
+            //Assert
             Assert.That(buttonText2, Is.EqualTo("Unfollow"));
         }
-
-        // Denne test skal muligvis rykkes ind i en ny test klasse?
+        
         [Test]
         public async Task CheckingMyTimelineForOtherCheeps()
         {
+            //Arrange
             await Page.GotoAsync("https://localhost:5273");
-
+            
+            //Act
             await Page.GetByRole(AriaRole.Link, new() { Name = "register" }).ClickAsync();
             await Page.GetByPlaceholder("user name").ClickAsync();
             await Page.GetByPlaceholder("user name").FillAsync("ATestUser");
@@ -214,14 +215,17 @@ namespace Chirp.UI.Tests
             await Page.GetByLabel("Confirm Password").FillAsync("Testpassword123!");
             await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
             
-            await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).GetByRole(AriaRole.Button).ClickAsync();
             
+            await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).GetByRole(AriaRole.Button).ClickAsync();
             await Page.GetByRole(AriaRole.Link, new() { Name = "my timeline" }).ClickAsync();
             
+            //Assert
             await Expect(Page.GetByText("Jacqualine Gilcoine Starbuck")).ToBeVisibleAsync();
             
+            //Act
             await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).GetByRole(AriaRole.Button).ClickAsync();
             
+            //Assert
             await Expect(Page.GetByText("Jacqualine Gilcoine Starbuck")).Not.ToBeVisibleAsync();
             
         }
