@@ -178,7 +178,7 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                 Console.WriteLine("else");
                 var user = CreateUser();
                 await _userStore.SetUserNameAsync(user, info.Principal.Identity.Name, CancellationToken.None);
-
+                
                 var createResult = await _userManager.CreateAsync(user);
                 if (createResult.Succeeded)
                 {
