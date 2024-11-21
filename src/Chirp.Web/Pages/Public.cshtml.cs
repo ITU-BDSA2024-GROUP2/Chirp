@@ -58,7 +58,7 @@ public class PublicModel : PageModel
         }
 
         await _cheepRepository.CreateCheep(User.Identity.Name, CheepInput.Message);
-        return Redirect("Public");
+        return Redirect("/");
     }
 
     public async Task<IActionResult> OnPostFollow(string authorName, int? page)

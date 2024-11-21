@@ -9,36 +9,36 @@
 <ul id="messagelist" class="cheeps">
     @foreach (var cheep in Model)
     {
-    <li>
-        <p>
-            <strong>
-                <a href="/@cheep.Author">@cheep.Author</a>
-            </strong>
-            @cheep.Text
-            <small>&mdash; @cheep.TimeStamp</small>
-            @if (User.Identity!.IsAuthenticated)
-            {
-                @if (User.Identity?.Name != cheep.Author)
+        <li>
+            <p>
+                <strong>
+                    <a href="/@cheep.Author">@cheep.Author</a>
+                </strong>
+                @cheep.Text
+                <small>&mdash; @cheep.TimeStamp</small>
+                @if (User.Identity!.IsAuthenticated)
                 {
-                    @if(followerMap.ContainsKey(cheep.Author) && followerMap[cheep.Author] == false) 
+                    @if (User.Identity?.Name != cheep.Author)
                     {
-                        <form method="post" asp-page-handler="Follow">
-                            <input type="hidden" name="authorName" value="@cheep.Author"/>
-                            <input type="hidden" name="page" value="@currentPage" />
-                            <button type="submit">Follow</button>
-                        </form>
-                    }
-                    else
-                    {
-                        <form method="post" asp-page-handler="Unfollow">
-                            <input type="hidden" name="authorName" value="@cheep.Author"/>
-                            <input type="hidden" name="page" value="@currentPage" />
-                            <button type="submit">Unfollow</button>
-                        </form>
+                        @if (followerMap.ContainsKey(cheep.Author) && followerMap[cheep.Author] == false)
+                        {
+                            <form method="post" asp-page-handler="Follow">
+                                <input type="hidden" name="authorName" value="@cheep.Author"/>
+                                <input type="hidden" name="page" value="@currentPage"/>
+                                <button type="submit">Follow</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <form method="post" asp-page-handler="Unfollow">
+                                <input type="hidden" name="authorName" value="@cheep.Author"/>
+                                <input type="hidden" name="page" value="@currentPage"/>
+                                <button type="submit">Unfollow</button>
+                            </form>
+                        }
                     }
                 }
-            }
-        </p>
-    </li>
+            </p>
+        </li>
     }
 </ul>
