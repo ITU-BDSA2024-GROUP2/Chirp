@@ -16,11 +16,9 @@ namespace Chirp.Web.Areas.Identity.Pages.Account.AboutMe
         private int _currentPage;
         public List<CheepDTO> Cheeps { get; set; }
 
-        [BindProperty]
-        public CheepViewModel CheepInput { get; set; }
+        public ICollection<Author> following { get; set; }
+        public ICollection<Author> followers { get; set; }
 
-        public ICollection<Author> following;
-        
         private readonly UserManager<Author> _userManager;
         public string LoginProvider { get; set; } = "Default";
 
@@ -37,6 +35,7 @@ namespace Chirp.Web.Areas.Identity.Pages.Account.AboutMe
 
         public async Task<IActionResult> OnGet([FromQuery] int? page)
         {
+            //check if there is a user
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
@@ -52,15 +51,15 @@ namespace Chirp.Web.Areas.Identity.Pages.Account.AboutMe
             }
             
             _currentPage = page ?? 1;
-
-            var username = User.Identity!.Name!;
-            var author = await _cheepRepository.FindAuthorByName(username);
             
-        
+            // Get Author from username
+            var username = User.Identity!.Name!;
+            var author = await _authorRepository.FindAuthor(username);
+            
             Cheeps = await GetAuthorCheeps(username, _currentPage);
-
-
-            following = user.Following;
+            following = author.Following;
+            followers = author.Followers;
+            
 
             return Page();
         }
@@ -70,6 +69,7 @@ namespace Chirp.Web.Areas.Identity.Pages.Account.AboutMe
             Cheeps = await _cheepRepository.GetCheepsFromAuthor(author, page);
             return Cheeps;
         }
+        
         
         
     }
