@@ -16,29 +16,42 @@
                 </strong>
                 @cheep.Text
                 <small>&mdash; @cheep.TimeStamp</small>
-                @if (User.Identity!.IsAuthenticated)
-                {
-                    @if (User.Identity?.Name != cheep.Author)
-                    {
-                        @if (followerMap.ContainsKey(cheep.Author) && followerMap[cheep.Author] == false)
-                        {
-                            <form method="post" asp-page-handler="Follow">
-                                <input type="hidden" name="authorName" value="@cheep.Author"/>
-                                <input type="hidden" name="page" value="@currentPage"/>
-                                <button type="submit">Follow</button>
-                            </form>
-                        }
-                        else
-                        {
-                            <form method="post" asp-page-handler="Unfollow">
-                                <input type="hidden" name="authorName" value="@cheep.Author"/>
-                                <input type="hidden" name="page" value="@currentPage"/>
-                                <button type="submit">Unfollow</button>
-                            </form>
-                        }
-                    }
-                }
             </p>
+                <div class="cheepOptionsContainer">
+                    <div class="followBox">
+                        @if (User.Identity!.IsAuthenticated)
+                        {
+                            @if (User.Identity?.Name != cheep.Author)
+                            {
+                                @if (followerMap.ContainsKey(cheep.Author) && followerMap[cheep.Author] == false)
+                                {
+                                    <form method="post" asp-page-handler="Follow">
+                                        <input type="hidden" name="authorName" value="@cheep.Author"/>
+                                        <input type="hidden" name="page" value="@currentPage"/>
+                                        <button class="followBtn" id="follow" type="submit">Follow</button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <form method="post" asp-page-handler="Unfollow">
+                                        <input type="hidden" name="authorName" value="@cheep.Author"/>
+                                        <input type="hidden" name="page" value="@currentPage"/>
+                                        <button class="followBtn" id="unfollow" type="submit">Unfollow</button>
+                                    </form>
+                                }
+                            }
+                        }
+                    </div>
+                    <div class="deleteBox">
+                        @if (User.Identity!.IsAuthenticated && User.Identity.Name == cheep.Author)
+                        {
+                            <form method="post" asp-page-handler="Delete">
+                                <input type="hidden" name="cheepId" value="@cheep.Id"/>
+                                <button class="deleteBtn" type="submit">DELETE</button>
+                            </form>
+                        }
+                    </div>
+                </div>
         </li>
     }
 </ul>
