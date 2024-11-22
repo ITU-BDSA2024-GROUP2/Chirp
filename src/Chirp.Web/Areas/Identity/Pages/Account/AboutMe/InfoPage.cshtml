@@ -12,21 +12,26 @@ ViewData["Title"] = "About me";
 <h3>@ViewData["Title"]</h3>
 
 <ul>
+        <div>
         @{
-        var usernameClaim = User.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name")?.Value;
-        var loginProvider = Model.LoginProvider;
+
+                var usernameClaim = User.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name")?.Value;
+                var loginProvider = Model.LoginProvider;
+
+                @if (loginProvider == "Default")
+                {
+                        var emailClaim = User.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress")?.Value;
+                        <li>Your Username is: @usernameClaim</li>
+                        <li>Your email is: @emailClaim</li>
+                }
+                else
+                {
+                        <li>Your Username is: @usernameClaim</li>
+                        <li>Logged in via: @Model.LoginProvider</li>
+                }
+        }
+        </div>  
         
-        @if (loginProvider == "Default")
-        { 
-                var emailClaim = User.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress")?.Value;
-                <li>Your Username is: @usernameClaim</li>
-                <li>Your email is: @emailClaim</li>
-        }
-        else
-        {
-                <li>Your Username is: @usernameClaim</li>
-                <li>Logged in via: @Model.LoginProvider</li>
-        }
         <div>
                 <h2>Your cheeps</h2>
                 @foreach (var cheep in Model.Cheeps)
@@ -62,21 +67,22 @@ ViewData["Title"] = "About me";
                 }
         </div>
         
-        <div>
-                <h2>You are following: </h2>
-                
-                @foreach (var following in Model.following)
-                {
-                        <li>
-                                <strong>
-                                        <a href="/@following">@following</a>
-                                </strong>
-                        </li>
-                }
-                
-        </div>
-        }
+                <div>
+                        <h2>You are following: </h2>
+
+                        @foreach (var following in Model.following)
+                        {
+                                <li>
+                                        <strong>
+                                                <a href="/@following">@following</a>
+                                        </strong>
+                                </li>
+                        }
+
+                </div>
+        
 </ul>
+
 
 
 @section Scripts {
