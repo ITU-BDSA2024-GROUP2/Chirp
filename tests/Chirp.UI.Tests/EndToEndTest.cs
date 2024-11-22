@@ -262,7 +262,7 @@ namespace Chirp.UI.Tests
         }
 
         [Test]
-        public async Task UserIsAbleToDeleteCheeps()
+        public async Task UserIsAbleToMakeAndDeleteCheeps()
         {
             //Arrange
             await Page.GotoAsync("https://localhost:5273");
@@ -282,7 +282,37 @@ namespace Chirp.UI.Tests
             await Page.Locator("#Message").FillAsync("This is a test cheep");
             await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
             
+            var buttonLocator = Page.Locator("li").Filter(new() { HasText = "ATestUser This is a test cheep" }).GetByRole(AriaRole.Button);
+            string buttonText = await buttonLocator.InnerTextAsync();
             
+            //Assert
+            Assert.That(buttonText, Is.EqualTo("Delete"));
+            
+            //Act
+            await Page.Locator("li").Filter(new() { HasText = "ATestUser This is a test cheep" }).GetByRole(AriaRole.Button).ClickAsync();
+            
+            //Assert
+            await Expect(Page.GetByText("ATestUser This is a test cheep")).Not.ToBeVisibleAsync();
+            
+            //Act
+            await Page.GetByRole(AriaRole.Link, new() { Name = "my timeline" }).ClickAsync();
+            
+            //Assert
+            await Expect(Page.GetByText("ATestUser This is a test cheep")).Not.ToBeVisibleAsync();
+            
+            //Act
+            await Page.Locator("#Message").ClickAsync();
+            await Page.Locator("#Message").FillAsync("This is a test cheep on my timeline");
+            await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
+            
+            //Assert
+            await Expect(Page.GetByText("This is a test cheep on my timeline")).ToBeVisibleAsync();
+            
+            //Act
+            await Page.Locator("li").Filter(new() { HasText = "ATestUser This is a test cheep on my timeline"}).GetByRole(AriaRole.Button).ClickAsync();
+            
+            //Assert
+            await Expect(Page.GetByText("This is a test cheep on my timeline")).Not.ToBeVisibleAsync();
         }
 
         public async Task LoginUserAndDeleteUser(string email, string password)
