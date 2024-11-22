@@ -58,6 +58,12 @@ public class UserTimelineModel : PageModel
         return RedirectToPage("UserTimeline", new { page = _currentPage });
     }
     
+    public async Task<IActionResult> OnPostDelete(string cheepId)
+    {
+        await _cheepRepository.DeleteCheep(cheepId);
+        return RedirectToPage("UserTimeline");
+    }
+    
     public async Task<IActionResult> OnPostFollow(string author, string authorName, int? page)
     {
         await _authorRepository.Follow(User.Identity.Name, authorName);
