@@ -28,8 +28,8 @@ input[type="password"] {
 }
 
 input[type="submit"] {
-  background: #571010;
-  border: 1px solid #3b0707;
+  background: #7c1919;
+  border: 1px solid #571010;
   padding: 1px 3px;
   font-family: 'Trebuchet MS', sans-serif;
   font-size: 14px;
@@ -38,6 +38,10 @@ input[type="submit"] {
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
   color: white;
+}
+
+input[type="submit"]:hover {
+    background: #571010;
 }
 
 div.page {
@@ -129,7 +133,7 @@ div.page ul.cheeps {
 
 div.page ul.cheeps li {
   margin: 10px 0;
-  padding: 5px;
+  padding: 5px 5px 0 5px;
   background: #F0FAF9;
   border: 1px solid #DBF3F1;
   border-radius: 2px;
@@ -294,7 +298,7 @@ ul.nav li a:hover {
     justify-content: space-between;
     margin-top: 25px;
     border-top: #DBF3F1 solid 1px;
-    padding: 10px;
+    padding: 2px;
 }
 
 button.followBtn {
@@ -333,6 +337,6 @@ button.followBtn {
 
 .deleteBtn:hover {
     background: transparent;
-    font-size: 12px;
+    font-size: 11px;
     color: #232323;
 }
