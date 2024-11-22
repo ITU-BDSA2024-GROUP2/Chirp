@@ -17,7 +17,7 @@ public class UserTimelineModel : PageModel
     public List<CheepDTO> Cheeps { get; set; }
 
     [BindProperty]
-    public CheepViewModel CheepInput { get; set; } 
+    public CheepInputModel CheepInput { get; set; } 
 
 
     public UserTimelineModel(ICheepRepository cheepRepository, IAuthorRepository authorRepository)
@@ -30,6 +30,7 @@ public class UserTimelineModel : PageModel
     public async Task<ActionResult> OnGet(string author, [FromQuery] int? page)
     {
         _currentPage = page ?? 1;
+        ViewData["CurrentPage"] = _currentPage;
         
         await PopulateCheepsAndFollowers(author, _currentPage);
         
@@ -59,22 +60,18 @@ public class UserTimelineModel : PageModel
     
     public async Task<IActionResult> OnPostFollow(string author, string authorName, int? page)
     {
-        _currentPage = page ?? 1;
-        
         await _authorRepository.Follow(User.Identity.Name, authorName);
         
         FollowerMap[authorName] = true;
-        return LocalRedirect($"/{author}?page={_currentPage}");
+        return LocalRedirect($"/{author}?page={page}");
     }
     
     public async Task<IActionResult> OnPostUnfollow(string author, string authorName, int? page)
     {
-        _currentPage = page ?? 1;
-        
         await _authorRepository.Unfollow(User.Identity.Name, authorName);
         
         FollowerMap[authorName] = false;
-        return LocalRedirect($"/{author}?page={_currentPage}");
+        return LocalRedirect($"/{author}?page={page}");
     }
 
     public async Task<bool> IsFollowing(string userName, string authorName)

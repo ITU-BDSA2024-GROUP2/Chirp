@@ -28,8 +28,8 @@ input[type="password"] {
 }
 
 input[type="submit"] {
-  background: #571010;
-  border: 1px solid #3b0707;
+  background: #7c1919;
+  border: 1px solid #571010;
   padding: 1px 3px;
   font-family: 'Trebuchet MS', sans-serif;
   font-size: 14px;
@@ -38,6 +38,10 @@ input[type="submit"] {
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
   color: white;
+}
+
+input[type="submit"]:hover {
+    background: #571010;
 }
 
 div.page {
@@ -129,7 +133,7 @@ div.page ul.cheeps {
 
 div.page ul.cheeps li {
   margin: 10px 0;
-  padding: 5px;
+  padding: 5px 5px 0 5px;
   background: #F0FAF9;
   border: 1px solid #DBF3F1;
   border-radius: 2px;
@@ -179,6 +183,7 @@ div.page div.cheepbox input[type="text"] {
 div.page div.cheepbox input[type="submit"] {
   width: 70px;
   margin-left: 5px;
+    cursor: pointer;
 }
 
 div.message {
@@ -286,4 +291,52 @@ ul.nav li a {
 
 ul.nav li a:hover {
     background-color: #8b4949;
+}
+
+.cheepOptionsContainer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 25px;
+    border-top: #DBF3F1 solid 1px;
+    padding: 2px;
+}
+
+button.followBtn {
+    border-radius: 8px;
+    font-size: 10px;
+    padding: 4px;
+    cursor: pointer;
+}
+
+#follow {
+    background-color: #2ea043;
+}
+
+#follow:hover {
+    background-color: #206a2e;
+}
+
+#unfollow:hover {
+    background-color: #8b4949;
+}
+
+.followBox {
+    
+}
+
+.deleteBtn {
+    border: none;
+    background: none;
+    outline: unset;
+    cursor: pointer;
+    margin: 0;
+    padding: 0;
+    color: #404040;
+    font-size: 10px;
+}
+
+.deleteBtn:hover {
+    background: transparent;
+    font-size: 11px;
+    color: #232323;
 }

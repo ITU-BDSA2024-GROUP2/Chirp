@@ -1,0 +1,57 @@
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model IEnumerable<Chirp.Core.CheepDTO>
+
+@{
+    var followerMap = ViewData["FollowerMap"] as Dictionary<string, bool> ?? new Dictionary<string, bool>();
+    var currentPage = ViewData["CurrentPage"] as int? ?? 1;
+}
+
+<ul id="messagelist" class="cheeps">
+    @foreach (var cheep in Model)
+    {
+        <li>
+            <p>
+                <strong>
+                    <a href="/@cheep.Author">@cheep.Author</a>
+                </strong>
+                @cheep.Text
+                <small>&mdash; @cheep.TimeStamp</small>
+            </p>
+                <div class="cheepOptionsContainer">
+                    <div class="followBox">
+                        @if (User.Identity!.IsAuthenticated)
+                        {
+                            @if (User.Identity?.Name != cheep.Author)
+                            {
+                                @if (followerMap.ContainsKey(cheep.Author) && followerMap[cheep.Author] == false)
+                                {
+                                    <form method="post" asp-page-handler="Follow">
+                                        <input type="hidden" name="authorName" value="@cheep.Author"/>
+                                        <input type="hidden" name="page" value="@currentPage"/>
+                                        <button class="followBtn" id="follow" type="submit">Follow</button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <form method="post" asp-page-handler="Unfollow">
+                                        <input type="hidden" name="authorName" value="@cheep.Author"/>
+                                        <input type="hidden" name="page" value="@currentPage"/>
+                                        <button class="followBtn" id="unfollow" type="submit">Unfollow</button>
+                                    </form>
+                                }
+                            }
+                        }
+                    </div>
+                    <div class="deleteBox">
+                        @if (User.Identity!.IsAuthenticated && User.Identity.Name == cheep.Author)
+                        {
+                            <form method="post" asp-page-handler="Delete">
+                                <input type="hidden" name="cheepId" value="@cheep.Id"/>
+                                <button class="deleteBtn" type="submit">DELETE</button>
+                            </form>
+                        }
+                    </div>
+                </div>
+        </li>
+    }
+</ul>
