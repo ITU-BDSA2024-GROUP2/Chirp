@@ -40,8 +40,8 @@ namespace Chirp.UI.Tests
         [TearDown]
         public async Task CleanupAccount()
         {
-            await LoginUserAndDeleteUser("test@mail.com", "Testpassword123!");
-            await LoginUserAndDeleteUser("testmail@mail.com", "Testpassword123!");
+            await ServerUtil.LoginUserAndDeleteUser("test@mail.com", "Testpassword123!", Page);
+            await ServerUtil.LoginUserAndDeleteUser("testmail@mail.com", "Testpassword123!", Page);
         }
 
         [Test]
@@ -52,16 +52,7 @@ namespace Chirp.UI.Tests
             await Page.GotoAsync("https://localhost:5273/");
 
             //Act
-            await Page.GetByRole(AriaRole.Link, new() { Name = "register" }).ClickAsync();
-            await Page.GetByPlaceholder("user name").ClickAsync();
-            await Page.GetByPlaceholder("user name").FillAsync("TestUser");
-            await Page.GetByPlaceholder("name@example.com").ClickAsync();
-            await Page.GetByPlaceholder("name@example.com").FillAsync("test@mail.com");
-            await Page.GetByLabel("Password", new() { Exact = true }).ClickAsync();
-            await Page.GetByLabel("Password", new() { Exact = true }).FillAsync("Testpassword123!");
-            await Page.GetByLabel("Confirm Password").ClickAsync();
-            await Page.GetByLabel("Confirm Password").FillAsync("Testpassword123!");
-            await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
+            await ServerUtil.RegisterUser("TestUser", "test@mail.com", "Testpassword123!", Page);
 
             //Act
             await Page.GetByText("logout").ClickAsync();
