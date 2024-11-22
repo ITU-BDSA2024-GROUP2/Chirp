@@ -6,7 +6,7 @@
 @model Chirp.Web.Areas.Identity.Pages.Account.AboutMe.InfoPage
 @{
 ViewData["Title"] = "About me";
-var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+//Layout = "AboutMe/_Layout";
 }
 
 <h3>@ViewData["Title"]</h3>
@@ -27,7 +27,54 @@ var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsy
                 <li>Your Username is: @usernameClaim</li>
                 <li>Logged in via: @Model.LoginProvider</li>
         }
+        <div>
+                <h2>Your cheeps</h2>
+                @foreach (var cheep in Model.Cheeps)
+                {
+                        <li>
+                                <p>
+                                        <strong>
+                                                <a href="/@cheep.Author">@cheep.Author</a>
+                                        </strong>
+                                        @cheep.Text
+                                        <small>&mdash; @cheep.TimeStamp</small>
+                                        @if (User.Identity!.IsAuthenticated && User.Identity.Name != cheep.Author)
+                                        {
+                                                @if (Model.FollowerMap.ContainsKey(cheep.Author) && Model.FollowerMap[cheep.Author] == false)
+                                                {
+                                                        <form method="post" asp-page-handler="Follow">
+                                                                <input type="hidden" name="page" value="@Request.Query["page"]"/>
+                                                                <input type="hidden" name="authorName" value="@cheep.Author"/>
+                                                                <button type="submit">Follow</button>
+                                                        </form>
+                                                }
+                                                else
+                                                {
+                                                        <form method="post" asp-page-handler="Unfollow">
+                                                                <input type="hidden" name="page" value="@Request.Query["page"]"/>
+                                                                <input type="hidden" name="authorName" value="@cheep.Author"/>
+                                                                <button type="submit">Unfollow</button>
+                                                        </form>
+                                                }
+                                        }
+                                </p>
+                        </li>
+                }
+        </div>
         
+        <div>
+                <h2>You are following: </h2>
+                
+                @foreach (var following in Model.following)
+                {
+                        <li>
+                                <strong>
+                                        <a href="/@following">@following</a>
+                                </strong>
+                        </li>
+                }
+                
+        </div>
         }
 </ul>
 
