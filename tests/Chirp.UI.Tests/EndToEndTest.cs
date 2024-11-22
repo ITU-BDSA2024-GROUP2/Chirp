@@ -261,6 +261,30 @@ namespace Chirp.UI.Tests
             await Expect(Page.GetByText("This is a test cheep")).ToBeVisibleAsync();
         }
 
+        [Test]
+        public async Task UserIsAbleToDeleteCheeps()
+        {
+            //Arrange
+            await Page.GotoAsync("https://localhost:5273");
+            
+            //Act
+            await Page.GetByRole(AriaRole.Link, new() { Name = "register" }).ClickAsync();
+            await Page.GetByPlaceholder("user name").ClickAsync();
+            await Page.GetByPlaceholder("user name").FillAsync("ATestUser");
+            await Page.GetByPlaceholder("name@example.com").ClickAsync();
+            await Page.GetByPlaceholder("name@example.com").FillAsync("testmail@mail.com");
+            await Page.GetByLabel("Password", new() { Exact = true }).ClickAsync();
+            await Page.GetByLabel("Password", new() { Exact = true }).FillAsync("Testpassword123!");
+            await Page.GetByLabel("Confirm Password").ClickAsync();
+            await Page.GetByLabel("Confirm Password").FillAsync("Testpassword123!");
+            await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
+            await Page.Locator("#Message").ClickAsync();
+            await Page.Locator("#Message").FillAsync("This is a test cheep");
+            await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
+            
+            
+        }
+
         public async Task LoginUserAndDeleteUser(string email, string password)
         {
             await Page.GotoAsync("https://localhost:5273/Identity/Account/Login");
