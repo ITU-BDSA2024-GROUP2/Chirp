@@ -4,7 +4,7 @@ namespace Chirp.Core;
 
 public class Cheep
 {
-    public int CheepId { get; set; }
+    public Guid CheepId { get; set; } = Guid.NewGuid();
     [Required]
     [StringLength(160, ErrorMessage = "Cheeps can't be longer than 160 characters.")]
     public string? Text { get; set; }

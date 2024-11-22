@@ -14,16 +14,16 @@ namespace Chirp.UI.Tests
     public class EndToEndTest : PageTest
     {
         private Process _serverProcess;
-        
+
         public override BrowserNewContextOptions ContextOptions()
         {
-            
+
             return new BrowserNewContextOptions
             {
                 IgnoreHTTPSErrors = true
             };
         }
-        
+
         [OneTimeSetUp]
         public async Task Setup()
         {
@@ -36,7 +36,7 @@ namespace Chirp.UI.Tests
             _serverProcess.Kill();
             _serverProcess.Dispose();
         }
-        
+
         [TearDown]
         public async Task CleanupAccount()
         {
@@ -45,11 +45,12 @@ namespace Chirp.UI.Tests
         }
 
         [Test]
-        public async Task UserRegistersANewAccountIsDirectlySignedInLogsOutAndLogsInWithNewAccountLogsOutLogsInDeletesAccount()
-        {   
+        public async Task
+            UserRegistersANewAccountIsDirectlySignedInLogsOutAndLogsInWithNewAccountLogsOutLogsInDeletesAccount()
+        {
             //Arrange
             await Page.GotoAsync("https://localhost:5273/");
-            
+
             //Act
             await Page.GetByRole(AriaRole.Link, new() { Name = "register" }).ClickAsync();
             await Page.GetByPlaceholder("user name").ClickAsync();
@@ -61,9 +62,9 @@ namespace Chirp.UI.Tests
             await Page.GetByLabel("Confirm Password").ClickAsync();
             await Page.GetByLabel("Confirm Password").FillAsync("Testpassword123!");
             await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
-            
+
             //Act
-            await  Page.GetByText("logout").ClickAsync();
+            await Page.GetByText("logout").ClickAsync();
             await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
             await Page.GetByPlaceholder("name@example.com").ClickAsync();
             await Page.GetByPlaceholder("name@example.com").FillAsync("test@mail.com");
@@ -71,7 +72,7 @@ namespace Chirp.UI.Tests
             await Page.GetByPlaceholder("password").FillAsync("Testpassword123!");
             await Page.GetByLabel("Remember me?").CheckAsync();
             await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
-            
+
             //Assert
             await Expect(Page.GetByRole(AriaRole.Button, new() { Name = "logout [TestUser]" })).ToBeVisibleAsync();
 
@@ -107,10 +108,10 @@ namespace Chirp.UI.Tests
 
         [Test]
         public async Task UserRegistersANewAccountAndLogsInWithNewAccountWritesCheepDeletesAccount()
-        {   
+        {
             //Arrange
             await Page.GotoAsync("https://localhost:5273/");
-            
+
             //Act
             await Page.GetByRole(AriaRole.Link, new() { Name = "register" }).ClickAsync();
             await Page.GetByPlaceholder("user name").ClickAsync();
@@ -122,8 +123,8 @@ namespace Chirp.UI.Tests
             await Page.GetByLabel("Confirm Password").ClickAsync();
             await Page.GetByLabel("Confirm Password").FillAsync("Testpassword123!");
             await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
-            await  Page.GetByText("logout").ClickAsync();
-            
+            await Page.GetByText("logout").ClickAsync();
+
             //Act
             await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
             await Page.GetByPlaceholder("name@example.com").ClickAsync();
@@ -132,7 +133,7 @@ namespace Chirp.UI.Tests
             await Page.GetByPlaceholder("password").FillAsync("Testpassword123!");
             await Page.GetByLabel("Remember me?").CheckAsync();
             await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
-            
+
             //Assert
             await Expect(Page.GetByRole(AriaRole.Button, new() { Name = "logout [ATestUser]" })).ToBeVisibleAsync();
 
@@ -162,6 +163,104 @@ namespace Chirp.UI.Tests
             await Expect(Page.GetByText("No user found")).ToBeVisibleAsync();
         }
         
+        [Test]
+        public async Task UserFollowsAnotherUserAndUnfollows()
+        {   
+            //Arrange
+            await Page.GotoAsync("https://localhost:5273");
+            
+            //Act
+            await Page.GetByRole(AriaRole.Link, new() { Name = "register" }).ClickAsync();
+            await Page.GetByPlaceholder("user name").ClickAsync();
+            await Page.GetByPlaceholder("user name").FillAsync("ATestUser");
+            await Page.GetByPlaceholder("name@example.com").ClickAsync();
+            await Page.GetByPlaceholder("name@example.com").FillAsync("testmail@mail.com");
+            await Page.GetByLabel("Password", new() { Exact = true }).ClickAsync();
+            await Page.GetByLabel("Password", new() { Exact = true }).FillAsync("Testpassword123!");
+            await Page.GetByLabel("Confirm Password").ClickAsync();
+            await Page.GetByLabel("Confirm Password").FillAsync("Testpassword123!");
+            await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
+            
+            
+            var buttonLocator = Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).GetByRole(AriaRole.Button);
+            string buttonText = await buttonLocator.InnerTextAsync();
+            
+            //Assert
+            Assert.That(buttonText, Is.EqualTo("Follow"));
+            
+            //Act
+            await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).GetByRole(AriaRole.Button).ClickAsync();
+            var buttonLocator2 = Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).GetByRole(AriaRole.Button);
+            string buttonText2 = await buttonLocator2.InnerTextAsync();
+            
+            //Assert
+            Assert.That(buttonText2, Is.EqualTo("Unfollow"));
+        }
+        
+        [Test]
+        public async Task CheckingMyTimelineForOtherCheeps()
+        {
+            //Arrange
+            await Page.GotoAsync("https://localhost:5273");
+            
+            //Act
+            await Page.GetByRole(AriaRole.Link, new() { Name = "register" }).ClickAsync();
+            await Page.GetByPlaceholder("user name").ClickAsync();
+            await Page.GetByPlaceholder("user name").FillAsync("ATestUser");
+            await Page.GetByPlaceholder("name@example.com").ClickAsync();
+            await Page.GetByPlaceholder("name@example.com").FillAsync("testmail@mail.com");
+            await Page.GetByLabel("Password", new() { Exact = true }).ClickAsync();
+            await Page.GetByLabel("Password", new() { Exact = true }).FillAsync("Testpassword123!");
+            await Page.GetByLabel("Confirm Password").ClickAsync();
+            await Page.GetByLabel("Confirm Password").FillAsync("Testpassword123!");
+            await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
+            
+            
+            await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).GetByRole(AriaRole.Button).ClickAsync();
+            await Page.GetByRole(AriaRole.Link, new() { Name = "my timeline" }).ClickAsync();
+            
+            //Assert
+            await Expect(Page.GetByText("Jacqualine Gilcoine Starbuck")).ToBeVisibleAsync();
+            
+            //Act
+            await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).GetByRole(AriaRole.Button).ClickAsync();
+            
+            //Assert
+            await Expect(Page.GetByText("Jacqualine Gilcoine Starbuck")).Not.ToBeVisibleAsync();
+            
+        }
+        
+        [Test]
+        public async Task UserChecksMyTimelineForOwnCheeps()
+        {
+            //Arrange
+            await Page.GotoAsync("https://localhost:5273");
+            
+            //Act
+            await Page.GetByRole(AriaRole.Link, new() { Name = "register" }).ClickAsync();
+            await Page.GetByPlaceholder("user name").ClickAsync();
+            await Page.GetByPlaceholder("user name").FillAsync("ATestUser");
+            await Page.GetByPlaceholder("name@example.com").ClickAsync();
+            await Page.GetByPlaceholder("name@example.com").FillAsync("testmail@mail.com");
+            await Page.GetByLabel("Password", new() { Exact = true }).ClickAsync();
+            await Page.GetByLabel("Password", new() { Exact = true }).FillAsync("Testpassword123!");
+            await Page.GetByLabel("Confirm Password").ClickAsync();
+            await Page.GetByLabel("Confirm Password").FillAsync("Testpassword123!");
+            await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
+            await Page.Locator("#Message").ClickAsync();
+            await Page.Locator("#Message").FillAsync("This is a test cheep");
+            await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
+
+            //Assert
+            await Expect(Page.GetByText("This is a test cheep")).ToBeVisibleAsync();
+            
+            //Act
+            await Page.GetByRole(AriaRole.Link, new() { Name = "my timeline" }).ClickAsync();
+            
+            //Assert
+            await Expect(Page.GetByText("This is a test cheep")).ToBeVisibleAsync();
+        }
+
         public async Task LoginUserAndDeleteUser(string email, string password)
         {
             await Page.GotoAsync("https://localhost:5273/Identity/Account/Login");

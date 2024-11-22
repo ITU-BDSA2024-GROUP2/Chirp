@@ -23,6 +23,7 @@ public class CheepRepository : ICheepRepository
             orderby cheep.TimeStamp descending
             select new CheepDTO
             {
+                Id = cheep.CheepId.ToString(),
                 Author = cheep.Author.UserName,
                 Text = cheep.Text,
                 TimeStamp = cheep.TimeStamp.ToString("MM'/'dd'/'yy H':'mm':'ss")
@@ -41,6 +42,7 @@ public class CheepRepository : ICheepRepository
             where cheep.Author.UserName == authorName
             select new CheepDTO
             {
+                Id = cheep.CheepId.ToString(),
                 Author = cheep.Author.UserName,
                 Text = cheep.Text,
                 TimeStamp = cheep.TimeStamp.ToString("MM'/'dd'/'yy H':'mm':'ss")
@@ -53,13 +55,21 @@ public class CheepRepository : ICheepRepository
     public async Task<List<CheepDTO>> GetCheepsFromFollowers(string userName, int currentPage)
     {
         int offset = (currentPage - 1) * pageSize;
-        var user = await FindAuthorByName(userName);
+        var user = await _dbContext.Authors
+            .Include(a => a.Following)
+            .FirstOrDefaultAsync(a => a.UserName == userName);
+        
+        if (user == null)
+        {
+            return new List<CheepDTO>();
+        }
         
         var query = (from cheep in _dbContext.Cheeps
             orderby cheep.TimeStamp descending
             where user.Following.Contains(cheep.Author) || cheep.Author.UserName == userName
             select new CheepDTO
             {
+                Id = cheep.CheepId.ToString(),
                 Author = cheep.Author.UserName,
                 Text = cheep.Text,
                 TimeStamp = cheep.TimeStamp.ToString("MM'/'dd'/'yy H':'mm':'ss")
@@ -93,21 +103,28 @@ public class CheepRepository : ICheepRepository
         await _dbContext.SaveChangesAsync(); // persist the changes in the database
         return newCheep;
     }
+    
+    public async Task DeleteCheep(string cheepId)
+    {
+        Guid cheepGuid = Guid.Parse(cheepId.ToString());
+        var cheep = await _dbContext.Cheeps.FindAsync(cheepGuid);
+
+        if (cheep != null)
+        { 
+            _dbContext.Cheeps.Remove(cheep);
+        }
+        
+        await _dbContext.SaveChangesAsync();
+        
+    }
 
     public async Task<Author> FindAuthorByName(string name)
     {
         var query = from author in _dbContext.Authors
-                .Include(a => a.Following)
-                .Include(a => a.Followers)
             where (author.UserName == name)
             select author;
 
         var foundAuthor = await query.FirstOrDefaultAsync();
-
-        if (foundAuthor == null)
-        {
-            throw new ValidationException($"Author {name} does not exist.");
-        }
 
         return foundAuthor;
     }

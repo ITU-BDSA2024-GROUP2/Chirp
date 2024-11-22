@@ -2,6 +2,7 @@
 @model Chirp.Web.Pages.UserTimelineModel
 @{
     ViewData["Title"] = "Chirp!";
+    ViewData["FollowerMap"] = Model.FollowerMap;
     Layout = "Shared/_Layout";
     var routeName = HttpContext.GetRouteValue("author");
 }
@@ -12,39 +13,7 @@
 
     @if (Model.Cheeps.Any())
     {
-        <ul id="messagelist" class="cheeps">
-            @foreach (var cheep in Model.Cheeps)
-            {
-                <li>
-                    <p>
-                        <strong>
-                            <a href="/@cheep.Author">@cheep.Author</a>
-                        </strong>
-                        @cheep.Text
-                        <small>&mdash; @cheep.TimeStamp</small>
-                        @if (User.Identity!.IsAuthenticated && User.Identity.Name != cheep.Author)
-                        {
-                            @if(Model.FollowerMap.ContainsKey(cheep.Author) && Model.FollowerMap[cheep.Author] == false) 
-                            { 
-                                <form method="post" asp-page-handler="Follow">
-                                    <input type="hidden" name="page" value="@Request.Query["page"]" />
-                                    <input type="hidden" name="authorName" value="@cheep.Author"/>
-                                    <button type="submit">Follow</button>
-                                </form>
-                            }
-                            else
-                            {
-                                <form method="post" asp-page-handler="Unfollow">
-                                    <input type="hidden" name="page" value="@Request.Query["page"]" />
-                                    <input type="hidden" name="authorName" value="@cheep.Author"/>
-                                    <button type="submit">Unfollow</button>
-                                </form> 
-                            }
-                        }
-                    </p>
-                </li>
-            }
-        </ul>
+        <partial name="Shared/_CheepsTimelinePartial" model="Model.Cheeps" />
     }
     else
     {
