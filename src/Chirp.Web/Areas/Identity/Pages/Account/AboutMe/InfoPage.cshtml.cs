@@ -8,8 +8,6 @@ namespace Chirp.Web.Areas.Identity.Pages.Account.AboutMe
     public class InfoPage : PageModel
     {
         private readonly UserManager<Author> _userManager;
-
-        public string ProviderDisplayName { get; set; } = "N/A";
         public string LoginProvider { get; set; } = "Default";
 
         public InfoPage(UserManager<Author> userManager)
@@ -31,7 +29,6 @@ namespace Chirp.Web.Areas.Identity.Pages.Account.AboutMe
             {
                 var externalLogin = logins.First();
                 LoginProvider = externalLogin.LoginProvider;
-                ProviderDisplayName = externalLogin.ProviderDisplayName ?? "External Provider";
             }
 
             return Page();
