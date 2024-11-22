@@ -314,26 +314,5 @@ namespace Chirp.UI.Tests
             //Assert
             await Expect(Page.GetByText("This is a test cheep on my timeline")).Not.ToBeVisibleAsync();
         }
-
-        public async Task LoginUserAndDeleteUser(string email, string password)
-        {
-            await Page.GotoAsync("https://localhost:5273/Identity/Account/Login");
-
-            await Page.GetByPlaceholder("name@example.com").FillAsync(email);
-            await Page.GetByPlaceholder("password").FillAsync(password);
-            
-            await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
-            
-            var isUserLoggedIn = await Page.GetByRole(AriaRole.Link, new() { Name = "my timeline" }).IsVisibleAsync();
-            if (!isUserLoggedIn)
-            {
-                return;
-            }
-            await Page.GetByRole(AriaRole.Link, new() { Name = "manage account" }).ClickAsync();
-            await Page.GetByRole(AriaRole.Link, new() { Name = "Personal data" }).ClickAsync();
-            await Page.GetByRole(AriaRole.Button, new() { Name = "Delete" }).ClickAsync();
-            await Page.GetByPlaceholder("Please enter your password.").FillAsync("Testpassword123!");
-            await Page.GetByRole(AriaRole.Button, new() { Name = "Delete data and close my" }).ClickAsync();
-        }
     }
 }
