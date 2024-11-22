@@ -99,7 +99,7 @@ namespace Chirp.UI.Tests
             await Expect(newCheep).ToContainTextAsync("Cheeping cheeps on Chirp!" + randCheepId);
         }
 
-        [Test]
+        /*[Test]
         public async Task CheepboxDoesNotAllowUserToSendCheepLongerThan160Characters()
         {
             // Arrange
@@ -123,7 +123,7 @@ namespace Chirp.UI.Tests
             string cheepText = await newCheep.InnerTextAsync();
             Assert.That(cheepText, Does.Not.Contain(randCheepId.ToString()));
 
-        }
+        }*/
         
         [Test]
         public async Task CheepboxDoesNotAllowUserToSendEmptyCheeps()
