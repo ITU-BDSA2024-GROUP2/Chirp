@@ -7,34 +7,32 @@ namespace Chirp.Web.Areas.Identity.Pages.Account.AboutMe
 {
     public class InfoPage : PageModel
     {
-        private readonly SignInManager<Author> _signInManager;
+        private readonly UserManager<Author> _userManager;
 
         public string ProviderDisplayName { get; set; } = "N/A";
         public string LoginProvider { get; set; } = "Default";
 
-        public InfoPage(SignInManager<Author> signInManager)
+        public InfoPage(UserManager<Author> userManager)
         {
-            _signInManager = signInManager;
+            _userManager = userManager;
         }
 
-        public async Task<ActionResult> OnGet()
+        public async Task<IActionResult> OnGet()
         {
-            var info = await _signInManager.GetExternalLoginInfoAsync();
-
-            Console.WriteLine("PRINT STATEMENT START------------");
-            if (info != null)
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
             {
-                Console.WriteLine($"LoginProvider: {info.LoginProvider}");
-                Console.WriteLine($"ProviderDisplayName: {info.ProviderDisplayName}");
+                return RedirectToPage("/Account/Login");
+            }
 
-                ProviderDisplayName = info.ProviderDisplayName ?? "N/A";
-                LoginProvider = info.LoginProvider ?? "Default";
-            }
-            else
+            // Retrieve external logins for the user
+            var logins = await _userManager.GetLoginsAsync(user);
+            if (logins.Any())
             {
-                Console.WriteLine("No external login information available.");
+                var externalLogin = logins.First();
+                LoginProvider = externalLogin.LoginProvider;
+                ProviderDisplayName = externalLogin.ProviderDisplayName ?? "External Provider";
             }
-            Console.WriteLine("PRINT STATEMENT END------------");
 
             return Page();
         }
