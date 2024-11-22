@@ -166,6 +166,9 @@ namespace Chirp.UI.Tests
         [Test]
         public async Task UserFollowsAnotherUserAndUnfollows()
         {   
+            //Arrange
+            await Page.GotoAsync("https://localhost:5273");
+            
             //Act
             await ServerUtil.RegisterUser("TestUser", "test@mail.com", "Testpassword123!", Page);
             
