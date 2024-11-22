@@ -16,9 +16,10 @@ var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsy
         <ul>
                 @foreach (var claim in User.Claims)
                 {
-                <li>@claim.Type: @claim.Value</li>
+                        <li>@claim.Type: @claim.Value</li>
                 }
         </ul>
+        
         @{
         var emailClaim = User.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress")?.Value;
         var usernameClaim = User.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name")?.Value; // Replace with actual claim type if different
@@ -31,6 +32,7 @@ var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsy
         <li>Your Username is: @usernameClaim</li>
         <li>Your email is: @emailClaim</li>
         <li>@Model.ProviderDisplayName</li>
+        <li>@User.Identity!.AuthenticationType</li>
     
 </ul>
 
