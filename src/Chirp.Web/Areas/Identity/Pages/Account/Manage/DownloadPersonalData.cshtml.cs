@@ -5,10 +5,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Chirp.Core;
+using Chirp.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -20,13 +22,16 @@ namespace Chirp.Web.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<Author> _userManager;
         private readonly ILogger<DownloadPersonalDataModel> _logger;
+        private readonly ICheepRepository _cheepRepository;
 
         public DownloadPersonalDataModel(
             UserManager<Author> userManager,
-            ILogger<DownloadPersonalDataModel> logger)
+            ILogger<DownloadPersonalDataModel> logger,
+            ICheepRepository cheepRepository)
         {
             _userManager = userManager;
             _logger = logger;
+            _cheepRepository = cheepRepository;
         }
 
         public IActionResult OnGet()
@@ -45,7 +50,7 @@ namespace Chirp.Web.Areas.Identity.Pages.Account.Manage
             _logger.LogInformation("User with ID '{UserId}' asked for their personal data.", _userManager.GetUserId(User));
 
             // Only include personal data for download
-            var personalData = new Dictionary<string, string>();
+            var personalData = new Dictionary<string, Object>();
             var personalDataProps = typeof(Author).GetProperties().Where(
                             prop => Attribute.IsDefined(prop, typeof(PersonalDataAttribute)));
             foreach (var p in personalDataProps)
@@ -60,6 +65,18 @@ namespace Chirp.Web.Areas.Identity.Pages.Account.Manage
             }
 
             personalData.Add($"Authenticator Key", await _userManager.GetAuthenticatorKeyAsync(user));
+            
+            var cheeps = await _cheepRepository.GetAllCheepsFromAuthor(User.Identity.Name);
+
+            foreach (var c in cheeps)
+            {
+                personalData.Add(c.Id, new
+                {
+                    Author = c.Author,
+                    Text = c.Text,
+                    TimeStamp = c.TimeStamp,
+                });
+            }
 
             Response.Headers.TryAdd("Content-Disposition", "attachment; filename=PersonalData.json");
             return new FileContentResult(JsonSerializer.SerializeToUtf8Bytes(personalData), "application/json");

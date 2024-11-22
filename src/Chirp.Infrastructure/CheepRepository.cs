@@ -33,6 +33,23 @@ public class CheepRepository : ICheepRepository
         return result;
     }
     
+    public async Task<List<CheepDTO>> GetAllCheepsFromAuthor(string authorName)
+    {
+        var query = (from cheep in _dbContext.Cheeps
+            orderby cheep.TimeStamp descending
+            where cheep.Author.UserName == authorName
+            select new CheepDTO
+            {
+                Id = cheep.CheepId.ToString(),
+                Author = cheep.Author.UserName,
+                Text = cheep.Text,
+                TimeStamp = cheep.TimeStamp.ToString("MM'/'dd'/'yy H':'mm':'ss")
+            });
+        
+        var result = await query.ToListAsync();
+        return result;
+    }
+    
     public async Task<List<CheepDTO>> GetCheepsFromAuthor(string authorName, int currentPage)
     {
         int offset = (currentPage - 1) * pageSize;
