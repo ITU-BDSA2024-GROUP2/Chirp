@@ -12,21 +12,20 @@
     var followerCount = @Model.UserInfo["followerCount"];
 }
 
-<h3>@ViewData["Title"]</h3>
-
-<ul>
-    @{
-        <li>Username: @Model.UserInfo["username"]</li>
-        @if (Model.UserInfo.ContainsKey("email") && Model.UserInfo["email"] != null)
-        {
-            <li>Email: @Model.UserInfo["email"]</li>
+<div class="aboutContainer">
+    <h2>Personal information</h2>
+    <ul>
+        @{
+            <li><strong>Username:</strong> @Model.UserInfo["username"]</li>
+            <li><strong>Email:</strong> @Model.UserInfo["email"]</li>
+            <li><strong>Login method:</strong> @Model.UserInfo["login"]</li>
         }
-        <li>Login method: @Model.UserInfo["login"]</li>
-    }
-</ul>
+    </ul>
+    <a class="manageButton" href="/Identity/Account/Manage">Manage information →</a>
+</div>
 
 <div class="followContainer">
-    <div>
+    <div class="followersBox">
         <h2>Following (@followingCount)</h2>
 
         <ul>
@@ -41,7 +40,7 @@
         </ul>
     </div>
 
-    <div>
+    <div class="followersBox">
         <h2>Followers (@followerCount)</h2>
 
         <ul>
@@ -57,7 +56,7 @@
     </div>
 </div>
 
-<div>
+<div class="cheepContainer">
     <h2>Your cheeps</h2>
     <ul>
         @foreach (var cheep in Model.Cheeps)
@@ -73,4 +72,5 @@
             </li>
         }
     </ul>
+    <a class="manageButton" href="/Identity/Account/Manage/PersonalData">Download cheeps →</a>
 </div>

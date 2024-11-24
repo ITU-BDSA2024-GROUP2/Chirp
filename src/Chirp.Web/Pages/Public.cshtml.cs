@@ -71,7 +71,7 @@ public class PublicModel : PageModel
         
         await _authorRepository.Follow(User.Identity.Name, authorName);
         FollowerMap[authorName] = true;
-        
+            
         return Redirect($"/?page={page}");
     }
     

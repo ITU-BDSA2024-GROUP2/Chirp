@@ -340,3 +340,64 @@ button.followBtn {
     font-size: 11px;
     color: #232323;
 }
+
+.followContainer, .cheepContainer, .aboutContainer {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 20px;
+    width: 100%;
+}
+
+.followContainer, .aboutContainer {
+    gap: 20px;
+}
+
+.followersBox, .cheepContainer, .aboutContainer {
+    display: flex;
+    flex-direction: column;
+    width: 45%;
+}
+
+.followersBox h2, .cheepContainer h2, .aboutContainer h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.followersBox ul, .cheepContainer ul, .aboutContainer ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.followersBox li, .cheepContainer li, .aboutContainer li {
+    padding: 8px 0;
+    font-size: 14px;
+}
+
+.followersBox li a, .cheepContainer li a, .aboutContainer li a {
+    text-decoration: none;
+    color: #975252;
+    font-weight: bold;
+}
+
+.followersBox li a:hover, .cheepContainer li a:hover, .aboutContainer li a:hover {
+    color: #7c1919;
+}
+
+.manageButton {
+    display: inline-block;
+    padding: 4px 4px;
+    margin-top: 10px;
+    width: fit-content;
+    background-color: #975252;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.manageButton:hover {
+    background-color: #7c1919;
+    color: white;
+}

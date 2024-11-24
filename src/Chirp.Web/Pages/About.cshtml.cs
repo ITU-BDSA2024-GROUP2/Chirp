@@ -45,14 +45,14 @@ namespace Chirp.Web.Areas.Identity.Pages.Account.AboutMe
             UserInfo.Add("username", username);
             
             // Email
-            var email = User?.FindFirst(ClaimTypes.Email)?.Value;
-            if (email != null)
-            {
-                UserInfo.Add("email", email);
-            }
-            
-            // Login
             var user = await _userManager.FindByNameAsync(username);
+            if (user != null)
+            {
+                var email = await _userManager.GetEmailAsync(user);
+                UserInfo.Add("email", email ?? "not registered");
+            }
+
+            // Login
             var logins = await  _userManager.GetLoginsAsync(user);
             if (logins.Any())
             {
