@@ -69,6 +69,15 @@
                     @cheep.Text
                     <small>&mdash; @cheep.TimeStamp</small>
                 </p>
+                <div class="deleteBox">
+                    @if (User.Identity!.IsAuthenticated && User.Identity.Name == cheep.Author)
+                    {
+                    <form method="post" asp-page-handler="Delete">
+                        <input type="hidden" name="cheepId" value="@cheep.Id"/>
+                        <button class="deleteBtn" type="submit">DELETE</button>
+                    </form>
+                    }
+                </div>
             </li>
         }
     </ul>

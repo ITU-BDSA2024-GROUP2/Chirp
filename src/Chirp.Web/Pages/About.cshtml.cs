@@ -35,6 +35,12 @@ namespace Chirp.Web.Areas.Identity.Pages.Account.AboutMe
             
             return Page();
         }
+        
+        public async Task<IActionResult> OnPostDelete(string cheepId)
+        {
+            await _cheepRepository.DeleteCheep(cheepId);
+            return RedirectToPage("About");
+        }
 
         private async Task LoadUserInfo()
         {
