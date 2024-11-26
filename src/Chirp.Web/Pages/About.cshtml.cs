@@ -30,6 +30,11 @@ namespace Chirp.Web.Areas.Identity.Pages.Account.AboutMe
 
         public async Task<IActionResult> OnGet([FromQuery] int? page)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return Redirect("/Identity/Account/Login");
+            }
+            
             UserInfo = new Dictionary<string, string>();
             await LoadUserInfo();
             
@@ -45,7 +50,6 @@ namespace Chirp.Web.Areas.Identity.Pages.Account.AboutMe
         private async Task LoadUserInfo()
         {
             var username = User.Identity?.Name;
-            var author = await _authorRepository.FindAuthor(username);
             
             // Username
             UserInfo.Add("username", username);
@@ -75,6 +79,10 @@ namespace Chirp.Web.Areas.Identity.Pages.Account.AboutMe
             
             // Followers
             Followers = await _authorRepository.GetFollowers(username);
+            foreach (var follower in Followers)
+            {
+                Console.WriteLine(username + " follows " + follower);
+            }
             UserInfo.Add("followerCount", Followers.Count.ToString());
             
             // Following
