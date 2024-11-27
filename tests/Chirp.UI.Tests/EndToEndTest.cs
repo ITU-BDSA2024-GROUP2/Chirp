@@ -42,6 +42,7 @@ namespace Chirp.UI.Tests
         {
             await ServerUtil.LoginUserAndDeleteUser("test@mail.com", "Testpassword123!", Page);
             await ServerUtil.LoginUserAndDeleteUser("testmail@mail.com", "Testpassword123!", Page);
+            await ServerUtil.LoginUserAndDeleteUser("atest@mail.com", "Testpassword123!", Page);
         }
 
         [Test]
@@ -162,6 +163,70 @@ namespace Chirp.UI.Tests
 
             //Assert
             await Expect(Page.GetByText("No user found")).ToBeVisibleAsync();
+        }
+
+[Test]
+        public async Task UserFollowsAccountsAndWritesCheepsCorrectAmountOfAccountsAndCheepsInAboutMePage()
+        {
+            //Arrange
+            await Page.GotoAsync("https://localhost:5273/");
+
+            //Act
+            await Page.GetByRole(AriaRole.Link, new() { Name = "register" }).ClickAsync();
+            await Page.GetByPlaceholder("user name").ClickAsync();
+            await Page.GetByPlaceholder("user name").FillAsync("ATestUser1");
+            await Page.GetByPlaceholder("name@example.com").ClickAsync();
+            await Page.GetByPlaceholder("name@example.com").FillAsync("atest@mail.com");
+            await Page.GetByLabel("Password", new() { Exact = true }).ClickAsync();
+            await Page.GetByLabel("Password", new() { Exact = true }).FillAsync("Testpassword123!");
+            await Page.GetByLabel("Confirm Password").ClickAsync();
+            await Page.GetByLabel("Confirm Password").FillAsync("Testpassword123!");
+            await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
+            await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).Locator("#follow").ClickAsync();
+            await Page.Locator("li").Filter(new() { HasText = "Mellie Yost But what was" }).Locator("#follow").ClickAsync();
+            await Page.Locator("li").Filter(new() { HasText = "Malcolm Janski At present I" }).Locator("#follow").ClickAsync();
+            await Page.Locator("#Message").ClickAsync();
+            await Page.Locator("#Message").FillAsync("Hello World1");
+            await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
+            await Page.Locator("#Message").ClickAsync();
+            await Page.Locator("#Message").FillAsync("Hello World2");
+            await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
+            await Page.Locator("#Message").ClickAsync();
+            await Page.Locator("#Message").FillAsync("Hello World3");
+            await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
+            await Page.GetByRole(AriaRole.Link, new() { Name = "About me" }).ClickAsync();
+
+            //Assert
+            await Expect(Page.GetByText("Hello World1")).ToBeVisibleAsync();
+            await Expect(Page.GetByText("Hello World2")).ToBeVisibleAsync();
+            await Expect(Page.GetByText("Hello World3")).ToBeVisibleAsync();
+
+            var follower1 = Page.GetByRole(AriaRole.Link, new() { Name = "Jacqualine Gilcoine" });
+            var follower2 = Page.GetByRole(AriaRole.Link, new() { Name = "Malcolm Janski" });
+            var follower3 = Page.GetByRole(AriaRole.Link, new() { Name = "Mellie Yost" });
+
+            Assert.IsTrue(await follower1.IsVisibleAsync());
+            Assert.IsTrue(await follower2.IsVisibleAsync());
+            Assert.IsTrue(await follower3.IsVisibleAsync());
+
+            //Act 
+            await Page.GetByRole(AriaRole.Link, new() { Name = "public timeline" }).ClickAsync();
+            await Page.Locator("li").Filter(new() { HasText = "ATestUser1 Hello World3 — 11/" }).GetByRole(AriaRole.Button).ClickAsync();
+            await Page.Locator("li").Filter(new() { HasText = "ATestUser1 Hello World2 — 11/" }).GetByRole(AriaRole.Button).ClickAsync();
+            await Page.Locator("li").Filter(new() { HasText = "ATestUser1 Hello World1 — 11/" }).GetByRole(AriaRole.Button).ClickAsync();
+            await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).Locator("#unfollow").ClickAsync();
+            await Page.Locator("li").Filter(new() { HasText = "Mellie Yost But what was" }).Locator("#unfollow").ClickAsync();
+            await Page.Locator("li").Filter(new() { HasText = "Malcolm Janski At present I" }).Locator("#unfollow").ClickAsync();
+            await Page.GetByRole(AriaRole.Link, new() { Name = "About me" }).ClickAsync();
+
+            //Assert
+            await Expect(Page.GetByText("Hello World1")).ToBeHiddenAsync();
+            await Expect(Page.GetByText("Hello World2")).ToBeHiddenAsync();
+            await Expect(Page.GetByText("Hello World3")).ToBeHiddenAsync();
+
+            Assert.IsFalse(await follower1.IsVisibleAsync());
+            Assert.IsFalse(await follower2.IsVisibleAsync());
+            Assert.IsFalse(await follower3.IsVisibleAsync());
         }
         
         [Test]
