@@ -281,22 +281,25 @@ public class AuthorRepositoryTest
     
     [Fact]
     public async Task DeleteAccount_Removes_Author_From_UserManager_And_Database()
-    { 
+    {   
+        //Arrange
         var userManager = AuthorRepositoryUtil.GetUserManager(_dbContext);
-
         var author = new Author { UserName = "JohnDoe", Email = "johndoe@example.com" };
         var password = "SecurePassword123!";
-        
-        await userManager.CreateAsync(author, password);
-        
         IAuthorRepository authorRepository = new Infrastructure.AuthorRepository(_dbContext);
         
+        //Act
+        await userManager.CreateAsync(author, password);
         var author2 = await authorRepository.FindAuthor("JohnDoe");
         
+        //Assert
         Assert.Equal(author, author2);
         
+        //Act
         var deleteResult = await userManager.DeleteAsync(author!);
         
+        
+        //Assert
         try
         {
             author2 = await authorRepository.FindAuthor("JohnDoe");
