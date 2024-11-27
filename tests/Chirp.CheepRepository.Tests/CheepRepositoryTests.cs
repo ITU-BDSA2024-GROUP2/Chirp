@@ -83,7 +83,7 @@ public class CheepRepositoryTests
     }
 
     [Theory]
-    [InlineData("John Doe", "I am alive")]
+    [InlineData("John Doe", "I am alive too")]
     [InlineData("Mary Doe", "I am also here")]
     public async Task ReadCheepsFromAuthor_Returns_Cheeps_For_Existing_Author(string author, string expectedText)
     {
@@ -116,21 +116,23 @@ public class CheepRepositoryTests
     }
     
     [Theory]
-    [InlineData("John Doe", "I am also here")]
-    public async Task GetCheepsFromFollowersTest(string author, string expectedText)
+    [InlineData("John Doe", "I am alive" ,"I am also here", "I am alive too")]
+    public async Task GetCheepsFromFollowersTest(string author, string expectedText1, string expectedText2, string expectedText3)
     {
         // Arrange
         await PopulateDatabase(_dbContext);
         ICheepRepository repository = new Infrastructure.CheepRepository(_dbContext);
         
         // Act
-        var cheeps = await repository.GetCheepsFromFollowers(author,1);
+        var cheeps = await repository.GetCheepsFromFollowersAndOwnCheeps(author,1);
         
         // Assert
         Assert.NotNull(cheeps);
         Assert.NotEmpty(cheeps);
         
-        Assert.Equal(expectedText, cheeps[0].Text);
+        Assert.Equal(expectedText1, cheeps[2].Text);
+        Assert.Equal(expectedText2, cheeps[1].Text);
+        Assert.Equal(expectedText3, cheeps[0].Text);
     }
 
     [Fact]

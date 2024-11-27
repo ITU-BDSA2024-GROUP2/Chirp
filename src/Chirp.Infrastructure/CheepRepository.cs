@@ -69,7 +69,7 @@ public class CheepRepository : ICheepRepository
         return result;
     }
     
-    public async Task<List<CheepDTO>> GetCheepsFromFollowers(string userName, int currentPage)
+    public async Task<List<CheepDTO>> GetCheepsFromFollowersAndOwnCheeps(string userName, int currentPage)
     {
         int offset = (currentPage - 1) * pageSize;
         var user = await _dbContext.Authors
