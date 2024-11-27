@@ -286,7 +286,7 @@ public class CheepRepositoryTests
             Author = author1
         };
 
-        await authorRepository.Follow(author1.UserName, author2.UserName);
+        await authorRepository.Follow(author1.UserName!, author2.UserName!);
         
         await context.Cheeps.AddAsync(cheep1);
         await context.Cheeps.AddAsync(cheep2);
