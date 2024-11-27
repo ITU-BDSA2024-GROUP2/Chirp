@@ -65,6 +65,25 @@ public class CheepRepositoryTests
 
     [Theory]
     [InlineData("John Doe", "I am alive")]
+    [InlineData("John Doe", "I am alive too")]
+    public async Task GetAllCheepsFromUserTest(string author, string expectedText)
+    {
+        // Arrange
+        await PopulateDatabase(_dbContext);
+        ICheepRepository repository = new Infrastructure.CheepRepository(_dbContext);
+        
+        // Act
+        var cheeps = await repository.GetAllCheepsFromAuthor(author);
+        
+        // Assert
+        Assert.NotNull(cheeps);
+        Assert.NotEmpty(cheeps);
+        
+        Assert.Contains(cheeps, cheep => cheep.Text == expectedText);
+    }
+
+    [Theory]
+    [InlineData("John Doe", "I am alive")]
     [InlineData("Mary Doe", "I am also here")]
     public async Task ReadCheepsFromAuthor_Returns_Cheeps_For_Existing_Author(string author, string expectedText)
     {
@@ -209,6 +228,7 @@ public class CheepRepositoryTests
     {
         var specificDate1 = new DateTime(2024, 1, 2, 3, 4, 5);
         var specificDate2 = new DateTime(2024, 2, 3, 4, 5, 6);
+        var specificDate3 = new DateTime(2024, 3, 4, 5, 6, 7);
         ICollection<Cheep> authorCheeps1 = new List<Cheep>();
         IAuthorRepository authorRepository = new Infrastructure.AuthorRepository(_dbContext);
         
@@ -239,9 +259,16 @@ public class CheepRepositoryTests
             TimeStamp = specificDate2, 
             Author = author2
         };
+        var cheep3 = new Cheep { 
+            CheepId = new Guid(), 
+            Text = "I am alive too", 
+            TimeStamp = specificDate3, 
+            Author = author1
+        };
         
         await context.Cheeps.AddAsync(cheep1);
         await context.Cheeps.AddAsync(cheep2);
+        await context.Cheeps.AddAsync(cheep3);
         await context.SaveChangesAsync();
     }
 }
