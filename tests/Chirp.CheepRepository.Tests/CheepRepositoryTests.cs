@@ -117,7 +117,7 @@ public class CheepRepositoryTests
     
     [Theory]
     [InlineData("John Doe", "I am alive" ,"I am also here", "I am alive too")]
-    public async Task GetCheepsFromFollowersTest(string author, string expectedText1, string expectedText2, string expectedText3)
+    public async Task GetCheepsFromFollowersAndOwnCheepsTest(string author, string expectedText1, string expectedText2, string expectedText3)
     {
         // Arrange
         await PopulateDatabase(_dbContext);
