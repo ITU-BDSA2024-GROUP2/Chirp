@@ -8,7 +8,7 @@ using Microsoft.Extensions.Options;
 
 namespace Chirp.AuthorRepository.Tests;
 
-public class AuthorRepositoryUtil
+public static class AuthorRepositoryUtil
 {
     public static UserManager<Author> GetUserManager(ChirpDBContext context)
     {

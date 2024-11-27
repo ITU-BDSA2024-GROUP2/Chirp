@@ -235,20 +235,29 @@ namespace Chirp.UI.Tests
             //Act
             await ServerUtil.RegisterUser("ATestUser", "test@mail.com", "Testpassword123!", Page);
             
-            
-            var buttonLocator = Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).GetByRole(AriaRole.Button);
+            var buttonLocator = Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).Locator("#follow");
             string buttonText = await buttonLocator.InnerTextAsync();
             
             //Assert
             Assert.That(buttonText, Is.EqualTo("Follow"));
             
             //Act
-            await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).GetByRole(AriaRole.Button).ClickAsync();
-            var buttonLocator2 = Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).GetByRole(AriaRole.Button);
+            await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).Locator("#follow").ClickAsync();
+            
+            var buttonLocator2 = Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).Locator("#unfollow");
             string buttonText2 = await buttonLocator2.InnerTextAsync();
             
             //Assert
             Assert.That(buttonText2, Is.EqualTo("Unfollow"));
+            
+            //Act
+            await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).Locator("#unfollow").ClickAsync();
+            
+            var buttonLocator3 = Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).Locator("#follow");
+            string buttonText3 = await buttonLocator3.InnerTextAsync();
+            
+            //Assert
+            Assert.That(buttonText3, Is.EqualTo("Follow"));
         }
         
         [Test]
@@ -258,14 +267,14 @@ namespace Chirp.UI.Tests
             await ServerUtil.RegisterUser("ATestUser", "test@mail.com", "Testpassword123!", Page);
             
             //Act
-            await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).GetByRole(AriaRole.Button).ClickAsync();
+            await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).Locator("#follow").ClickAsync();
             await Page.GetByRole(AriaRole.Link, new() { Name = "my timeline" }).ClickAsync();
             
             //Assert
             await Expect(Page.GetByText("Jacqualine Gilcoine Starbuck")).ToBeVisibleAsync();
             
             //Act
-            await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).GetByRole(AriaRole.Button).ClickAsync();
+            await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).Locator("#unfollow").ClickAsync();
             
             //Assert
             await Expect(Page.GetByText("Jacqualine Gilcoine Starbuck")).Not.ToBeVisibleAsync();
@@ -304,14 +313,7 @@ namespace Chirp.UI.Tests
             await Page.Locator("#Message").FillAsync("This is a test cheep");
             await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
             
-            var buttonLocator = Page.Locator("li").Filter(new() { HasText = "ATestUser This is a test cheep" }).GetByRole(AriaRole.Button);
-            string buttonText = await buttonLocator.InnerTextAsync();
-            
-            //Assert
-            Assert.That(buttonText, Is.EqualTo("DELETE"));
-            
-            //Act
-            await Page.Locator("li").Filter(new() { HasText = "ATestUser This is a test cheep" }).GetByRole(AriaRole.Button).ClickAsync();
+            await Page.GetByRole(AriaRole.Button, new() { Name = "DELETE" }).ClickAsync();
             
             //Assert
             await Expect(Page.GetByText("ATestUser This is a test cheep")).Not.ToBeVisibleAsync();
@@ -331,7 +333,7 @@ namespace Chirp.UI.Tests
             await Expect(Page.GetByText("This is a test cheep on my timeline")).ToBeVisibleAsync();
             
             //Act
-            await Page.Locator("li").Filter(new() { HasText = "ATestUser This is a test cheep on my timeline"}).GetByRole(AriaRole.Button).ClickAsync();
+            await Page.GetByRole(AriaRole.Button, new() { Name = "DELETE" }).ClickAsync();
             
             //Assert
             await Expect(Page.GetByText("This is a test cheep on my timeline")).Not.ToBeVisibleAsync();
