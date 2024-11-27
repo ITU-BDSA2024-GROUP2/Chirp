@@ -14,7 +14,9 @@ namespace Chirp.UI.Tests
     public class EndToEndTest : PageTest
     {
         private Process _serverProcess;
+        
 
+        
         public override BrowserNewContextOptions ContextOptions()
         {
 
@@ -25,7 +27,7 @@ namespace Chirp.UI.Tests
         }
 
         [OneTimeSetUp]
-        public async Task Setup()
+        public async Task SetupOneTime()
         {
             _serverProcess = await ServerUtil.StartServer();
         }
@@ -42,11 +44,11 @@ namespace Chirp.UI.Tests
         {
             //Arrange
             await Page.GotoAsync("https://localhost:5273/");
-
+         
             //Act
             await Page.GetByRole(AriaRole.Link, new() { Name = "register" }).ClickAsync();
             await Page.GetByPlaceholder("user name").ClickAsync();
-            await Page.GetByPlaceholder("user name").FillAsync("username");
+            await Page.GetByPlaceholder("user name").FillAsync("username1");
             await Page.GetByPlaceholder("name@example.com").ClickAsync();
             await Page.GetByPlaceholder("name@example.com").FillAsync("name@example.com");
             await Page.GetByLabel("Password", new() { Exact = true }).ClickAsync();
@@ -55,8 +57,9 @@ namespace Chirp.UI.Tests
             await Page.GetByLabel("Confirm Password").FillAsync("Password123!");
             await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
             
+           
             //Act
-            await Page.GetByRole(AriaRole.Button, new() { Name = "logout [username]" }).ClickAsync();
+            await Page.GetByRole(AriaRole.Button, new() { Name = "logout [username1]" }).ClickAsync();
             await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
             await Page.GetByPlaceholder("name@example.com").ClickAsync();
             await Page.GetByPlaceholder("name@example.com").FillAsync("name@example.com");
@@ -66,10 +69,10 @@ namespace Chirp.UI.Tests
             await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
 
             //Assert
-            await Expect(Page.GetByRole(AriaRole.Button, new() { Name = "logout [username]" })).ToBeVisibleAsync();
+            await Expect(Page.GetByRole(AriaRole.Button, new() { Name = "logout [username1]" })).ToBeVisibleAsync();
 
             //Act
-            await Page.GetByRole(AriaRole.Button, new() { Name = "logout [username]" }).ClickAsync();
+            await Page.GetByRole(AriaRole.Button, new() { Name = "logout [username1]" }).ClickAsync();
 
             //Assert
             await Expect(Page.GetByText("login")).ToBeVisibleAsync();
@@ -104,21 +107,22 @@ namespace Chirp.UI.Tests
         {
             //Arrange
             await Page.GotoAsync("https://localhost:5273/");
-
+         
             //Act
             await Page.GetByRole(AriaRole.Link, new() { Name = "register" }).ClickAsync();
             await Page.GetByPlaceholder("user name").ClickAsync();
-            await Page.GetByPlaceholder("user name").FillAsync("username");
+            await Page.GetByPlaceholder("user name").FillAsync("username5");
             await Page.GetByPlaceholder("name@example.com").ClickAsync();
-            await Page.GetByPlaceholder("name@example.com").FillAsync("testmail@mail.com");
+            await Page.GetByPlaceholder("name@example.com").FillAsync("name@example.com");
             await Page.GetByLabel("Password", new() { Exact = true }).ClickAsync();
             await Page.GetByLabel("Password", new() { Exact = true }).FillAsync("Password123!");
             await Page.GetByLabel("Confirm Password").ClickAsync();
             await Page.GetByLabel("Confirm Password").FillAsync("Password123!");
             await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
-            await Page.GetByText("logout").ClickAsync();
-
+            
+           
             //Act
+            await Page.GetByRole(AriaRole.Button, new() { Name = "logout [username5]" }).ClickAsync();
             await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
             await Page.GetByPlaceholder("name@example.com").ClickAsync();
             await Page.GetByPlaceholder("name@example.com").FillAsync("name@example.com");
@@ -128,7 +132,7 @@ namespace Chirp.UI.Tests
             await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
 
             //Assert
-            await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "logout [username]" })).ToBeVisibleAsync();
+            await Expect(Page.GetByRole(AriaRole.Button, new() { Name = "logout [username5]" })).ToBeVisibleAsync();
 
             //Act
             await Page.Locator("#Message").ClickAsync();
