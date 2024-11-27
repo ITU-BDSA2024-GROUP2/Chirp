@@ -51,15 +51,15 @@ public class CheepRepositoryTests
         
         // Assert
         Assert.NotEmpty(cheeps);
-        Assert.Equal(2,cheeps.Count());
+        Assert.Equal(3,cheeps.Count());
         
-        Assert.Equal("John Doe", cheeps[1].Author);
-        Assert.Equal("I am alive", cheeps[1].Text);
-        Assert.Equal("01/02/24 3:04:05", cheeps[1].TimeStamp);
+        Assert.Equal("John Doe", cheeps[2].Author);
+        Assert.Equal("I am alive", cheeps[2].Text);
+        Assert.Equal("01/02/24 3:04:05", cheeps[2].TimeStamp);
         
-        Assert.Equal("Mary Doe", cheeps[0].Author);
-        Assert.Equal("I am also here", cheeps[0].Text);
-        Assert.Equal("02/03/24 4:05:06", cheeps[0].TimeStamp);
+        Assert.Equal("Mary Doe", cheeps[1].Author);
+        Assert.Equal("I am also here", cheeps[1].Text);
+        Assert.Equal("02/03/24 4:05:06", cheeps[1].TimeStamp);
         
     }
 
@@ -116,21 +116,21 @@ public class CheepRepositoryTests
     }
     
     [Theory]
-    [InlineData("John Doe")]
-    public async Task GetCheepsFromFollowersTest(string author)
+    [InlineData("John Doe", "I am also here")]
+    public async Task GetCheepsFromFollowersTest(string author, string expectedText)
     {
         // Arrange
         await PopulateDatabase(_dbContext);
         ICheepRepository repository = new Infrastructure.CheepRepository(_dbContext);
         
         // Act
-        var cheeps = await repository.GetCheepsFromAuthor(author,1);
+        var cheeps = await repository.GetCheepsFromFollowers(author,1);
         
         // Assert
         Assert.NotNull(cheeps);
         Assert.NotEmpty(cheeps);
         
-        //Assert.Equal(expectedText, cheeps[0].Text);
+        Assert.Equal(expectedText, cheeps[0].Text);
     }
 
     [Fact]
@@ -265,8 +265,6 @@ public class CheepRepositoryTests
         var author1 = await authorRepository.CreateAuthor(authorDTO1);
         var author2 = await authorRepository.CreateAuthor(authorDTO2);
 
-        await authorRepository.Follow(author1.UserName, author2.UserName);
-
         var cheep1 = new Cheep { 
             CheepId = new Guid(), 
             Text = "I am alive", 
@@ -285,6 +283,8 @@ public class CheepRepositoryTests
             TimeStamp = specificDate3, 
             Author = author1
         };
+
+        await authorRepository.Follow(author1.UserName, author2.UserName);
         
         await context.Cheeps.AddAsync(cheep1);
         await context.Cheeps.AddAsync(cheep2);
