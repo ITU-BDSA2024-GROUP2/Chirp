@@ -46,7 +46,7 @@ namespace Chirp.UI.Tests
             }
             await page.GetByRole(AriaRole.Link, new() { Name = "manage account" }).ClickAsync();
             await page.GetByRole(AriaRole.Link, new() { Name = "Personal data" }).ClickAsync();
-            await page.GetByRole(AriaRole.Button, new() { Name = "Delete" }).ClickAsync();
+            await page.GetByRole(AriaRole.Link, new() { Name = "Delete" }).ClickAsync();
             await page.GetByPlaceholder("Please enter your password.").FillAsync("Testpassword123!");
             await page.GetByRole(AriaRole.Button, new() { Name = "Delete data and close my" }).ClickAsync();
         }
