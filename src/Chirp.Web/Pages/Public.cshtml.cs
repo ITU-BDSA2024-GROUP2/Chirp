@@ -63,9 +63,15 @@ public class PublicModel : PageModel
 
     public async Task<IActionResult> OnPostFollow(string authorName, int? page)
     {
-        await _authorRepository.Follow(User.Identity.Name, authorName);
+        if (User.Identity.Name == authorName)
+        {
+            ModelState.AddModelError(string.Empty, "You cannot follow yourself.");
+            return Redirect($"/?page={page}");
+        }
         
+        await _authorRepository.Follow(User.Identity.Name, authorName);
         FollowerMap[authorName] = true;
+            
         return Redirect($"/?page={page}");
     }
     
@@ -97,7 +103,10 @@ public class PublicModel : PageModel
         {
             foreach (var cheep in Cheeps)
             {
-                FollowerMap[cheep.Author] = await IsFollowing(User.Identity.Name, cheep.Author);
+                if (cheep.Author != User.Identity.Name)
+                {
+                    FollowerMap[cheep.Author] = await IsFollowing(User.Identity.Name, cheep.Author);
+                }
             }
         }
     }
