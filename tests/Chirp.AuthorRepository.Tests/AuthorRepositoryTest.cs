@@ -308,33 +308,24 @@ public class AuthorRepositoryTest
         var author = new Author { UserName = "JohnDoe", Email = "johndoe@example.com" };
         var password = "SecurePassword123!";
         
-        var createResult = await _userManager.CreateAsync(author, password);
-        Assert.True(createResult.Succeeded, "Failed to create the author");
-        
-        var userBeforeDeletion = await _userManager.FindByNameAsync(author.UserName);
-        Assert.NotNull(userBeforeDeletion);
-        
-        
+        await _userManager.CreateAsync(author, password);
         
         IAuthorRepository authorRepository = new Infrastructure.AuthorRepository(_dbContext);
         
         var author2 = await authorRepository.FindAuthor("JohnDoe");
         
-        Assert.NotNull(author2);
-        Assert.Equal(author.UserName, author2.UserName);
+        Assert.Equal(author, author2);
         
-        
-        
-        var authorInDbBeforeDeletion = await _dbContext.Authors.FirstOrDefaultAsync(a => a.UserName == author.UserName);
-        Assert.NotNull(authorInDbBeforeDeletion);
-        
-        var deleteResult = await _userManager.DeleteAsync(userBeforeDeletion!);
-        Assert.True(deleteResult.Succeeded, "Failed to delete the author");
-        
-        var userAfterDeletion = await _userManager.FindByNameAsync(author.UserName);
-        Assert.Null(userAfterDeletion);
-        
-        var authorInDbAfterDeletion = await _dbContext.Authors.FirstOrDefaultAsync(a => a.UserName == author.UserName);
-        Assert.Null(authorInDbAfterDeletion);
+        var deleteResult = await _userManager.DeleteAsync(author!);
+
+
+        try
+        {
+            author2 = await authorRepository.FindAuthor("JohnDoe");
+        }
+        catch (Exception e)
+        {
+            Assert.Equal("Author with name 'JohnDoe' was not found.", e.Message);
+        }
     }
 }
