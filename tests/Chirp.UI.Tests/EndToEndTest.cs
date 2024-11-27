@@ -181,8 +181,6 @@ namespace Chirp.UI.Tests
             await Page.GetByLabel("Confirm Password").FillAsync("Testpassword123!");
             await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
             await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).Locator("#follow").ClickAsync();
-            await Page.GetByRole(AriaRole.Link, new() { Name = "About me" }).ClickAsync();
-            await Page.GetByRole(AriaRole.Link, new() { Name = "public timeline" }).ClickAsync();
             await Page.Locator("li").Filter(new() { HasText = "Mellie Yost But what was" }).Locator("#follow").ClickAsync();
             await Page.Locator("li").Filter(new() { HasText = "Malcolm Janski At present I" }).Locator("#follow").ClickAsync();
             await Page.Locator("#Message").ClickAsync();
@@ -195,6 +193,16 @@ namespace Chirp.UI.Tests
             await Page.Locator("#Message").FillAsync("Hello World3");
             await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
             await Page.GetByRole(AriaRole.Link, new() { Name = "About me" }).ClickAsync();
+
+            //Assert
+            var follower1 = Page.GetByRole(AriaRole.Link, new() { Name = "Jacqualine Gilcoine" });
+            var follower2 = Page.GetByRole(AriaRole.Link, new() { Name = "Quintin Sitts" });
+            var follower3 = Page.GetByRole(AriaRole.Link, new() { Name = "Mellie Yost" });
+
+            Assert.IsTrue(await follower1.IsVisibleAsync());
+            Assert.IsTrue(await follower2.IsVisibleAsync());
+            Assert.IsTrue(await follower3.IsVisibleAsync());
+
             await Page.GetByRole(AriaRole.Link, new() { Name = "public timeline" }).ClickAsync();
             await Page.Locator("li").Filter(new() { HasText = "ATestUser1 Hello World3 — 11/" }).GetByRole(AriaRole.Button).ClickAsync();
             await Page.Locator("li").Filter(new() { HasText = "ATestUser1 Hello World2 — 11/" }).GetByRole(AriaRole.Button).ClickAsync();
