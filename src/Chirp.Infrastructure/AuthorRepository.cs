@@ -50,7 +50,7 @@ public class AuthorRepository : IAuthorRepository
         {
             user.Following.Add(author);
         }
-
+        
         if (!author.Followers.Contains(user))
         {
             author.Followers.Add(user);
@@ -79,9 +79,36 @@ public class AuthorRepository : IAuthorRepository
 
     public async Task<bool> IsFollowing(string userName, string authorName)
     {
+        if (userName == authorName)
+        {
+            return false;
+        }
+        
         var author = await FindAuthor(authorName);
         var user = await FindAuthor(userName);
         
         return user.Following.Contains(author);
+    }
+
+    public async Task<List<string>> GetFollowing(string userName)
+    {
+        var query = from author in _dbContext.Authors
+            where author.UserName == userName
+            from following in author.Following
+            select following.UserName;
+        
+        var result = await query.ToListAsync();
+        return result;
+    }
+    
+    public async Task<List<string>> GetFollowers(string userName)
+    {
+        var query = from author in _dbContext.Authors
+            where author.UserName == userName
+            from follower in author.Followers
+            select follower.UserName;
+        
+        var result = await query.ToListAsync();
+        return result;
     }
 }

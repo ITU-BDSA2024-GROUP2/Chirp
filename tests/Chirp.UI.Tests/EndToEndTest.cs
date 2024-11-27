@@ -272,7 +272,7 @@ namespace Chirp.UI.Tests
             await Expect(Page.GetByText("This is a test cheep")).ToBeVisibleAsync();
         }
 
-        /*[Test]
+        [Test]
         public async Task UserIsAbleToMakeAndDeleteCheeps()
         {
             //Arrange
@@ -314,6 +314,6 @@ namespace Chirp.UI.Tests
             
             //Assert
             await Expect(Page.GetByText("This is a test cheep on my timeline")).Not.ToBeVisibleAsync();
-        }*/
+        }
     }
 }

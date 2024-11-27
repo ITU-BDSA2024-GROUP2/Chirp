@@ -1,0 +1,85 @@
+﻿@page "/About"
+@using Chirp.Core
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@inject SignInManager<Author> SignInManager
+@model Chirp.Web.Areas.Identity.Pages.Account.AboutMe.About
+
+@{
+    ViewData["Title"] = "About me";
+    Layout = "Shared/_Layout";
+    var followingCount = @Model.UserInfo["followingCount"];
+    var followerCount = @Model.UserInfo["followerCount"];
+}
+
+<div class="aboutContainer">
+    <h2>Personal information</h2>
+    <ul>
+        @{
+            <li><strong>Username:</strong> @Model.UserInfo["username"]</li>
+            <li><strong>Email:</strong> @Model.UserInfo["email"]</li>
+            <li><strong>Login method:</strong> @Model.UserInfo["login"]</li>
+        }
+    </ul>
+    <a class="manageButton" href="/Identity/Account/Manage">Manage information →</a>
+</div>
+
+<div class="followContainer">
+    <div class="followersBox">
+        <h2>Following (@followingCount)</h2>
+
+        <ul>
+            @foreach (var following in Model.Following)
+            {
+                <li>
+                    <strong>
+                        <a href="/@following">@following</a>
+                    </strong>
+                </li>
+            }
+        </ul>
+    </div>
+
+    <div class="followersBox">
+        <h2>Followers (@followerCount)</h2>
+
+        <ul>
+            @foreach (var follower in Model.Followers)
+            {
+                <li>
+                    <strong>
+                        <a href="/@follower">@follower</a>
+                    </strong>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+
+<div class="cheepContainer">
+    <h2>Your cheeps (@Model.Cheeps.Count)</h2>
+    <ul>
+        @foreach (var cheep in Model.Cheeps)
+        {
+            <li>
+                <p>
+                    <strong>
+                        <a href="/@cheep.Author">@cheep.Author</a>
+                    </strong>
+                    @cheep.Text
+                    <small>&mdash; @cheep.TimeStamp</small>
+                </p>
+                <div class="deleteBox">
+                    @if (User.Identity!.IsAuthenticated && User.Identity.Name == cheep.Author)
+                    {
+                    <form method="post" asp-page-handler="Delete">
+                        <input type="hidden" name="cheepId" value="@cheep.Id"/>
+                        <button class="deleteBtn" type="submit">DELETE</button>
+                    </form>
+                    }
+                </div>
+            </li>
+        }
+    </ul>
+    <a class="manageButton" href="/Identity/Account/Manage/PersonalData">Download cheeps →</a>
+</div>

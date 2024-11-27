@@ -99,7 +99,7 @@ namespace Chirp.UI.Tests
             await Expect(newCheep).ToContainTextAsync("Cheeping cheeps on Chirp!" + randCheepId);
         }
 
-        /*[Test]
+        [Test]
         public async Task CheepboxDoesNotAllowUserToSendCheepLongerThan160Characters()
         {
             // Arrange
@@ -123,7 +123,7 @@ namespace Chirp.UI.Tests
             string cheepText = await newCheep.InnerTextAsync();
             Assert.That(cheepText, Does.Not.Contain(randCheepId.ToString()));
 
-        }*/
+        }
         
         [Test]
         public async Task CheepboxDoesNotAllowUserToSendEmptyCheeps()
@@ -246,9 +246,9 @@ namespace Chirp.UI.Tests
             
             await Page.GetByRole(AriaRole.Link, new() { Name = "manage account" }).ClickAsync();
             await Page.GetByRole(AriaRole.Link, new() { Name = "Personal data" }).ClickAsync();
-            await Page.GetByRole(AriaRole.Button, new() { Name = "Delete" }).ClickAsync();
+            await Page.GetByRole(AriaRole.Link, new() { Name = "Delete" }).ClickAsync();
             await Page.GetByPlaceholder("Please enter your password.").FillAsync("Password123!");
-            await Page.GetByRole(AriaRole.Button, new() { Name = "Delete data and close my" }).ClickAsync();
+            await Page.GetByRole(AriaRole.Button, new() { Name = "Delete data and close my account" }).ClickAsync();
         }
     }
 }
