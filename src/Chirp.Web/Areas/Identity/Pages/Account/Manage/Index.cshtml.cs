@@ -121,7 +121,15 @@ namespace Chirp.Web.Areas.Identity.Pages.Account.Manage
             
             if (Input.UserName != user.UserName)
             {
+                var existingUser = await _userManager.FindByNameAsync(Input.UserName);
+                if (existingUser != null)
+                {
+                    StatusMessage = "Username not available. Please choose another one.";
+                    return RedirectToPage();
+                }
+                
                 var setUserNameResult = await _userManager.SetUserNameAsync(user, Input.UserName);
+                
                 if (!setUserNameResult.Succeeded)
                 {
                     StatusMessage = "Unexpected error when trying to set username.";
