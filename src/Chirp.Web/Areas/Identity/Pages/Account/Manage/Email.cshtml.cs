@@ -87,8 +87,6 @@ namespace Chirp.Web.Areas.Identity.Pages.Account.Manage
             {
                 NewEmail = email,
             };
-
-            IsEmailConfirmed = await _userManager.IsEmailConfirmedAsync(user);
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -118,9 +116,17 @@ namespace Chirp.Web.Areas.Identity.Pages.Account.Manage
             }
 
             var email = await _userManager.GetEmailAsync(user);
+            var newEmail = Input.NewEmail;
             
-            if (Input.NewEmail != email)
+            if (newEmail != email)
             {
+                var existingUser = await _userManager.FindByEmailAsync(newEmail);
+                if (existingUser != null)
+                {
+                    StatusMessage = "The email address is already in use. Please choose a different one.";
+                    return RedirectToPage();
+                }
+                
                 var setEmailResult = await _userManager.SetEmailAsync(user, Input.NewEmail);
 
                 if (setEmailResult.Succeeded)
@@ -128,10 +134,19 @@ namespace Chirp.Web.Areas.Identity.Pages.Account.Manage
                     StatusMessage = "Your email has been changed.";
                     return RedirectToPage();
                 }
+                
+                foreach (var error in setEmailResult.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+            else
+            {
+                StatusMessage = "Your email is unchanged.";
+                return RedirectToPage();
             }
 
-            StatusMessage = "Your email is unchanged.";
-            return RedirectToPage();
+            return Page();
         }
     }
 }

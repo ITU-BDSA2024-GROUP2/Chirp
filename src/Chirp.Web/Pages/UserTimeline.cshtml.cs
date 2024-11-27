@@ -66,6 +66,12 @@ public class UserTimelineModel : PageModel
     
     public async Task<IActionResult> OnPostFollow(string author, string authorName, int? page)
     {
+        if (User.Identity.Name == authorName)
+        {
+            ModelState.AddModelError(string.Empty, "You cannot follow yourself.");
+            return Redirect($"/?page={page}");
+        }
+        
         await _authorRepository.Follow(User.Identity.Name, authorName);
         
         FollowerMap[authorName] = true;
@@ -93,7 +99,10 @@ public class UserTimelineModel : PageModel
         {
             foreach (var cheep in Cheeps)
             {
-                FollowerMap[cheep.Author] = await IsFollowing(User.Identity.Name, cheep.Author);
+                if (cheep.Author != User.Identity.Name)
+                {
+                    FollowerMap[cheep.Author] = await IsFollowing(User.Identity.Name, cheep.Author);
+                }
             }
         }
     }
