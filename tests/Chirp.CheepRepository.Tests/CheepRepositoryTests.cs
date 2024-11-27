@@ -185,7 +185,7 @@ public class CheepRepositoryTests
         var createdCheep = await cheepRepository.CreateCheep(authorName, "This cheep is to be deleted");
         
         // Act
-        cheepRepository.DeleteCheep(createdCheep.CheepId.ToString());
+        await cheepRepository.DeleteCheep(createdCheep.CheepId.ToString());
         
         // Assert
         var cheeps = await cheepRepository.GetCheepsFromAuthor(authorName, 1);

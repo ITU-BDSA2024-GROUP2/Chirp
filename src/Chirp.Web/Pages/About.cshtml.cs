@@ -1,12 +1,10 @@
-﻿using System.Collections;
-using System.Security.Claims;
+﻿#nullable disable
 using Chirp.Core;
-using Chirp.Web.Pages;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Chirp.Web.Areas.Identity.Pages.Account.AboutMe
+namespace Chirp.Web.Pages
 {
     public class About : PageModel
     {
