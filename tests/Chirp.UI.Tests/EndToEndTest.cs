@@ -42,6 +42,7 @@ namespace Chirp.UI.Tests
         {
             await ServerUtil.LoginUserAndDeleteUser("test@mail.com", "Testpassword123!", Page);
             await ServerUtil.LoginUserAndDeleteUser("testmail@mail.com", "Testpassword123!", Page);
+            await ServerUtil.LoginUserAndDeleteUser("atest@mail.com", "Testpassword123!", Page);
         }
 
         [Test]
@@ -218,7 +219,13 @@ namespace Chirp.UI.Tests
             await Page.GetByRole(AriaRole.Link, new() { Name = "About me" }).ClickAsync();
 
             //Assert
+            await Expect(Page.GetByText("Hello World1")).ToBeHiddenAsync();
+            await Expect(Page.GetByText("Hello World2")).ToBeHiddenAsync();
+            await Expect(Page.GetByText("Hello World3")).ToBeHiddenAsync();
 
+            Assert.IsFalse(await follower1.IsVisibleAsync());
+            Assert.IsFalse(await follower2.IsVisibleAsync());
+            Assert.IsFalse(await follower3.IsVisibleAsync());
         }
         
         [Test]
