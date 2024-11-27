@@ -115,6 +115,24 @@ public class CheepRepositoryTests
         Assert.Empty(cheeps);
     }
     
+    [Theory]
+    [InlineData("John Doe", "I am alive")]
+    public async Task GetCheepsFromFollowers(string author, string expectedText)
+    {
+        // Arrange
+        await PopulateDatabase(_dbContext);
+        ICheepRepository repository = new Infrastructure.CheepRepository(_dbContext);
+        
+        // Act
+        var cheeps = await repository.GetCheepsFromAuthor(author,1);
+        
+        // Assert
+        Assert.NotNull(cheeps);
+        Assert.NotEmpty(cheeps);
+        
+        //Assert.Equal(expectedText, cheeps[0].Text);
+    }
+
     [Fact]
     public async Task CreateCheep()
     {
