@@ -235,12 +235,40 @@ public class AuthorRepositoryTest
     [Fact]
     public async Task GetFollowing_Returns_Correct_Following()
     {
-        
+        // Arrange
+        var userFollowing = new AuthorDTO { Name = "John Doe", Email = "johndoe@example.com" };
+        var authorFollowed = new AuthorDTO { Name = "Not John Doe", Email = "notjohndoe@example.com" };
+        IAuthorRepository authorRepository = new Infrastructure.AuthorRepository(_dbContext);
+
+        // Act
+        await authorRepository.CreateAuthor(userFollowing);
+        await authorRepository.CreateAuthor(authorFollowed);
+        await authorRepository.Follow(userFollowing.Name, authorFollowed.Name);
+
+        // Assert
+        var following = await authorRepository.GetFollowing(userFollowing.Name);
+        Assert.NotEmpty(following);
+        Assert.Contains(following, author => author == authorFollowed.Name);
+        Assert.Single(following);
     }
     
     [Fact]
     public async Task GetFollowers_Returns_Correct_Followers()
     {
-        
+        // Arrange
+        var userFollowing = new AuthorDTO { Name = "John Doe", Email = "johndoe@example.com" };
+        var authorFollowed = new AuthorDTO { Name = "Not John Doe", Email = "notjohndoe@example.com" };
+        IAuthorRepository authorRepository = new Infrastructure.AuthorRepository(_dbContext);
+
+        // Act
+        await authorRepository.CreateAuthor(userFollowing);
+        await authorRepository.CreateAuthor(authorFollowed);
+        await authorRepository.Follow(userFollowing.Name, authorFollowed.Name);
+
+        // Assert
+        var followers = await authorRepository.GetFollowers(authorFollowed.Name);
+        Assert.NotEmpty(followers);
+        Assert.Contains(followers, user => user == userFollowing.Name);
+        Assert.Single(followers);
     }
 }
