@@ -52,7 +52,7 @@ public class AuthorRepositoryTest
     public async Task FindAuthor()
     {
         // Arrange
-        var authorDto = new AuthorDTO { Name = "John Doe", Email = "email1" };
+        var authorDto = new AuthorDTO { Name = "John Doe", Email = "name@example.com" };
 
         ICheepRepository cheepRepository = new CheepRepository(_dbContext);
         IAuthorRepository authorRepository = new Infrastructure.AuthorRepository(_dbContext);
@@ -64,15 +64,15 @@ public class AuthorRepositoryTest
         // Assert
         Assert.NotNull(author);
         Assert.Equal("John Doe", author.UserName);
-        Assert.Equal("email1", author.Email);
+        Assert.Equal("name@example.com", author.Email);
     }
 
     [Fact]
-    public async Task IsFollowing()
+    public async Task IsFollowing_Returns_True_If_User_Is_Following_Author_And_False_if_Not()
     {
         // Arrange
-        var authorDto = new AuthorDTO { Name = "John Doe", Email = "email1" };
-        var authorDto2 = new AuthorDTO { Name = "Not John Doe", Email = "gmail" };
+        var authorDto = new AuthorDTO { Name = "John Doe", Email = "johndoe@example.com" };
+        var authorDto2 = new AuthorDTO { Name = "Not John Doe", Email = "notjohndoe@example.com" };
         IAuthorRepository authorRepository = new Infrastructure.AuthorRepository(_dbContext);
         
         // Act
@@ -84,13 +84,87 @@ public class AuthorRepositoryTest
         Assert.True(await authorRepository.IsFollowing(authorDto.Name, authorDto2.Name));
         Assert.False(await authorRepository.IsFollowing(authorDto2.Name, authorDto.Name));
     }
-    
+
     [Fact]
-    public async Task UnFollowing()
+    public async Task User_can_follow_author()
     {
         // Arrange
-        var authorDto = new AuthorDTO { Name = "John Doe", Email = "email1" };
-        var authorDto2 = new AuthorDTO { Name = "Not John Doe", Email = "gmail" };
+        var userFollowing = new AuthorDTO { Name = "John Doe", Email = "johndoe@example.com" };
+        var authorFollowed = new AuthorDTO { Name = "Not John Doe", Email = "notjohndoe@example.com" };
+        IAuthorRepository authorRepository = new Infrastructure.AuthorRepository(_dbContext);
+        
+        // Act
+        await authorRepository.Follow(userFollowing.Name, authorFollowed.Name);
+
+        // Assert
+        var isFollowing = await authorRepository.IsFollowing(userFollowing.Name, authorFollowed.Name);
+        Assert.True(isFollowing);
+    }
+
+    [Fact]
+    public async Task FollowingList_Stores_Followed_Authors()
+    {
+        // Arrange
+        var userFollowing = new AuthorDTO { Name = "John Doe", Email = "johndoe@example.com" };
+        var authorFollowed = new AuthorDTO { Name = "Not John Doe", Email = "notjohndoe@example.com" };
+        IAuthorRepository authorRepository = new Infrastructure.AuthorRepository(_dbContext);
+        
+        // 
+        await authorRepository.CreateAuthor(userFollowing);
+        await authorRepository.CreateAuthor(authorFollowed);
+        await authorRepository.Follow(userFollowing.Name, authorFollowed.Name);
+        
+        var following = await authorRepository.GetFollowing(userFollowing.Name);
+        
+        Assert.NotEmpty(following);
+        Assert.Contains(following, author => author == authorFollowed.Name);
+    }
+    
+    [Fact]
+    public async Task FollowerList_Stores_Following_Users()
+    {
+        // Arrange
+        var userFollowing = new AuthorDTO { Name = "John Doe", Email = "johndoe@example.com" };
+        var authorFollowed = new AuthorDTO { Name = "Not John Doe", Email = "notjohndoe@example.com" };
+        IAuthorRepository authorRepository = new Infrastructure.AuthorRepository(_dbContext);
+        
+        // 
+        await authorRepository.CreateAuthor(userFollowing);
+        await authorRepository.CreateAuthor(authorFollowed);
+        await authorRepository.Follow(userFollowing.Name, authorFollowed.Name);
+        
+        var followers = await authorRepository.GetFollowers(authorFollowed.Name);
+        
+        Assert.NotEmpty(followers);
+        Assert.Contains(followers, user => user == userFollowing.Name);
+    }
+
+    [Fact]
+    public async Task Users_Cannot_Follow_Themselves()
+    {
+        // Arrange
+        var userFollowing = new AuthorDTO { Name = "John Doe", Email = "johndoe@example.com" };
+        var authorFollowed = new AuthorDTO { Name = "Not John Doe", Email = "notjohndoe@example.com" };
+        IAuthorRepository authorRepository = new Infrastructure.AuthorRepository(_dbContext);
+        
+        // Act
+        await authorRepository.CreateAuthor(userFollowing);
+        await authorRepository.CreateAuthor(authorFollowed);
+        
+        await authorRepository.Follow(userFollowing.Name, userFollowing.Name);
+        
+        // Assert
+        var following = await authorRepository.GetFollowing(userFollowing.Name);
+        Assert.Empty(following);
+        Assert.DoesNotContain(following, author => author == userFollowing.Name);
+    }
+    
+    [Fact]
+    public async Task User_can_unfollow_author()
+    {
+        // Arrange
+        var authorDto = new AuthorDTO { Name = "John Doe", Email = "johndoe@example.com" };
+        var authorDto2 = new AuthorDTO { Name = "Not John Doe", Email = "notjohndoe@example.com" };
         IAuthorRepository authorRepository = new Infrastructure.AuthorRepository(_dbContext);
         
         // Act
@@ -101,5 +175,72 @@ public class AuthorRepositoryTest
         
         // Assert
         Assert.False(await authorRepository.IsFollowing(authorDto.Name, authorDto2.Name));
+    }
+    
+    [Fact]
+    public async Task FollowingList_Does_Not_Store_Unfollowed_Authors()
+    {
+        // Arrange
+        var userFollowing = new AuthorDTO { Name = "John Doe", Email = "johndoe@example.com" };
+        var authorFollowed = new AuthorDTO { Name = "Not John Doe", Email = "notjohndoe@example.com" };
+        IAuthorRepository authorRepository = new Infrastructure.AuthorRepository(_dbContext);
+        
+        // Act
+        await authorRepository.CreateAuthor(userFollowing);
+        await authorRepository.CreateAuthor(authorFollowed);
+        await authorRepository.Follow(userFollowing.Name, authorFollowed.Name);
+        
+        // Assert
+        var followingBefore = await authorRepository.GetFollowing(userFollowing.Name);
+        Assert.NotEmpty(followingBefore);
+        Assert.Contains(followingBefore, author => author == authorFollowed.Name);
+        
+        // Act
+        await authorRepository.Unfollow(userFollowing.Name, authorFollowed.Name);
+        
+        // Assert
+        var followingAfter = await authorRepository.GetFollowing(userFollowing.Name);
+        Assert.Empty(followingAfter);
+        Assert.DoesNotContain(followingAfter, author => author == authorFollowed.Name);
+    }
+
+    [Fact]
+    public async Task FollowerList_Does_Not_Store_Unfollowing_Users()
+    {
+        // Arrange
+        var userFollowing = new AuthorDTO { Name = "John Doe", Email = "johndoe@example.com" };
+        var authorFollowed = new AuthorDTO { Name = "Not John Doe", Email = "notjohndoe@example.com" };
+        IAuthorRepository authorRepository = new Infrastructure.AuthorRepository(_dbContext);
+
+        // Act
+        await authorRepository.CreateAuthor(userFollowing);
+        await authorRepository.CreateAuthor(authorFollowed);
+        await authorRepository.Follow(userFollowing.Name, authorFollowed.Name);
+
+        // Assert
+        var followersBefore = await authorRepository.GetFollowers(authorFollowed.Name);
+        Assert.NotEmpty(followersBefore);
+        Assert.Contains(followersBefore, user => user == userFollowing.Name);
+
+        // Act
+        await authorRepository.Unfollow(userFollowing.Name, authorFollowed.Name);
+
+        // Assert
+        var followersAfter = await authorRepository.GetFollowers(authorFollowed.Name);
+
+        Assert.Empty(followersAfter);
+        Assert.DoesNotContain(followersAfter, user => user == userFollowing.Name);
+    }
+
+    [Fact]
+    public async Task GetFollowing_Returns_Correct_Following()
+    {
+        
+    }
+    
+    [Fact]
+    public async Task GetFollowers_Returns_Correct_Followers()
+    {
+        
     }
 }
