@@ -16,7 +16,6 @@ namespace Chirp.AuthorRepository.Tests;
 public class AuthorRepositoryTest
 {
     private readonly ChirpDBContext _dbContext;
-    private UserManager<Author> _userManager;
 
     public AuthorRepositoryTest()
     {
@@ -283,32 +282,12 @@ public class AuthorRepositoryTest
     [Fact]
     public async Task DeleteAccount_Removes_Author_From_UserManager_And_Database()
     { 
-        var userStore = new UserStore<Author>(_dbContext);
-        var optionsAccessor = Options.Create(new IdentityOptions());
-        var passwordHasher = new PasswordHasher<Author>();
-        var userValidators = new List<IUserValidator<Author>> { new UserValidator<Author>() };
-        var passwordValidators = new List<IPasswordValidator<Author>> { new PasswordValidator<Author>() };
-        var lookupNormalizer = new UpperInvariantLookupNormalizer();
-        var errorDescriber = new IdentityErrorDescriber();
-        var services = new ServiceCollection();
-        var logger = new Logger<UserManager<Author>>(new LoggerFactory());
-
-        _userManager = new UserManager<Author>(
-            userStore,
-            optionsAccessor,
-            passwordHasher,
-            userValidators,
-            passwordValidators,
-            lookupNormalizer,
-            errorDescriber,
-            services.BuildServiceProvider(),
-            logger
-        );
+        var userManager = AuthorRepositoryUtil.GetUserManager(_dbContext);
 
         var author = new Author { UserName = "JohnDoe", Email = "johndoe@example.com" };
         var password = "SecurePassword123!";
         
-        await _userManager.CreateAsync(author, password);
+        await userManager.CreateAsync(author, password);
         
         IAuthorRepository authorRepository = new Infrastructure.AuthorRepository(_dbContext);
         
@@ -316,9 +295,8 @@ public class AuthorRepositoryTest
         
         Assert.Equal(author, author2);
         
-        var deleteResult = await _userManager.DeleteAsync(author!);
-
-
+        var deleteResult = await userManager.DeleteAsync(author!);
+        
         try
         {
             author2 = await authorRepository.FindAuthor("JohnDoe");
