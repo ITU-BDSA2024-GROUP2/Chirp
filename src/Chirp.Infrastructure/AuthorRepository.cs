@@ -43,6 +43,11 @@ public class AuthorRepository : IAuthorRepository
 
     public async Task Follow(string userName, string authorName)
     {
+        if (userName == authorName)
+        {
+            return;
+        }
+        
         var user = await FindAuthor(userName);
         var author = await FindAuthor(authorName);
         
@@ -61,6 +66,11 @@ public class AuthorRepository : IAuthorRepository
     
     public async Task Unfollow(string userName, string authorName)
     {
+        if (userName == authorName)
+        {
+            return;
+        }
+        
         var user = await FindAuthor(userName);
         var author = await FindAuthor(authorName);
         
