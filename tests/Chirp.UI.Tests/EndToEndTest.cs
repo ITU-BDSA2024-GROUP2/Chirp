@@ -162,6 +162,17 @@ namespace Chirp.UI.Tests
             //Assert
             await Expect(Page.GetByText("No user found")).ToBeVisibleAsync();
         }
+
+[Test]
+        public async Task UserFollowsAccountsAndWritesCheepsCorrectAmountOfAccountsAndCheepsInAboutMePage()
+        {
+            //Arrange
+            await Page.GotoAsync("https://localhost:5273/");
+
+            //Act
+
+            //Assert
+        }
         
         [Test]
         public async Task UserFollowsAnotherUserAndUnfollows()
