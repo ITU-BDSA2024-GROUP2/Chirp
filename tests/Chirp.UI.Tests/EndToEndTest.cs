@@ -37,13 +37,6 @@ namespace Chirp.UI.Tests
             _serverProcess.Dispose();
         }
 
-        [TearDown]
-        public async Task CleanupAccount()
-        {
-            await ServerUtil.LoginUser(Page);
-            await ServerUtil.DeleteUser(Page);
-        }
-
         [Test]
         public async Task UserRegistersANewAccountIsDirectlySignedInLogsOutAndLogsInWithNewAccountLogsOutLogsInDeletesAccount()
         {
@@ -63,7 +56,7 @@ namespace Chirp.UI.Tests
             await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
             
             //Act
-            await Page.GetByText("logout").ClickAsync();
+            await Page.GetByRole(AriaRole.Button, new() { Name = "logout [username]" }).ClickAsync();
             await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
             await Page.GetByPlaceholder("name@example.com").ClickAsync();
             await Page.GetByPlaceholder("name@example.com").FillAsync("name@example.com");
@@ -191,8 +184,8 @@ namespace Chirp.UI.Tests
         public async Task CheckingMyTimelineForOtherCheeps()
         {
             //Arrange
-            await ServerUtil.DeleteUser(Page);
             await ServerUtil.RegisterUser(Page);
+            await ServerUtil.LoginUser(Page);
             
             //Act
             await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).GetByRole(AriaRole.Button).ClickAsync();

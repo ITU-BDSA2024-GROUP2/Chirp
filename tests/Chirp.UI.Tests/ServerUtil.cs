@@ -68,6 +68,12 @@ namespace Chirp.UI.Tests
             if (!isUserLoggedIn)
             {
                 await LoginUser(page, email, password);
+
+                var UserDoesNotExists = await page.GetByText("No user found").IsVisibleAsync();
+                if (UserDoesNotExists)
+                {
+                    return;
+                }
             }
             
             await page.GetByRole(AriaRole.Link, new() { Name = "manage account" }).ClickAsync();
