@@ -95,7 +95,7 @@ public class UserTimelineModel : PageModel
     {
         if (author == User.Identity.Name)
         {
-            Cheeps = await _cheepRepository.GetCheepsFromFollowers(author, page);
+            Cheeps = await _cheepRepository.GetCheepsFromFollowersAndOwnCheeps(author, page);
         }
         else
         {

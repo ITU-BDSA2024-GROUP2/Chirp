@@ -2,8 +2,13 @@ using Chirp.Infrastructure;
 using JetBrains.Annotations;
 using Xunit;
 using Chirp.Core;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace Chirp.AuthorRepository.Tests;
 
@@ -11,7 +16,6 @@ namespace Chirp.AuthorRepository.Tests;
 public class AuthorRepositoryTest
 {
     private readonly ChirpDBContext _dbContext;
-    
 
     public AuthorRepositoryTest()
     {
@@ -272,5 +276,37 @@ public class AuthorRepositoryTest
         Assert.NotEmpty(followers);
         Assert.Contains(followers, user => user == userFollowing.Name);
         Assert.Single(followers);
+    }
+    
+    
+    [Fact]
+    public async Task DeleteAccount_Removes_Author_From_UserManager_And_Database()
+    {   
+        //Arrange
+        var userManager = AuthorRepositoryUtil.GetUserManager(_dbContext);
+        var author = new Author { UserName = "JohnDoe", Email = "johndoe@example.com" };
+        var password = "SecurePassword123!";
+        IAuthorRepository authorRepository = new Infrastructure.AuthorRepository(_dbContext);
+        
+        //Act
+        await userManager.CreateAsync(author, password);
+        var author2 = await authorRepository.FindAuthor("JohnDoe");
+        
+        //Assert
+        Assert.Equal(author, author2);
+        
+        //Act
+        var deleteResult = await userManager.DeleteAsync(author!);
+        
+        
+        //Assert
+        try
+        {
+            author2 = await authorRepository.FindAuthor("JohnDoe");
+        }
+        catch (Exception e)
+        {
+            Assert.Equal("Author with name 'JohnDoe' was not found.", e.Message);
+        }
     }
 }
