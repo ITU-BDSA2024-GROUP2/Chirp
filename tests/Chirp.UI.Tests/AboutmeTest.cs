@@ -47,7 +47,7 @@ public class AboutmeTest : PageTest
     public async Task AboutMePageVisableWhenLoggedIn()
     {
         // Arrange
-        await Page.GotoAsync("https://localhost:5273/Identity/Account/AboutMe/InfoPage");
+        await Page.GotoAsync("https://localhost:5273/about");
         
         // Assert
         await Expect(Page).ToHaveTitleAsync(new Regex("About me"));
@@ -63,24 +63,50 @@ public class AboutmeTest : PageTest
             await Page.GetByRole(AriaRole.Button, new() { Name = "logout [username]" }).ClickAsync();
         }
         
-        await Page.GotoAsync("https://localhost:5273/Identity/Account/AboutMe/InfoPage");
+        await Page.GotoAsync("https://localhost:5273/about");
         
         // Assert
         await Expect(Page).ToHaveTitleAsync("Log in");
     }
     
     [Test]
-    public async Task AboutMePageDisplayUsername()
+    public async Task AboutMePageInNavigator()
     {
         // Arrange
-        await Page.GotoAsync("https://localhost:5273/Identity/Account/AboutMe/InfoPage");
+        await Page.GotoAsync("https://localhost:5273");
         
         // Act
-        var listItemText = Page.Locator("div.body ul > div > li");
         await Page.GetByRole(AriaRole.Link, new() { Name = "about me" }).ClickAsync();
             
         // Assert
-        await Expect(listItemText.Nth(0)).ToHaveTextAsync("Your Username is: username");
+        await Expect(Page).ToHaveTitleAsync(new Regex("About me"));
+    }
+    
+    
+    [Test]
+    public async Task AboutMePageDisplayUsername()
+    {
+        // Arrange
+        await Page.GotoAsync("https://localhost:5273/about");
+        
+        // Act
+        var listItemText = Page.Locator("div.aboutContainer > ul > li");
+            
+        // Assert
+        await Expect(listItemText.Nth(0)).ToHaveTextAsync("Username: username");
+    }
+    
+    [Test]
+    public async Task AboutMePageDisplayEmail()
+    {
+        // Arrange
+        await Page.GotoAsync("https://localhost:5273/about");
+        
+        // Act
+        var listItemText = Page.Locator("div.aboutContainer > ul > li");
+            
+        // Assert
+        await Expect(listItemText.Nth(1)).ToHaveTextAsync("Email: name@example.com");
     }
     
     // This method can be used to prepare a test that requires a logged in user
