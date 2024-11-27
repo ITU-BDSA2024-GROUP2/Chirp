@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using Microsoft.Playwright;
 using Microsoft.Playwright.NUnit;
 
@@ -196,6 +197,7 @@ namespace Chirp.UI.Tests
             await Expect(newCheep).ToBeVisibleAsync();
             await Expect(newCheep).ToContainTextAsync("This is a cheep'); DROP TABLE Cheeps;--");
         }
+        
 
         
         // This method can be used to prepare a test that requires a logged in user
