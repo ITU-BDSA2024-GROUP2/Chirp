@@ -25,7 +25,7 @@ namespace Chirp.UI.Tests
         }
 
         [OneTimeSetUp]
-        public async Task Setup()
+        public async Task OneTimeSetup()
         {
             _serverProcess = await ServerUtil.StartServer();
         }
@@ -110,7 +110,7 @@ namespace Chirp.UI.Tests
             await Page.GetByPlaceholder("user name").ClickAsync();
             await Page.GetByPlaceholder("user name").FillAsync("username");
             await Page.GetByPlaceholder("name@example.com").ClickAsync();
-            await Page.GetByPlaceholder("name@example.com").FillAsync("testmail@mail.com");
+            await Page.GetByPlaceholder("name@example.com").FillAsync("name@example.com");
             await Page.GetByLabel("Password", new() { Exact = true }).ClickAsync();
             await Page.GetByLabel("Password", new() { Exact = true }).FillAsync("Password123!");
             await Page.GetByLabel("Confirm Password").ClickAsync();
