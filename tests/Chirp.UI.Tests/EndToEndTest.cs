@@ -91,7 +91,7 @@ namespace Chirp.UI.Tests
             await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
             await Page.GetByRole(AriaRole.Link, new() { Name = "manage account" }).ClickAsync();
             await Page.GetByRole(AriaRole.Link, new() { Name = "Personal data" }).ClickAsync();
-            await Page.GetByRole(AriaRole.Button, new() { Name = "Delete" }).ClickAsync();
+            await Page.GetByRole(AriaRole.Link, new() { Name = "Delete" }).ClickAsync();
             await Page.GetByPlaceholder("Please enter your password.").ClickAsync();
             await Page.GetByPlaceholder("Please enter your password.").FillAsync("Testpassword123!");
             await Page.GetByRole(AriaRole.Button, new() { Name = "Delete data and close my" }).ClickAsync();
@@ -106,6 +106,7 @@ namespace Chirp.UI.Tests
             await Expect(Page.GetByText("No user found")).ToBeVisibleAsync();
         }
 
+        
         [Test]
         public async Task UserRegistersANewAccountAndLogsInWithNewAccountWritesCheepDeletesAccount()
         {
@@ -148,7 +149,7 @@ namespace Chirp.UI.Tests
             //Act
             await Page.GetByRole(AriaRole.Link, new() { Name = "manage account" }).ClickAsync();
             await Page.GetByRole(AriaRole.Link, new() { Name = "Personal data" }).ClickAsync();
-            await Page.GetByRole(AriaRole.Button, new() { Name = "Delete" }).ClickAsync();
+            await Page.GetByRole(AriaRole.Link, new() { Name = "Delete" }).ClickAsync();
             await Page.GetByPlaceholder("Please enter your password.").ClickAsync();
             await Page.GetByPlaceholder("Please enter your password.").FillAsync("Testpassword123!");
             await Page.GetByRole(AriaRole.Button, new() { Name = "Delete data and close my" }).ClickAsync();
@@ -242,7 +243,7 @@ namespace Chirp.UI.Tests
             string buttonText = await buttonLocator.InnerTextAsync();
             
             //Assert
-            Assert.That(buttonText, Is.EqualTo("Delete"));
+            Assert.That(buttonText, Is.EqualTo("DELETE"));
             
             //Act
             await Page.Locator("li").Filter(new() { HasText = "ATestUser This is a test cheep" }).GetByRole(AriaRole.Button).ClickAsync();
