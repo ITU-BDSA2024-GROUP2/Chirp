@@ -265,6 +265,8 @@ public class CheepRepositoryTests
         var author1 = await authorRepository.CreateAuthor(authorDTO1);
         var author2 = await authorRepository.CreateAuthor(authorDTO2);
 
+        await authorRepository.Follow(author1.UserName, author2.UserName);
+
         var cheep1 = new Cheep { 
             CheepId = new Guid(), 
             Text = "I am alive", 
