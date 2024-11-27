@@ -93,7 +93,14 @@ public class UserTimelineModel : PageModel
     
     private async Task PopulateCheepsAndFollowers(string author, int page)
     {
-        Cheeps = await _cheepRepository.GetCheepsFromFollowers(author, page);
+        if (author == User.Identity.Name)
+        {
+            Cheeps = await _cheepRepository.GetCheepsFromFollowers(author, page);
+        }
+        else
+        {
+            Cheeps = await _cheepRepository.GetCheepsFromAuthor(author, page);
+        }
 
         if (User.Identity.IsAuthenticated)
         {
