@@ -2,8 +2,13 @@ using Chirp.Infrastructure;
 using JetBrains.Annotations;
 using Xunit;
 using Chirp.Core;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace Chirp.AuthorRepository.Tests;
 
@@ -11,7 +16,7 @@ namespace Chirp.AuthorRepository.Tests;
 public class AuthorRepositoryTest
 {
     private readonly ChirpDBContext _dbContext;
-    
+    private UserManager<Author> _userManager;
 
     public AuthorRepositoryTest()
     {
@@ -272,5 +277,60 @@ public class AuthorRepositoryTest
         Assert.NotEmpty(followers);
         Assert.Contains(followers, user => user == userFollowing.Name);
         Assert.Single(followers);
+    }
+    
+    
+    [Fact]
+    public async Task DeleteAccount_Removes_Author_From_UserManager_And_Database()
+    { 
+        var userStore = new UserStore<Author>(_dbContext);
+        var services = new ServiceCollection();
+        var logger = new Logger<UserManager<Author>>(new LoggerFactory());
+
+        _userManager = new UserManager<Author>(
+            userStore,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            services.BuildServiceProvider(),
+            logger
+        );
+
+        var author = new Author { UserName = "JohnDoe", Email = "johndoe@example.com" };
+        var password = "SecurePassword123!";
+        
+        var createResult = await _userManager.CreateAsync(author, password);
+        Assert.True(createResult.Succeeded, "Failed to create the author using UserManager.");
+        
+        var userBeforeDeletion = await _userManager.FindByNameAsync(author.UserName);
+        Assert.NotNull(userBeforeDeletion);
+        
+        
+        
+        IAuthorRepository authorRepository = new Infrastructure.AuthorRepository(_dbContext);
+
+        // Act
+        var author2 = await authorRepository.FindAuthor("JohnDoe");
+        
+        // Assert
+        Assert.NotNull(author);
+        Assert.Equal(author.UserName, author2.UserName);
+        
+        
+        
+        var authorInDbBeforeDeletion = await _dbContext.Authors.FirstOrDefaultAsync(a => a.UserName == author.UserName);
+        Assert.NotNull(authorInDbBeforeDeletion);
+        
+        var deleteResult = await _userManager.DeleteAsync(userBeforeDeletion!);
+        Assert.True(deleteResult.Succeeded, "Failed to delete the author using UserManager.");
+        
+        var userAfterDeletion = await _userManager.FindByNameAsync(author.UserName);
+        Assert.Null(userAfterDeletion);
+        
+        var authorInDbAfterDeletion = await _dbContext.Authors.FirstOrDefaultAsync(a => a.UserName == author.UserName);
+        Assert.Null(authorInDbAfterDeletion);
     }
 }
