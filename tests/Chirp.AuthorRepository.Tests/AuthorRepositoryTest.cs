@@ -94,6 +94,8 @@ public class AuthorRepositoryTest
         IAuthorRepository authorRepository = new Infrastructure.AuthorRepository(_dbContext);
         
         // Act
+        await authorRepository.CreateAuthor(userFollowing);
+        await authorRepository.CreateAuthor(authorFollowed);
         await authorRepository.Follow(userFollowing.Name, authorFollowed.Name);
 
         // Assert
