@@ -10,6 +10,7 @@ public class ChirpDBContext : IdentityDbContext<Author>
     public DbSet<Cheep> Cheeps { get; set; }
 
     public DbSet<Author> Authors { get; set; }
+    public DbSet<Like> Likes { get; set; }
 
     public ChirpDBContext(DbContextOptions<ChirpDBContext> options) : base(options)
     {

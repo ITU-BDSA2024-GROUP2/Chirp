@@ -3,6 +3,7 @@
 
 @{
     var followerMap = ViewData["FollowerMap"] as Dictionary<string, bool> ?? new Dictionary<string, bool>();
+    var likeMap = ViewData["LikeMap"] as Dictionary<string, bool> ?? new Dictionary<string, bool>();
     var currentPage = ViewData["CurrentPage"] as int? ?? 1;
 }
 
@@ -37,6 +38,23 @@
                                         <input type="hidden" name="authorName" value="@cheep.Author"/>
                                         <input type="hidden" name="page" value="@currentPage"/>
                                         <button class="followBtn" id="unfollow" type="submit">Unfollow</button>
+                                    </form>
+                                }
+                                
+                                if (likeMap.ContainsKey(cheep.Id) && likeMap[cheep.Id] == false)
+                                {
+                                    <form method="post" asp-page-handler="Like">
+                                        <input type="hidden" name="cheepId" value="@cheep.Id"/>
+                                        <input type="hidden" name="page" value="@currentPage"/>
+                                        <button class="likeBtn" type="submit">Like</button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <form method="post" asp-page-handler="Unlike">
+                                        <input type="hidden" name="cheepId" value="@cheep.Id"/>
+                                        <input type="hidden" name="page" value="@currentPage"/>
+                                        <button class="unlikeBtn" type="submit">Unlike</button>
                                     </form>
                                 }
                             }

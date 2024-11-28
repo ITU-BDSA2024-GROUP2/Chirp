@@ -7,6 +7,9 @@ public interface ICheepRepository
     public Task<List<CheepDTO>> GetCheepsFromFollowersAndOwnCheeps(string userName, int currentPage);
     public Task<Cheep> CreateCheep(string authorName, string message);
     public Task<Author> FindAuthorByName(string name);
-    public Task DeleteCheep(string cheepId);
+    public Task DeleteCheep(string cheepId, string userName);
     public Task<List<CheepDTO>> GetAllCheepsFromAuthor(string authorName);
+    public Task Like(string cheepId, string userName);
+    public Task Unlike(string cheepId, string userName);
+    public Task<bool> IsLiked(string cheepId, string userName);
 }

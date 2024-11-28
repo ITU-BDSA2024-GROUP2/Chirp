@@ -1,6 +1,7 @@
 #nullable disable //fjern null warning
 using System.ComponentModel.DataAnnotations;
 using Chirp.Core;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Chirp.Infrastructure;
@@ -121,18 +122,86 @@ public class CheepRepository : ICheepRepository
         return newCheep;
     }
     
-    public async Task DeleteCheep(string cheepId)
+    public async Task DeleteCheep(string cheepId, string userName)
     {
-        Guid cheepGuid = Guid.Parse(cheepId.ToString());
-        var cheep = await _dbContext.Cheeps.FindAsync(cheepGuid);
+        var cheep = await _dbContext.Cheeps.FindAsync(cheepId);
 
+        if (cheep.Author.UserName != userName)
+        {
+            throw new ArgumentException("Cheep does not belong to this user.");
+        }
         if (cheep != null)
         { 
             _dbContext.Cheeps.Remove(cheep);
         }
         
         await _dbContext.SaveChangesAsync();
+    }
+
+    private async Task<Cheep> GetCheep(string cheepId)
+    {
+        var query = from cheep in _dbContext.Cheeps
+                .Include(c => c.Likes)
+            where (cheep.CheepId.ToString() == cheepId)
+            select cheep;
+
+        var result = await query.Distinct().FirstOrDefaultAsync();
+        return result;
+    }
+
+    public async Task Like(string cheepId, string userName)
+    {
+        var foundCheep = await GetCheep(cheepId);
         
+        if (foundCheep == null)
+        {
+            throw new ArgumentException("Cheep not found");
+        }
+        
+        if (foundCheep.Likes.Any(l => l.Author == userName))
+        {
+            throw new InvalidOperationException("User has already liked this Cheep");
+        }
+        
+        foundCheep.Likes.Add(new Like
+        {
+            Author = userName,
+            CheepId = cheepId,
+        });
+
+        await _dbContext.SaveChangesAsync();
+    }
+    
+    public async Task Unlike(string cheepId, string userName)
+    {
+        var foundCheep = await GetCheep(cheepId);
+        
+        if (foundCheep == null)
+        {
+            throw new ArgumentException("Cheep not found");
+        }
+        
+        if (!foundCheep.Likes.Any(l => l.Author == userName))
+        {
+            throw new InvalidOperationException("User has not liked this Cheep");
+        }
+        
+        var like = foundCheep.Likes.FirstOrDefault(l => l.Author == userName);
+        if (like == null)
+        {
+            throw new InvalidOperationException("Like not found");
+        }
+        foundCheep.Likes.Remove(like);
+
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task<bool> IsLiked(string cheepId, string userName)
+    {
+        var foundCheep = await GetCheep(cheepId);
+        Console.WriteLine(cheepId);
+        
+        return foundCheep != null && foundCheep.Likes.Any(l => l.Author == userName);
     }
 
     public async Task<Author> FindAuthorByName(string name)

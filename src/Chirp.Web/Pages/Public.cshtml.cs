@@ -4,6 +4,7 @@ using System.Security.Claims;
 using Azure.Identity;
 using Chirp.Core;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.VisualBasic;
@@ -15,6 +16,7 @@ public class PublicModel : PageModel
     private readonly ICheepRepository _cheepRepository;
     private readonly IAuthorRepository _authorRepository;
     public Dictionary<string, bool> FollowerMap;
+    public Dictionary<string, bool> LikeMap;
     public int _currentPage;
     
     public List<CheepDTO> Cheeps { get; set; }
@@ -27,6 +29,7 @@ public class PublicModel : PageModel
         _cheepRepository = cheepRepository;
         _authorRepository = authorRepository;
         FollowerMap = new Dictionary<string, bool>();
+        LikeMap = new Dictionary<string, bool>();
 
     }
 
@@ -86,13 +89,29 @@ public class PublicModel : PageModel
     
     public async Task<IActionResult> OnPostDelete(string cheepId)
     {
-        await _cheepRepository.DeleteCheep(cheepId);
+        try
+        {
+            await _cheepRepository.DeleteCheep(cheepId, User.Identity.Name);
+        }
+        catch (ArgumentException e)
+        {
+            Console.WriteLine("Unable to delete cheep. Error: " + e.Message);
+        }
         return RedirectToPage("Public");
     }
-
-    public async Task<bool> IsFollowing(string userName, string authorName)
+    
+    public async Task<IActionResult> OnPostLike(string cheepId, int? page)
     {
-        return await _authorRepository.IsFollowing(userName, authorName);
+        await _cheepRepository.Like(cheepId, User.Identity.Name);
+        LikeMap[cheepId] = true;
+        return Redirect($"/?page={page}");
+    }
+    
+    public async Task<IActionResult> OnPostUnlike(string cheepId, int? page)
+    {
+        await _cheepRepository.Unlike(cheepId, User.Identity.Name);
+        LikeMap[cheepId] = false;
+        return Redirect($"/?page={page}");
     }
     
     private async Task PopulateCheepsAndFollowers(int page)
@@ -105,7 +124,8 @@ public class PublicModel : PageModel
             {
                 if (cheep.Author != User.Identity.Name)
                 {
-                    FollowerMap[cheep.Author] = await IsFollowing(User.Identity.Name, cheep.Author);
+                    FollowerMap[cheep.Author] = await  _authorRepository.IsFollowing(User.Identity.Name, cheep.Author);
+                    FollowerMap[cheep.Id] = await _cheepRepository.IsLiked(cheep.Id, User.Identity.Name);
                 }
             }
         }
