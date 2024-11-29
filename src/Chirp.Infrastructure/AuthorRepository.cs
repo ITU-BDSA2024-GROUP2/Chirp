@@ -121,4 +121,15 @@ public class AuthorRepository : IAuthorRepository
         var result = await query.ToListAsync();
         return result;
     }
+    
+    public async Task<int> GetFollowerCount(string userName)
+    {
+        var query = from author in _dbContext.Authors
+            where author.UserName == userName
+            from follower in author.Followers
+            select follower.UserName;
+        
+        var result = await query.ToListAsync();
+        return result.Count;
+    }
 }

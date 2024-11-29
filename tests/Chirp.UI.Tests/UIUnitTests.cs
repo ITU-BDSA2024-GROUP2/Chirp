@@ -86,11 +86,12 @@ namespace Chirp.UI.Tests
             await Page.GotoAsync("https://localhost:5273");
             
             //Act
-            var author = await Page.Locator("p a").First.InnerTextAsync();
-            var locator = Page.Locator("p a").First;
+            var locator = Page.Locator("li").Filter(new()
+                    { HasText = "Jacqualine Gilcoine — 08/01/23 13:17:39 Starbuck now is what we hear the worst." })
+                .GetByRole(AriaRole.Link);
             
             //Assert
-            await Expect(locator).ToHaveAttributeAsync("href", $"/{author}");
+            await Expect(locator).ToHaveAttributeAsync("href", "/Jacqualine Gilcoine");
             
         }
         

@@ -8,7 +8,7 @@ using Xunit;
 namespace Chirp.UI.Tests;
 
 
-public class AboutmeTest : PageTest
+public class AboutMeTest : PageTest
 {
     private Process _serverProcess;
     
