@@ -18,7 +18,7 @@
     {
         <em>There are no cheeps so far.</em>
     }
-    @if (await Model.NextPageHasCheeps(Model._currentPage))
+    @if (Model._nextPageHasCheeps)
     {
         <form method="get">
             <input type="hidden" name="page" value="@(Model._currentPage+1)" />

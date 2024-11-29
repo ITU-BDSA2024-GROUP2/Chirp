@@ -19,4 +19,21 @@
     {
         <em>There are no cheeps so far.</em>
     }
+
+    @if (Model._nextPageHasCheeps)
+    {
+    <form method="get">
+        <input type="hidden" name="page" value="@(Model._currentPage+1)" />
+        <button type="submit">Next Page</button>
+    </form>
+    }
+    <input type="hidden" name="page" value="@(Model._currentPage+1)" />
+    <button type="submit">Page @Model._currentPage</button>
+    @if (Model._currentPage > 1)
+    {
+    <form method="get">
+        <input type="hidden" name="page" value="@(Model._currentPage-1)" />
+        <button type="submit">Previous page</button>
+    </form>
+    }
 </div>
