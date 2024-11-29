@@ -165,16 +165,17 @@ namespace Chirp.UI.Tests
             //Assert
             await Expect(Page.GetByText("No user found")).ToBeVisibleAsync();
         }
-[Test]
+        
+        [Test]
         public async Task UserFollowsAccountsAndWritesCheepsCorrectAmountOfAccountsAndCheepsInAboutMePage()
         {
             //Arrange
             await ServerUtil.RegisterUser(Page, "ATestUser1", "atest@mail.com", "Testpassword123!");
 
             //Act
-            await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).Locator("#follow").ClickAsync();
-            await Page.Locator("li").Filter(new() { HasText = "Mellie Yost But what was" }).Locator("#follow").ClickAsync();
-            await Page.Locator("li").Filter(new() { HasText = "Malcolm Janski At present I" }).Locator("#follow").ClickAsync();
+            await Page.Locator("li").Filter(new() { HasText = "Starbuck now is what we hear the worst" }).Locator("#follow").ClickAsync();
+            await Page.Locator("li").Filter(new() { HasText = "But what was" }).Locator("#follow").ClickAsync();
+            await Page.Locator("li").Filter(new() { HasText = "At present I" }).Locator("#follow").ClickAsync();
             await Page.Locator("#Message").ClickAsync();
             await Page.Locator("#Message").FillAsync("Hello World1");
             await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
@@ -201,12 +202,12 @@ namespace Chirp.UI.Tests
 
             //Act 
             await Page.GetByRole(AriaRole.Link, new() { Name = "public timeline" }).ClickAsync();
-            await Page.Locator("li").Filter(new() { HasText = "ATestUser1 Hello World3 — 11/" }).GetByRole(AriaRole.Button).ClickAsync();
-            await Page.Locator("li").Filter(new() { HasText = "ATestUser1 Hello World2 — 11/" }).GetByRole(AriaRole.Button).ClickAsync();
-            await Page.Locator("li").Filter(new() { HasText = "ATestUser1 Hello World1 — 11/" }).GetByRole(AriaRole.Button).ClickAsync();
-            await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).Locator("#unfollow").ClickAsync();
-            await Page.Locator("li").Filter(new() { HasText = "Mellie Yost But what was" }).Locator("#unfollow").ClickAsync();
-            await Page.Locator("li").Filter(new() { HasText = "Malcolm Janski At present I" }).Locator("#unfollow").ClickAsync();
+            await Page.Locator("li").Filter(new() { HasText = "Hello World3" }).GetByRole(AriaRole.Button).ClickAsync();
+            await Page.Locator("li").Filter(new() { HasText = "Hello World2" }).GetByRole(AriaRole.Button).ClickAsync();
+            await Page.Locator("li").Filter(new() { HasText = "Hello World1" }).GetByRole(AriaRole.Button).ClickAsync();
+            await Page.Locator("li").Filter(new() { HasText = "Starbuck now is what we hear the worst." }).Locator("#unfollow").ClickAsync();
+            await Page.Locator("li").Filter(new() { HasText = "But what was behind the barricade." }).Locator("#unfollow").ClickAsync();
+            await Page.Locator("li").Filter(new() { HasText = "At present I cannot spare energy and determination such as I did look up I saw a gigantic Sperm Whale is toothless." }).Locator("#unfollow").ClickAsync();
             await Page.GetByRole(AriaRole.Link, new() { Name = "About me" }).ClickAsync();
 
             //Assert

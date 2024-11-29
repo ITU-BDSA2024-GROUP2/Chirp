@@ -148,11 +148,7 @@ public class CheepRepository : ICheepRepository
     public async Task DeleteCheep(string cheepId, string userName)
     {
         var cheep = await _dbContext.Cheeps.FindAsync(cheepId);
-
-        if (cheep.Author.UserName != userName)
-        {
-            throw new ArgumentException("Cheep does not belong to this user.");
-        }
+        
         if (cheep != null)
         { 
             _dbContext.Cheeps.Remove(cheep);
