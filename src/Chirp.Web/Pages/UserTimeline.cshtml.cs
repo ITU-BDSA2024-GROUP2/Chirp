@@ -14,7 +14,9 @@ public class UserTimelineModel : PageModel
 
     public Dictionary<string, bool> FollowerMap;
     public Dictionary<string, bool> LikeMap;
-    private int _currentPage;
+    public int _currentPage;
+    public bool _nextPageHasCheeps;
+    public int followerCount { get; set; }
     public List<CheepDTO> Cheeps { get; set; }
 
     [BindProperty]
@@ -35,6 +37,8 @@ public class UserTimelineModel : PageModel
         ViewData["CurrentPage"] = _currentPage;
         
         await FetchCheepAndAuthorData(author, _currentPage);
+        followerCount = await _authorRepository.GetFollowerCount(author);
+        _nextPageHasCheeps = await NextPageHasCheeps(author, _currentPage);
         
         return Page();
         
@@ -138,6 +142,20 @@ public class UserTimelineModel : PageModel
                     LikeMap[cheep.Id] = await _cheepRepository.IsLiked(cheep.Id, User.Identity.Name);
                 }
             }
+        }
+    }
+    
+    public async Task<bool> NextPageHasCheeps(string author, int page)
+    {   
+        if (author == User.Identity.Name)
+        {
+            var list = await _cheepRepository.GetCheepsFromFollowersAndOwnCheeps(author, page+1);
+            return list.Any();
+        }
+        else
+        {
+            var list = await _cheepRepository.GetCheepsFromAuthor(author, page+1);
+            return list.Any();
         }
     }
 }

@@ -395,6 +395,39 @@ namespace Chirp.UI.Tests
             await DeleteUser();
         }
         
+        [Test]
+        public async Task NextPageExistsAndWorks()
+        {   
+            //Arrange
+            await Page.GotoAsync("https://localhost:5273/?page=1");
+            
+            //Assert
+            await Expect(Page.GetByRole(AriaRole.Button, new() { Name = "Next Page" })).ToBeVisibleAsync();
+            
+            //Act
+            await Page.GetByRole(AriaRole.Button, new() { Name = "Next Page" }).ClickAsync();
+            
+            //Assert
+            Assert.That(Page.Url, Is.EqualTo("https://localhost:5273/?page=2"));
+        }
+        
+        [Test]
+        public async Task PreviousPageExistsAndWorks()
+        {   
+            //Arrange
+            await Page.GotoAsync("https://localhost:5273/?page=2");
+            
+            //Assert
+            await Expect(Page.GetByRole(AriaRole.Button, new() { Name = "Previous Page" })).ToBeVisibleAsync();
+            
+            //Act
+            await Page.GetByRole(AriaRole.Button, new() { Name = "Previous Page" }).ClickAsync();
+            
+            //Assert
+            Assert.That(Page.Url, Is.EqualTo("https://localhost:5273/?page=1"));
+            
+        }
+        
         // This method can be used to prepare a test that requires a logged in user
         public async Task LoginUser(string email = "name@example.com", string password = "Password123!")
         {
@@ -447,6 +480,5 @@ namespace Chirp.UI.Tests
             await Page.GetByPlaceholder("Please enter your password.").FillAsync("Password123!");
             await Page.GetByRole(AriaRole.Button, new() { Name = "Delete data and close my account" }).ClickAsync();
         }
-        
     }
 }

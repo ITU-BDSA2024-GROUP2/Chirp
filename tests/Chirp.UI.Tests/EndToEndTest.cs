@@ -332,5 +332,38 @@ namespace Chirp.UI.Tests
             //Assert
             await Expect(Page.GetByText("This is a test cheep on my timeline")).Not.ToBeVisibleAsync();
         }
+
+        [Test]
+        public async Task UserRegistersAndTestsPagination()
+        {
+            //Arrange
+            await ServerUtil.RegisterUser(Page, "ATestUser", "test@mail.com", "Testpassword123!");
+            
+            //Assert
+            await Expect(Page.GetByRole(AriaRole.Button, new() { Name = "Previous Page" })).Not.ToBeVisibleAsync(); //On page 1, so should not be visible
+            
+            //Act
+            await Page.GetByRole(AriaRole.Button, new() { Name = "Next Page" }).ClickAsync();
+            
+            //Assert
+            Assert.That(Page.Url, Is.EqualTo("https://localhost:5273/?page=2"));
+            
+            //Act
+            await Page.GetByRole(AriaRole.Link, new() { Name = "my timeline" }).ClickAsync();
+            
+            //Assert
+            await Expect(Page.GetByRole(AriaRole.Button, new() { Name = "Previous Page" })).Not.ToBeVisibleAsync(); //On page 1, so should not be visible
+            await Expect(Page.GetByRole(AriaRole.Button, new() { Name = "Next Page" })).Not.ToBeVisibleAsync(); //Havent posted or followed, so button should not be visible
+            
+            //Act
+            await Page.GetByRole(AriaRole.Link, new() { Name = "public timeline" }).ClickAsync();
+            await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).Locator("#follow").ClickAsync(); //Follow jac.. because she has > 32 cheeps
+            await Page.GetByRole(AriaRole.Link, new() { Name = "my timeline" }).ClickAsync();
+            await Page.GetByRole(AriaRole.Button, new() { Name = "Next Page" }).ClickAsync();
+            
+            //Assert
+            await Expect(Page.GetByRole(AriaRole.Button, new() { Name = "Previous Page" })).ToBeVisibleAsync(); 
+            await Expect(Page.GetByRole(AriaRole.Button, new() { Name = "Next Page" })).ToBeVisibleAsync(); 
+        }
     }
 }
