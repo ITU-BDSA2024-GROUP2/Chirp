@@ -37,7 +37,7 @@ public class UserTimelineModel : PageModel
         await PopulateCheepsAndFollowers(author, _currentPage);
 
         UserInfo = new Dictionary<string, string>();
-        await LoadUserInfo();
+        await LoadUserFollowers();
         
         return Page();
         
@@ -118,16 +118,9 @@ public class UserTimelineModel : PageModel
             }
         }
     }
-    private async Task LoadUserInfo()
+    private async Task LoadUserFollowers(string author)
     {
-        var username = User.Identity?.Name;
-        
-        // Followers
-        Followers = await _authorRepository.GetFollowers(username);
-        foreach (var follower in Followers)
-        {
-            Console.WriteLine(username + " follows " + follower);
-        }
+        Followers = await _authorRepository.GetFollowers(author);
         UserInfo.Add("followerCount", Followers.Count.ToString());
     }
 }
