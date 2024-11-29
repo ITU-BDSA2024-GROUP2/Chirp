@@ -40,9 +40,6 @@ public class PublicModel : PageModel
         
         await FetchCheepAndAuthorData(_currentPage);
         
-        Console.WriteLine(LikeMap.Count);
-        Console.WriteLine(FollowerMap.Count);
-        
         return Page();
     }
     
@@ -84,7 +81,6 @@ public class PublicModel : PageModel
     public async Task<IActionResult> OnPostUnfollow(string authorName, int? page)
     {
         await _authorRepository.Unfollow(User.Identity.Name, authorName);
-        
         FollowerMap[authorName] = false;
 
         return Redirect($"/?page={page}");
@@ -130,7 +126,7 @@ public class PublicModel : PageModel
                 if (cheep.Author != User.Identity.Name)
                 {
                     FollowerMap[cheep.Author] = await _authorRepository.IsFollowing(User.Identity.Name, cheep.Author);
-                    FollowerMap[cheep.Id] = await _cheepRepository.IsLiked(cheep.Id, User.Identity.Name);
+                    LikeMap[cheep.Id] = await _cheepRepository.IsLiked(cheep.Id, User.Identity.Name);
                 }
             }
         }
