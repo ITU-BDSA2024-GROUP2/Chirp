@@ -37,7 +37,7 @@ public class UserTimelineModel : PageModel
         await PopulateCheepsAndFollowers(author, _currentPage);
 
         UserInfo = new Dictionary<string, string>();
-        await LoadUserFollowers();
+        await LoadUserFollowers(author);
         
         return Page();
         
