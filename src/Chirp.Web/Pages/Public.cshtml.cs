@@ -38,7 +38,10 @@ public class PublicModel : PageModel
         _currentPage = page ?? 1;
         ViewData["CurrentPage"] = _currentPage;
         
-        await PopulateCheepsAndFollowers(_currentPage);
+        await FetchCheepAndAuthorData(_currentPage);
+        
+        Console.WriteLine(LikeMap.Count);
+        Console.WriteLine(FollowerMap.Count);
         
         return Page();
     }
@@ -56,7 +59,7 @@ public class PublicModel : PageModel
         }
         if (!ModelState.IsValid)
         {
-            await PopulateCheepsAndFollowers(_currentPage);
+            await FetchCheepAndAuthorData(_currentPage);
             return Page();
         }
 
@@ -104,6 +107,7 @@ public class PublicModel : PageModel
     {
         await _cheepRepository.Like(cheepId, User.Identity.Name);
         LikeMap[cheepId] = true;
+        
         return Redirect($"/?page={page}");
     }
     
@@ -111,10 +115,11 @@ public class PublicModel : PageModel
     {
         await _cheepRepository.Unlike(cheepId, User.Identity.Name);
         LikeMap[cheepId] = false;
+        
         return Redirect($"/?page={page}");
     }
     
-    private async Task PopulateCheepsAndFollowers(int page)
+    private async Task FetchCheepAndAuthorData(int page)
     {
         Cheeps = await _cheepRepository.GetCheeps(page);
 
@@ -124,7 +129,7 @@ public class PublicModel : PageModel
             {
                 if (cheep.Author != User.Identity.Name)
                 {
-                    FollowerMap[cheep.Author] = await  _authorRepository.IsFollowing(User.Identity.Name, cheep.Author);
+                    FollowerMap[cheep.Author] = await _authorRepository.IsFollowing(User.Identity.Name, cheep.Author);
                     FollowerMap[cheep.Id] = await _cheepRepository.IsLiked(cheep.Id, User.Identity.Name);
                 }
             }

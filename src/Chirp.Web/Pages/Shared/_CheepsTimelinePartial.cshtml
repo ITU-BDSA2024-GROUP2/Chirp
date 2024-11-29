@@ -18,58 +18,75 @@
                 @cheep.Text
                 <small>&mdash; @cheep.TimeStamp</small>
             </p>
-                <div class="cheepOptionsContainer">
-                    <div class="followBox">
-                        @if (User.Identity!.IsAuthenticated)
+            <div class="cheepOptionsContainer">
+                <div class="followBox">
+                    @if (User.Identity!.IsAuthenticated)
+                    {
+                        @if (User.Identity?.Name != cheep.Author)
                         {
-                            @if (User.Identity?.Name != cheep.Author)
+                            @if (followerMap.ContainsKey(cheep.Author) && followerMap[cheep.Author] == false)
                             {
-                                @if (followerMap.ContainsKey(cheep.Author) && followerMap[cheep.Author] == false)
-                                {
-                                    <form method="post" asp-page-handler="Follow">
-                                        <input type="hidden" name="authorName" value="@cheep.Author"/>
-                                        <input type="hidden" name="page" value="@currentPage"/>
-                                        <button class="followBtn" id="follow" type="submit">Follow</button>
-                                    </form>
-                                }
-                                else
-                                {
-                                    <form method="post" asp-page-handler="Unfollow">
-                                        <input type="hidden" name="authorName" value="@cheep.Author"/>
-                                        <input type="hidden" name="page" value="@currentPage"/>
-                                        <button class="followBtn" id="unfollow" type="submit">Unfollow</button>
-                                    </form>
-                                }
+                                <form method="post" asp-page-handler="Follow">
+                                    <input type="hidden" name="authorName" value="@cheep.Author"/>
+                                    <input type="hidden" name="page" value="@currentPage"/>
+                                    <button class="followBtn" id="follow" type="submit">Follow</button>
+                                </form>
+                            }
+                            else
+                            {
+                                <form method="post" asp-page-handler="Unfollow">
+                                    <input type="hidden" name="authorName" value="@cheep.Author"/>
+                                    <input type="hidden" name="page" value="@currentPage"/>
+                                    <button class="followBtn" id="unfollow" type="submit">Unfollow</button>
+                                </form>
+                            }
                                 
-                                if (likeMap.ContainsKey(cheep.Id) && likeMap[cheep.Id] == false)
-                                {
-                                    <form method="post" asp-page-handler="Like">
-                                        <input type="hidden" name="cheepId" value="@cheep.Id"/>
-                                        <input type="hidden" name="page" value="@currentPage"/>
-                                        <button class="likeBtn" type="submit">Like</button>
-                                    </form>
-                                }
-                                else
-                                {
-                                    <form method="post" asp-page-handler="Unlike">
-                                        <input type="hidden" name="cheepId" value="@cheep.Id"/>
-                                        <input type="hidden" name="page" value="@currentPage"/>
-                                        <button class="unlikeBtn" type="submit">Unlike</button>
-                                    </form>
-                                }
+                            if (likeMap.ContainsKey(cheep.Id) && likeMap[cheep.Id] == false)
+                            {
+                                <form method="post" asp-page-handler="Like">
+                                    <input type="hidden" name="cheepId" value="@cheep.Id"/>
+                                    <input type="hidden" name="page" value="@currentPage"/>
+                                    <button class="likeBtn" type="submit">Like</button>
+                                </form>
+                            }
+                            else
+                            {
+                                <form method="post" asp-page-handler="Unlike">
+                                    <input type="hidden" name="cheepId" value="@cheep.Id"/>
+                                    <input type="hidden" name="page" value="@currentPage"/>
+                                    <button class="unlikeBtn" type="submit">Unlike</button>
+                                </form>
                             }
                         }
-                    </div>
-                    <div class="deleteBox">
-                        @if (User.Identity!.IsAuthenticated && User.Identity.Name == cheep.Author)
-                        {
-                            <form method="post" asp-page-handler="Delete">
-                                <input type="hidden" name="cheepId" value="@cheep.Id"/>
-                                <button class="deleteBtn" type="submit">DELETE</button>
-                            </form>
-                        }
-                    </div>
+                    }
                 </div>
+                <div class="deleteBox">
+                    @if (User.Identity!.IsAuthenticated && User.Identity.Name == cheep.Author)
+                    {
+                        <form method="post" asp-page-handler="Delete">
+                            <input type="hidden" name="cheepId" value="@cheep.Id"/>
+                            <button class="deleteBtn" type="submit">DELETE</button>
+                        </form>
+                    }
+                </div>
+            </div>
         </li>
     }
 </ul>
+
+<!--The script maintains scroll position on redirect
+Co-authored by https://stackoverflow.com/questions/17642872/refresh-page-and-keep-scroll-position-->
+<script>
+    // Save scroll position on unload
+    window.addEventListener("beforeunload", () => {
+        sessionStorage.setItem("scrollPosition", window.scrollY);
+    });
+
+    // Restore scroll position on load
+    window.addEventListener("load", () => {
+        const scrollPosition = sessionStorage.getItem("scrollPosition");
+        if (scrollPosition) {
+            window.scrollTo(0, parseInt(scrollPosition, 10));
+        }
+    });
+</script>
