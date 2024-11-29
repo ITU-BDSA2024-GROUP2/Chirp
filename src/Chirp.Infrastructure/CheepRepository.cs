@@ -16,7 +16,7 @@ public class CheepRepository : ICheepRepository
         _dbContext = dbContext;
     }
     
-    public async Task<List<CheepDTO>> GetCheeps(int currentPage)
+    public async Task<List<CheepDTO>> GetCheepsByNewest(int currentPage)
     {
         int offset = (currentPage - 1) * pageSize;
 
@@ -24,10 +24,30 @@ public class CheepRepository : ICheepRepository
             orderby cheep.TimeStamp descending
             select new CheepDTO
             {
-                Id = cheep.CheepId.ToString(),
+                Id = cheep.CheepId,
                 Author = cheep.Author.UserName,
                 Text = cheep.Text,
-                TimeStamp = cheep.TimeStamp.ToString("MM'/'dd'/'yy H':'mm':'ss")
+                TimeStamp = cheep.TimeStamp.ToString("MM'/'dd'/'yy H':'mm':'ss"),
+                LikeCount = cheep.Likes.Count.ToString(),
+            }).Skip(offset).Take(pageSize);
+        
+        var result = await query.ToListAsync();
+        return result;
+    }
+    
+    public async Task<List<CheepDTO>> GetCheepsByLikes(int currentPage)
+    {
+        int offset = (currentPage - 1) * pageSize;
+
+        var query = (from cheep in _dbContext.Cheeps
+            orderby cheep.Likes.Count descending
+            select new CheepDTO
+            {
+                Id = cheep.CheepId,
+                Author = cheep.Author.UserName,
+                Text = cheep.Text,
+                TimeStamp = cheep.TimeStamp.ToString("MM'/'dd'/'yy H':'mm':'ss"),
+                LikeCount = cheep.Likes.Count.ToString(),
             }).Skip(offset).Take(pageSize);
         
         var result = await query.ToListAsync();
@@ -41,10 +61,11 @@ public class CheepRepository : ICheepRepository
             where cheep.Author.UserName == authorName
             select new CheepDTO
             {
-                Id = cheep.CheepId.ToString(),
+                Id = cheep.CheepId,
                 Author = cheep.Author.UserName,
                 Text = cheep.Text,
-                TimeStamp = cheep.TimeStamp.ToString("MM'/'dd'/'yy H':'mm':'ss")
+                TimeStamp = cheep.TimeStamp.ToString("MM'/'dd'/'yy H':'mm':'ss"),
+                LikeCount = cheep.Likes.Count.ToString(),
             });
         
         var result = await query.ToListAsync();
@@ -60,10 +81,11 @@ public class CheepRepository : ICheepRepository
             where cheep.Author.UserName == authorName
             select new CheepDTO
             {
-                Id = cheep.CheepId.ToString(),
+                Id = cheep.CheepId,
                 Author = cheep.Author.UserName,
                 Text = cheep.Text,
-                TimeStamp = cheep.TimeStamp.ToString("MM'/'dd'/'yy H':'mm':'ss")
+                TimeStamp = cheep.TimeStamp.ToString("MM'/'dd'/'yy H':'mm':'ss"),
+                LikeCount = cheep.Likes.Count.ToString(),
             }).Skip(offset).Take(pageSize);
         var result = await query.ToListAsync();
         
@@ -87,10 +109,11 @@ public class CheepRepository : ICheepRepository
             where user.Following.Contains(cheep.Author) || cheep.Author.UserName == userName
             select new CheepDTO
             {
-                Id = cheep.CheepId.ToString(),
+                Id = cheep.CheepId,
                 Author = cheep.Author.UserName,
                 Text = cheep.Text,
-                TimeStamp = cheep.TimeStamp.ToString("MM'/'dd'/'yy H':'mm':'ss")
+                TimeStamp = cheep.TimeStamp.ToString("MM'/'dd'/'yy H':'mm':'ss"),
+                LikeCount = cheep.Likes.Count.ToString(),
             }).Skip(offset).Take(pageSize);
         var result = await query.ToListAsync();
         
@@ -116,7 +139,7 @@ public class CheepRepository : ICheepRepository
             Author = author,
         };
         
-        var queryResult = await _dbContext.Cheeps.AddAsync(newCheep); // does not write to the database!
+        await _dbContext.Cheeps.AddAsync(newCheep); // does not write to the database!
 
         await _dbContext.SaveChangesAsync(); // persist the changes in the database
         return newCheep;
@@ -138,70 +161,43 @@ public class CheepRepository : ICheepRepository
         await _dbContext.SaveChangesAsync();
     }
 
-    private async Task<Cheep> GetCheep(string cheepId)
-    {
-        var query = from cheep in _dbContext.Cheeps
-                .Include(c => c.Likes)
-            where (cheep.CheepId.ToString() == cheepId)
-            select cheep;
-
-        var result = await query.Distinct().FirstOrDefaultAsync();
-        return result;
-    }
-
     public async Task Like(string cheepId, string userName)
     {
-        var foundCheep = await GetCheep(cheepId);
-        
-        if (foundCheep == null)
-        {
-            throw new ArgumentException("Cheep not found");
-        }
-        
-        if (foundCheep.Likes.Any(l => l.Author == userName))
-        {
-            throw new InvalidOperationException("User has already liked this Cheep");
-        }
-        
-        foundCheep.Likes.Add(new Like
-        {
-            Author = userName,
-            CheepId = cheepId,
-        });
+        var likeExists = await _dbContext.Likes
+            .AnyAsync(l => l.CheepId == cheepId && l.Author == userName);
 
+        if (!likeExists)
+        {
+            var like = new Like
+            {
+                Author = userName,
+                CheepId = cheepId
+            };
+           await  _dbContext.Likes.AddAsync(like);
+        }
         await _dbContext.SaveChangesAsync();
     }
     
     public async Task Unlike(string cheepId, string userName)
     {
-        var foundCheep = await GetCheep(cheepId);
-        
-        if (foundCheep == null)
-        {
-            throw new ArgumentException("Cheep not found");
-        }
-        
-        if (!foundCheep.Likes.Any(l => l.Author == userName))
-        {
-            throw new InvalidOperationException("User has not liked this Cheep");
-        }
-        
-        var like = foundCheep.Likes.FirstOrDefault(l => l.Author == userName);
+        var like = await _dbContext.Likes
+            .FirstOrDefaultAsync(l => l.CheepId == cheepId && l.Author == userName);
+
         if (like == null)
         {
-            throw new InvalidOperationException("Like not found");
+            return;
         }
-        foundCheep.Likes.Remove(like);
+
+        _dbContext.Likes.Remove(like);
 
         await _dbContext.SaveChangesAsync();
     }
 
     public async Task<bool> IsLiked(string cheepId, string userName)
     {
-        var foundCheep = await GetCheep(cheepId);
-        Console.WriteLine(cheepId);
-        
-        return foundCheep != null && foundCheep.Likes.Any(l => l.Author == userName);
+        var like = await _dbContext.Likes.FirstOrDefaultAsync(l => l.CheepId == cheepId && l.Author == userName);
+
+        return like != null;
     }
 
     public async Task<Author> FindAuthorByName(string name)

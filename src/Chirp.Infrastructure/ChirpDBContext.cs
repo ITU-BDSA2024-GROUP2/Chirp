@@ -16,7 +16,7 @@ public class ChirpDBContext : IdentityDbContext<Author>
     {
 
     }
-    
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -26,6 +26,12 @@ public class ChirpDBContext : IdentityDbContext<Author>
             .IsUnique();
         modelBuilder.Entity<Author>()
             .HasIndex(c => c.Email)
+            .IsUnique();
+        modelBuilder.Entity<Cheep>()
+            .HasIndex(c => c.CheepId)
+            .IsUnique();
+        modelBuilder.Entity<Like>()
+            .HasIndex(l => new {l.CheepId, l.Author})
             .IsUnique();
     }
 }

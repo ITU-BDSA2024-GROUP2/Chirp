@@ -123,6 +123,9 @@ namespace Chirp.Infrastructure.Migrations
 
                     b.HasIndex("AuthorId");
 
+                    b.HasIndex("CheepId")
+                        .IsUnique();
+
                     b.ToTable("Cheeps");
                 });
 

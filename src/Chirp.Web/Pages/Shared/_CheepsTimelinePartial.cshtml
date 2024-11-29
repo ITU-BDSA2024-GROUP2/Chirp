@@ -26,11 +26,11 @@
                         {
                             @if (followerMap.ContainsKey(cheep.Author) && followerMap[cheep.Author] == false)
                             {
-                                <form method="post" asp-page-handler="Follow">
-                                    <input type="hidden" name="authorName" value="@cheep.Author"/>
-                                    <input type="hidden" name="page" value="@currentPage"/>
-                                    <button class="followBtn" id="follow" type="submit">Follow</button>
-                                </form>
+                    <form method="post" asp-page-handler="Follow">
+                        <input type="hidden" name="authorName" value="@cheep.Author"/>
+                        <input type="hidden" name="page" value="@currentPage"/>
+                        <button class="followBtn" id="follow" type="submit">Follow</button>
+                    </form>
                             }
                             else
                             {
@@ -40,7 +40,7 @@
                                     <button class="followBtn" id="unfollow" type="submit">Unfollow</button>
                                 </form>
                             }
-                                
+
                             if (likeMap.ContainsKey(cheep.Id) && likeMap[cheep.Id] == false)
                             {
                                 <form method="post" asp-page-handler="Like">
@@ -57,6 +57,8 @@
                                     <button class="unlikeBtn" type="submit">Unlike</button>
                                 </form>
                             }
+
+                            <p>@cheep.LikeCount</p>
                         }
                     }
                 </div>

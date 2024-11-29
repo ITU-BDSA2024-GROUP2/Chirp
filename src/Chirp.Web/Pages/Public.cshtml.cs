@@ -117,7 +117,7 @@ public class PublicModel : PageModel
     
     private async Task FetchCheepAndAuthorData(int page)
     {
-        Cheeps = await _cheepRepository.GetCheeps(page);
+        Cheeps = await _cheepRepository.GetCheepsByNewest(page);
 
         if (User.Identity.IsAuthenticated)
         {

@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Chirp.Infrastructure.Migrations
 {
     [DbContext(typeof(ChirpDBContext))]
-    [Migration("20241128191652_LikeCheeps")]
-    partial class LikeCheeps
+    [Migration("20241129095956_LikeCheep")]
+    partial class LikeCheep
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -125,6 +125,9 @@ namespace Chirp.Infrastructure.Migrations
                     b.HasKey("CheepId");
 
                     b.HasIndex("AuthorId");
+
+                    b.HasIndex("CheepId")
+                        .IsUnique();
 
                     b.ToTable("Cheeps");
                 });
