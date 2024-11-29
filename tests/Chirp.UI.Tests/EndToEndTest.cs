@@ -357,7 +357,7 @@ namespace Chirp.UI.Tests
             
             //Act
             await Page.GetByRole(AriaRole.Link, new() { Name = "public timeline" }).ClickAsync();
-            await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).Locator("#follow").ClickAsync(); //Follow jac.. because she has > 32 cheeps
+            await Page.Locator("li").Filter(new() { HasText = "Starbuck now is what we hear the worst." }).Locator("#follow").ClickAsync(); //Follow jac.. because she has > 32 cheeps
             await Page.GetByRole(AriaRole.Link, new() { Name = "my timeline" }).ClickAsync();
             await Page.GetByRole(AriaRole.Button, new() { Name = "Next Page" }).ClickAsync();
             
