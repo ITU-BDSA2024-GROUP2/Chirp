@@ -61,6 +61,11 @@
                         </form>
                         <p class="heartBtn">@cheep.LikeCount</p>
                     }
+                    else
+                    {
+                        <i class="fa fa-heart-o outlined-heart" aria-hidden="true"></i>
+                        <p>@cheep.LikeCount</p>
+                    }
                     <div class="deleteBox">
                         @if (User.Identity!.IsAuthenticated && User.Identity.Name == cheep.Author)
                         {
