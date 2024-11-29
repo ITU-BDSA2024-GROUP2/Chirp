@@ -401,3 +401,16 @@ button.followBtn {
     background-color: #7c1919;
     color: white;
 }
+
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.paginationButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

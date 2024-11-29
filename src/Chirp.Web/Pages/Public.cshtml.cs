@@ -16,6 +16,7 @@ public class PublicModel : PageModel
     private readonly IAuthorRepository _authorRepository;
     public Dictionary<string, bool> FollowerMap;
     public int _currentPage;
+    public bool _nextPageHasCheeps;
     
     public List<CheepDTO> Cheeps { get; set; }
     
@@ -36,6 +37,8 @@ public class PublicModel : PageModel
         ViewData["CurrentPage"] = _currentPage;
         
         await PopulateCheepsAndFollowers(_currentPage);
+        
+        _nextPageHasCheeps = await NextPageHasCheeps(_currentPage);
         
         return Page();
     }
@@ -109,5 +112,11 @@ public class PublicModel : PageModel
                 }
             }
         }
+    }
+
+    public async Task<bool> NextPageHasCheeps(int page)
+    {
+        var list = await _cheepRepository.GetCheeps(page + 1);
+        return list.Any();
     }
 }
