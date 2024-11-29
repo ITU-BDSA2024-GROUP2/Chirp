@@ -35,7 +35,7 @@ public class CheepRepository : ICheepRepository
         return result;
     }
     
-    public async Task<List<CheepDTO>> GetCheepsByLikes(int currentPage)
+    public async Task<List<CheepDTO>> GetCheeps(int currentPage)
     {
         int offset = (currentPage - 1) * pageSize;
 

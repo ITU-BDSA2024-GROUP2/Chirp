@@ -268,19 +268,16 @@ public class CheepRepositoryTests
         var author2 = await authorRepository.CreateAuthor(authorDTO2);
 
         var cheep1 = new Cheep { 
-            CheepId = new Guid().ToString(), 
             Text = "I am alive", 
             TimeStamp = specificDate1, 
             Author = author1
         };
         var cheep2 = new Cheep { 
-            CheepId = new Guid().ToString(), 
             Text = "I am also here", 
             TimeStamp = specificDate2, 
             Author = author2
         };
         var cheep3 = new Cheep { 
-            CheepId = new Guid().ToString(), 
             Text = "I am alive too", 
             TimeStamp = specificDate3, 
             Author = author1
