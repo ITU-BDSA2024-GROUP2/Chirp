@@ -404,7 +404,6 @@ namespace Chirp.UI.Tests
             await Page.GetByRole(AriaRole.Button, new() { Name = "Next Page" }).ClickAsync();
 
             Assert.AreEqual("https://localhost:5273/?page=2",Page.Url);
-            
         }
         
         [Test]
@@ -412,7 +411,7 @@ namespace Chirp.UI.Tests
         {
             await Page.GotoAsync("https://localhost:5273/?page=2");
             
-            await Expect(Page.GetByRole(AriaRole.Button, new() { Name = "Next Page" })).ToBeVisibleAsync();
+            await Expect(Page.GetByRole(AriaRole.Button, new() { Name = "Previous Page" })).ToBeVisibleAsync();
             
             await Page.GetByRole(AriaRole.Button, new() { Name = "Previous Page" }).ClickAsync();
 
