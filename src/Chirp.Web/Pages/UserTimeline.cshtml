@@ -10,7 +10,11 @@
 
 <div>
     <h2> @routeName's Timeline </h2>
-    <h2>Followers (@followerCount)</h2>
+
+    <div class="follower-count">
+        @followerCount Followers
+    </div>
+
     <partial name="Shared/_CheepBoxPartial" model="Model.CheepInput" />
 
     @if (Model.Cheeps.Any())
