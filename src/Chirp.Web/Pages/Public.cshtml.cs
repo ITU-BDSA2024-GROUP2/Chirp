@@ -110,4 +110,10 @@ public class PublicModel : PageModel
             }
         }
     }
+
+    public async Task<bool> NextPageHasCheeps(int page)
+    {
+        var list = await _cheepRepository.GetCheeps(page + 1);
+        return list.Count > 0;
+    }
 }
