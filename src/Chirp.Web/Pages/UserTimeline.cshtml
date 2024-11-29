@@ -5,10 +5,12 @@
     ViewData["FollowerMap"] = Model.FollowerMap;
     Layout = "Shared/_Layout";
     var routeName = HttpContext.GetRouteValue("author");
+    var followerCount = @Model.UserInfo["followerCount"];
 }
 
 <div>
     <h2> @routeName's Timeline </h2>
+    <h2>Followers (@followerCount)</h2>
     <partial name="Shared/_CheepBoxPartial" model="Model.CheepInput" />
 
     @if (Model.Cheeps.Any())

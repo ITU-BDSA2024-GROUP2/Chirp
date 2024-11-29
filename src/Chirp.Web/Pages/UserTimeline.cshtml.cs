@@ -14,6 +14,8 @@ public class UserTimelineModel : PageModel
 
     public Dictionary<string, bool> FollowerMap;
     private int _currentPage;
+    public ICollection<string> Followers { get; set; }
+    public Dictionary<string, string> UserInfo { get; set; }
     public List<CheepDTO> Cheeps { get; set; }
 
     [BindProperty]
@@ -33,6 +35,9 @@ public class UserTimelineModel : PageModel
         ViewData["CurrentPage"] = _currentPage;
         
         await PopulateCheepsAndFollowers(author, _currentPage);
+
+        UserInfo = new Dictionary<string, string>();
+        await LoadUserInfo();
         
         return Page();
         
@@ -112,5 +117,17 @@ public class UserTimelineModel : PageModel
                 }
             }
         }
+    }
+    private async Task LoadUserInfo()
+    {
+        var username = User.Identity?.Name;
+        
+        // Followers
+        Followers = await _authorRepository.GetFollowers(username);
+        foreach (var follower in Followers)
+        {
+            Console.WriteLine(username + " follows " + follower);
+        }
+        UserInfo.Add("followerCount", Followers.Count.ToString());
     }
 }
