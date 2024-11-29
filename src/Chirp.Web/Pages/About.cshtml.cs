@@ -94,12 +94,16 @@ namespace Chirp.Web.Pages
             Following = await _authorRepository.GetFollowing(username);
             UserInfo.Add("followingCount", Following.Count.ToString());
             
-            ID = User.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value;
+            foreach (var claim in User.Claims)
+            {
+                Console.WriteLine($"Claim Type: {claim.Type}, Claim Value: {claim.Value}");
+            }
+            
             Username = User.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name")?.Value;
             Email = User.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress")?.Value;
             Name = User.FindFirst("urn:github:name")?.Value;
             GithubURL = User.FindFirst("urn:github:url")?.Value;
-            Avatar = $"https://avatars.githubusercontent.com/%7BUsername%7D";
+            Avatar = $"https://avatars.githubusercontent.com/{Username}";
         }
     }
 }
