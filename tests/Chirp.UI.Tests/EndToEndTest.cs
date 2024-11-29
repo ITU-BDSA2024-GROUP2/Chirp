@@ -342,7 +342,7 @@ namespace Chirp.UI.Tests
             await Page.GetByRole(AriaRole.Button, new() { Name = "Next Page" }).ClickAsync();
             
             //Assert
-            Assert.AreEqual("https://localhost:5273/?page=2",Page.Url);
+            Assert.That(Page.Url, Is.EqualTo("https://localhost:5273/?page=2"));
             
             //Act
             await Page.GetByRole(AriaRole.Link, new() { Name = "my timeline" }).ClickAsync();
