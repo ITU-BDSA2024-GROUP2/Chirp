@@ -3,6 +3,7 @@ namespace Chirp.Core;
 public interface ICheepRepository
 {
     public Task<List<CheepDTO>> GetCheepsByNewest(int currentPage);
+    public Task<List<CheepDTO>> GetCheepsByLikes(int currentPage);
     public Task<List<CheepDTO>> GetCheepsFromAuthor(string authorName, int currentPage);
     public Task<List<CheepDTO>> GetCheepsFromFollowersAndOwnCheeps(string userName, int currentPage);
     public Task<Cheep> CreateCheep(string authorName, string message);

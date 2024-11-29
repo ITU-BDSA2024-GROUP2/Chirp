@@ -99,19 +99,20 @@ public class PublicModel : PageModel
         return RedirectToPage("Public");
     }
     
-    public async Task<IActionResult> OnPostLike(string cheepId, int? page)
+    public async Task<IActionResult> OnPostToggleLike(string cheepId, int? page)
     {
-        await _cheepRepository.Like(cheepId, User.Identity.Name);
-        LikeMap[cheepId] = true;
-        
-        return Redirect($"/?page={page}");
-    }
-    
-    public async Task<IActionResult> OnPostUnlike(string cheepId, int? page)
-    {
-        await _cheepRepository.Unlike(cheepId, User.Identity.Name);
-        LikeMap[cheepId] = false;
-        
+        var isLiked = await _cheepRepository.IsLiked(cheepId, User.Identity.Name);
+        if (isLiked)
+        {
+            await _cheepRepository.Unlike(cheepId, User.Identity.Name);
+            LikeMap[cheepId] = false;
+        }
+        else
+        {
+            await _cheepRepository.Like(cheepId, User.Identity.Name);
+            LikeMap[cheepId] = true;
+        }
+
         return Redirect($"/?page={page}");
     }
     

@@ -32,7 +32,7 @@ public class CheepRepositoryTests
          ICheepRepository repository = new Infrastructure.CheepRepository(_dbContext);
 
         // Act
-        var cheeps = await repository.GetCheeps(1);
+        var cheeps = await repository.GetCheepsByNewest(1);
         
         // Assert
         Assert.Empty(cheeps);
@@ -47,7 +47,7 @@ public class CheepRepositoryTests
         ICheepRepository repository = new Infrastructure.CheepRepository(_dbContext);
         
         // Act
-        var cheeps = await repository.GetCheeps(1);
+        var cheeps = await repository.GetCheepsByNewest(1);
         
         // Assert
         Assert.NotEmpty(cheeps);
@@ -153,7 +153,7 @@ public class CheepRepositoryTests
         });
         
         var createdCheep = await cheepRepository.CreateCheep(authorName, message);
-        var cheeps = await cheepRepository.GetCheeps(1);
+        var cheeps = await cheepRepository.GetCheepsByNewest(1);
         
         // Assert
         Assert.NotNull(createdCheep);
@@ -185,7 +185,7 @@ public class CheepRepositoryTests
         var createdCheep = await cheepRepository.CreateCheep(authorName, "This cheep is to be deleted");
         
         // Act
-        await cheepRepository.DeleteCheep(createdCheep.CheepId.ToString());
+        await cheepRepository.DeleteCheep(createdCheep.CheepId, authorName);
         
         // Assert
         var cheeps = await cheepRepository.GetCheepsFromAuthor(authorName, 1);

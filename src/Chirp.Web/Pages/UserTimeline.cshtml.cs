@@ -13,6 +13,7 @@ public class UserTimelineModel : PageModel
     private readonly IAuthorRepository _authorRepository;
 
     public Dictionary<string, bool> FollowerMap;
+    public Dictionary<string, bool> LikeMap;
     private int _currentPage;
     public List<CheepDTO> Cheeps { get; set; }
 
@@ -25,6 +26,7 @@ public class UserTimelineModel : PageModel
         _cheepRepository = cheepRepository;
         _authorRepository = authorRepository;
         FollowerMap = new Dictionary<string, bool>();
+        LikeMap = new Dictionary<string, bool>();
     }
 
     public async Task<ActionResult> OnGet(string author, [FromQuery] int? page)
@@ -32,7 +34,7 @@ public class UserTimelineModel : PageModel
         _currentPage = page ?? 1;
         ViewData["CurrentPage"] = _currentPage;
         
-        await PopulateCheepsAndFollowers(author, _currentPage);
+        await FetchCheepAndAuthorData(author, _currentPage);
         
         return Page();
         
@@ -50,7 +52,7 @@ public class UserTimelineModel : PageModel
         }
         if (!ModelState.IsValid)
         {
-            await PopulateCheepsAndFollowers(author, _currentPage);
+            await FetchCheepAndAuthorData(author, _currentPage);
             return Page();
         }
 
@@ -98,7 +100,24 @@ public class UserTimelineModel : PageModel
         return await _authorRepository.IsFollowing(userName, authorName);
     }
     
-    private async Task PopulateCheepsAndFollowers(string author, int page)
+    public async Task<IActionResult> OnPostToggleLike(string author, string cheepId, int? page)
+    {
+        var isLiked = await _cheepRepository.IsLiked(cheepId, User.Identity.Name);
+        if (isLiked)
+        {
+            await _cheepRepository.Unlike(cheepId, User.Identity.Name);
+            LikeMap[cheepId] = false;
+        }
+        else
+        {
+            await _cheepRepository.Like(cheepId, User.Identity.Name);
+            LikeMap[cheepId] = true;
+        }
+
+        return Redirect($"/{author}?page={page}");
+    }
+    
+    private async Task FetchCheepAndAuthorData(string author, int page)
     {
         if (author == User.Identity.Name)
         {
@@ -115,7 +134,8 @@ public class UserTimelineModel : PageModel
             {
                 if (cheep.Author != User.Identity.Name)
                 {
-                    FollowerMap[cheep.Author] = await IsFollowing(User.Identity.Name, cheep.Author);
+                    FollowerMap[cheep.Author] = await _authorRepository.IsFollowing(User.Identity.Name, cheep.Author);
+                    LikeMap[cheep.Id] = await _cheepRepository.IsLiked(cheep.Id, User.Identity.Name);
                 }
             }
         }

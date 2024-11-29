@@ -10,27 +10,24 @@
 <ul id="messagelist" class="cheeps">
     @foreach (var cheep in Model)
     {
-        <li>
-            <p>
-                <strong>
-                    <a href="/@cheep.Author">@cheep.Author</a>
-                </strong>
-                @cheep.Text
-                <small>&mdash; @cheep.TimeStamp</small>
-            </p>
-            <div class="cheepOptionsContainer">
-                <div class="followBox">
+        <div class="cheep">
+            <li>
+                <div class="authorContainer">
+                    <strong>
+                        <a href="/@cheep.Author">@cheep.Author</a>
+                    </strong>
+                    <small>&mdash; @cheep.TimeStamp</small>
                     @if (User.Identity!.IsAuthenticated)
                     {
                         @if (User.Identity?.Name != cheep.Author)
                         {
                             @if (followerMap.ContainsKey(cheep.Author) && followerMap[cheep.Author] == false)
                             {
-                    <form method="post" asp-page-handler="Follow">
-                        <input type="hidden" name="authorName" value="@cheep.Author"/>
-                        <input type="hidden" name="page" value="@currentPage"/>
-                        <button class="followBtn" id="follow" type="submit">Follow</button>
-                    </form>
+                                <form method="post" asp-page-handler="Follow">
+                                    <input type="hidden" name="authorName" value="@cheep.Author"/>
+                                    <input type="hidden" name="page" value="@currentPage"/>
+                                    <button class="followBtn" id="follow" type="submit">Follow</button>
+                                </form>
                             }
                             else
                             {
@@ -40,39 +37,42 @@
                                     <button class="followBtn" id="unfollow" type="submit">Unfollow</button>
                                 </form>
                             }
-
-                            if (likeMap.ContainsKey(cheep.Id) && likeMap[cheep.Id] == false)
-                            {
-                                <form method="post" asp-page-handler="Like">
-                                    <input type="hidden" name="cheepId" value="@cheep.Id"/>
-                                    <input type="hidden" name="page" value="@currentPage"/>
-                                    <button class="likeBtn" type="submit">Like</button>
-                                </form>
-                            }
-                            else
-                            {
-                                <form method="post" asp-page-handler="Unlike">
-                                    <input type="hidden" name="cheepId" value="@cheep.Id"/>
-                                    <input type="hidden" name="page" value="@currentPage"/>
-                                    <button class="unlikeBtn" type="submit">Unlike</button>
-                                </form>
-                            }
-
-                            <p>@cheep.LikeCount</p>
                         }
                     }
                 </div>
-                <div class="deleteBox">
-                    @if (User.Identity!.IsAuthenticated && User.Identity.Name == cheep.Author)
+                @cheep.Text
+
+                <div class="cheepOptionsContainer">
+                    @if (User.Identity!.IsAuthenticated && cheep.Author != User.Identity.Name)
                     {
+                        <form method="post" asp-page-handler="ToggleLike">
+                            <input type="hidden" name="cheepId" value="@cheep.Id"/>
+                            <input type="hidden" name="page" value="@currentPage"/>
+                            <button class="heartBtn" type="submit">
+                                @if (likeMap.ContainsKey(cheep.Id) && likeMap[cheep.Id])
+                                {
+                                    <i class="fa fa-heart filled-heart" aria-hidden="true"></i>
+                                }
+                                else
+                                {
+                                    <i class="fa fa-heart-o outlined-heart" aria-hidden="true"></i>
+                                }
+                            </button>
+                        </form>
+                        <p class="heartBtn">@cheep.LikeCount</p>
+                    }
+                    <div class="deleteBox">
+                        @if (User.Identity!.IsAuthenticated && User.Identity.Name == cheep.Author)
+                        {
                         <form method="post" asp-page-handler="Delete">
                             <input type="hidden" name="cheepId" value="@cheep.Id"/>
                             <button class="deleteBtn" type="submit">DELETE</button>
                         </form>
-                    }
+                        }
+                    </div>
                 </div>
-            </div>
-        </li>
+            </li>
+        </div>
     }
 </ul>
 
