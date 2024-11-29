@@ -402,6 +402,18 @@ button.followBtn {
     color: white;
 }
 
+.follower-count {
+    display: inline-block;
+    background-color: #f8f9fa;
+    color: #975252;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 7px 12px;
+    border: 2px solid #eccaca;
+    border-radius: 10px;
+    text-align: center;
+}
+
 .pagination {
     display: flex;
     align-items: center;
