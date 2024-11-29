@@ -19,21 +19,25 @@
     {
         <em>There are no cheeps so far.</em>
     }
+    
+</div>
 
-    @if (Model._nextPageHasCheeps)
-    {
-    <form method="get">
-        <input type="hidden" name="page" value="@(Model._currentPage+1)" />
-        <button type="submit">Next Page</button>
-    </form>
-    }
-    <input type="hidden" name="page" value="@(Model._currentPage+1)" />
-    <button type="submit">Page @Model._currentPage</button>
+<div class="pagination">
     @if (Model._currentPage > 1)
     {
-    <form method="get">
-        <input type="hidden" name="page" value="@(Model._currentPage-1)" />
-        <button type="submit">Previous page</button>
-    </form>
+        <form method="get" class="paginationButton">
+            <input type="hidden" name="page" value="@(Model._currentPage - 1)"/>
+            <button type="submit">Previous Page</button>
+        </form>
+    }
+    <div class="paginationButton">
+        <button type="submit">Current page @Model._currentPage</button>
+    </div>
+    @if (Model._nextPageHasCheeps)
+    {
+        <form method="get" class="paginationButton">
+            <input type="hidden" name="page" value="@(Model._currentPage + 1)"/>
+            <button type="submit">Next Page</button>
+        </form>
     }
 </div>
