@@ -29,12 +29,12 @@ builder.Services.AddDefaultIdentity<Author>(options =>
     .AddEntityFrameworkStores<ChirpDBContext>();
 
 builder.Services.AddAuthentication()
-    .AddCookie()
+.AddCookie()
     .AddGitHub(o =>
     {
         o.ClientId = builder.Configuration["authentication_github_clientId"] ?? string.Empty;
         o.ClientSecret = builder.Configuration["authentication_github_clientSecret"] ?? string.Empty;
-        o.ClaimActions.MapJsonKey(ClaimTypes.Name, "name");
+        o.CallbackPath ="/signin-github";
     }); 
 
 var app = builder.Build();
