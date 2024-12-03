@@ -194,6 +194,36 @@ public class CheepRepositoryTests
         var deletedCheep = await _dbContext.Cheeps.FindAsync(createdCheep.CheepId);
         Assert.Null(deletedCheep);
     }
+
+    [Fact]
+    public async Task Cannot_Delete_Cheep_Made_By_Another_User()
+    {
+        // Arrange
+        ICheepRepository cheepRepository = new Infrastructure.CheepRepository(_dbContext);
+        IAuthorRepository authorRepository = new Infrastructure.AuthorRepository(_dbContext);
+
+        var authorName = "John Smith";
+        
+        await authorRepository.CreateAuthor(new AuthorDTO()
+        {
+            Name = authorName,
+            Email = "John@smith.com",
+        });
+        
+        var createdCheep = await cheepRepository.CreateCheep(authorName, "This cheep should not be deleted");
+        
+        // Act
+        await cheepRepository.DeleteCheep(createdCheep.CheepId, "Not John Smith");
+        
+        // Assert
+        var cheeps = await cheepRepository.GetCheepsFromAuthor(authorName, 1);
+        Assert.NotEmpty(cheeps);
+
+        Assert.Contains(cheeps.FirstOrDefault().Text, "This cheep should not be deleted");
+        
+        var deletedCheep = await _dbContext.Cheeps.FindAsync(createdCheep.CheepId);
+        Assert.NotNull(deletedCheep);
+    }
     
     [Fact]
     public async Task CreateCheep_ShouldThrowException_WhenMessageIsEmpty()
