@@ -147,9 +147,11 @@ public class CheepRepository : ICheepRepository
     
     public async Task DeleteCheep(string cheepId, string userName)
     {
-        var cheep = await _dbContext.Cheeps.FindAsync(cheepId);
+        var cheep = await _dbContext.Cheeps
+            .Include(c => c.Author)
+            .FirstOrDefaultAsync(c => c.CheepId == cheepId);
         
-        if (cheep != null)
+        if (cheep != null && cheep.Author.UserName == userName)
         { 
             _dbContext.Cheeps.Remove(cheep);
         }
