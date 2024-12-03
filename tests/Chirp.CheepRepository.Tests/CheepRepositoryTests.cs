@@ -274,6 +274,144 @@ public class CheepRepositoryTests
         Assert.Equal("Cheep text cannot exceed 160 characters.", exception.Message);
     }
 
+    [Fact]
+    public async Task Can_Like_Cheep()
+    {
+        // Arrange
+        ICheepRepository cheepRepository = new Infrastructure.CheepRepository(_dbContext);
+        IAuthorRepository authorRepository = new Infrastructure.AuthorRepository(_dbContext);
+
+        var authorName = "John Doe";
+        await authorRepository.CreateAuthor(new AuthorDTO()
+        {
+            Name = authorName,
+            Email = "John@doe.com",
+        });
+
+        await cheepRepository.CreateCheep(authorName, "Like for like");
+        var cheeps = await cheepRepository.GetCheepsFromAuthor(authorName, 1);
+        var createdCheep = cheeps.FirstOrDefault();
+        
+        var userName = "John Smith";
+        await authorRepository.CreateAuthor(new AuthorDTO()
+        {
+            Name = userName,
+            Email = "John@smith.com",
+        });
+        
+        // Act
+        cheepRepository.Like(createdCheep.Id, userName);
+        
+        // Assert
+        var isLiked = await cheepRepository.IsLiked(createdCheep.Id, userName);
+        Assert.True(isLiked);
+    }
+    
+    [Fact]
+    public async Task Can_Unlike_Liked_Cheep()
+    {
+        // Arrange
+        ICheepRepository cheepRepository = new Infrastructure.CheepRepository(_dbContext);
+        IAuthorRepository authorRepository = new Infrastructure.AuthorRepository(_dbContext);
+
+        var authorName = "John Doe";
+        await authorRepository.CreateAuthor(new AuthorDTO()
+        {
+            Name = authorName,
+            Email = "John@doe.com",
+        });
+
+        await cheepRepository.CreateCheep(authorName, "Like for like");
+        var cheeps = await cheepRepository.GetCheepsFromAuthor(authorName, 1);
+        var createdCheep = cheeps.FirstOrDefault();
+        
+        var userName = "John Smith";
+        await authorRepository.CreateAuthor(new AuthorDTO()
+        {
+            Name = userName,
+            Email = "John@smith.com",
+        });
+        
+        // Act
+        cheepRepository.Like(createdCheep.Id, userName);
+        
+        // Assert
+        var isLikedBefore = await cheepRepository.IsLiked(createdCheep.Id, userName);
+        Assert.True(isLikedBefore);
+        
+        // Act
+        cheepRepository.Unlike(createdCheep.Id, userName);
+        
+        // Assert
+        var isLikedAfter = await cheepRepository.IsLiked(createdCheep.Id, userName);
+        Assert.False(isLikedAfter);
+    }
+
+    [Fact]
+    public async Task IsLiked_ReturnsTrue_WhenCheepIsLiked()
+    {
+        // Arrange
+        ICheepRepository cheepRepository = new Infrastructure.CheepRepository(_dbContext);
+        IAuthorRepository authorRepository = new Infrastructure.AuthorRepository(_dbContext);
+
+        var authorName = "John Doe";
+        await authorRepository.CreateAuthor(new AuthorDTO()
+        {
+            Name = authorName,
+            Email = "John@doe.com",
+        });
+
+        await cheepRepository.CreateCheep(authorName, "Like for like");
+        var cheeps = await cheepRepository.GetCheepsFromAuthor(authorName, 1);
+        var createdCheep = cheeps.FirstOrDefault();
+        
+        var userName = "John Smith";
+        await authorRepository.CreateAuthor(new AuthorDTO()
+        {
+            Name = userName,
+            Email = "John@smith.com",
+        });
+        
+        // Assert
+        var isLikedBefore = await cheepRepository.IsLiked(createdCheep.Id, userName);
+        Assert.False(isLikedBefore);
+        
+        // Act
+        cheepRepository.Like(createdCheep.Id, userName);
+        
+        // Assert
+        var isLikedAfter = await cheepRepository.IsLiked(createdCheep.Id, userName);
+        Assert.True(isLikedAfter);
+    }
+    
+    [Fact]
+    public async Task Cannot_Like_Cheep_Made_By_Self()
+    {
+        // Arrange
+        ICheepRepository cheepRepository = new Infrastructure.CheepRepository(_dbContext);
+        IAuthorRepository authorRepository = new Infrastructure.AuthorRepository(_dbContext);
+
+        var authorName = "John Doe";
+        await authorRepository.CreateAuthor(new AuthorDTO()
+        {
+            Name = authorName,
+            Email = "John@doe.com",
+        });
+
+        await cheepRepository.CreateCheep(authorName, "Like for like");
+        var cheeps = await cheepRepository.GetCheepsFromAuthor(authorName, 1);
+        var createdCheep = cheeps.FirstOrDefault();
+        
+        // Act
+        cheepRepository.Like(createdCheep.Id, createdCheep.Author);
+        
+        // Assert
+        var isLiked = await cheepRepository.IsLiked(createdCheep.Id, createdCheep.Author);
+        Assert.False(isLiked);
+    }
+    
+    
+
     private async Task PopulateDatabase(ChirpDBContext context)
     {
         var specificDate1 = new DateTime(2024, 1, 2, 3, 4, 5);
