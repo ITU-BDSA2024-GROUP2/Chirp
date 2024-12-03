@@ -15,6 +15,13 @@ namespace Chirp.Web.Pages
         public ICollection<string> Following { get; set; }
         public ICollection<string> Followers { get; set; }
         public Dictionary<string, string> UserInfo { get; set; }
+        
+        public string? ID { get; set; }
+        public string? Username { get; set; }
+        public string? Name { get; set; }
+        public string? Email { get; set; }
+        public string? GithubURL { get; set; }
+        public string? Avatar { get; set; }
 
         private readonly UserManager<Author> _userManager;
         
@@ -93,6 +100,17 @@ namespace Chirp.Web.Pages
             // Following
             Following = await _authorRepository.GetFollowing(username);
             UserInfo.Add("followingCount", Following.Count.ToString());
+            
+            foreach (var claim in User.Claims)
+            {
+                Console.WriteLine($"Claim Type: {claim.Type}, Claim Value: {claim.Value}");
+            }
+            
+            Username = User.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name")?.Value;
+            Email = User.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress")?.Value;
+            Name = User.FindFirst("urn:github:name")?.Value;
+            GithubURL = User.FindFirst("urn:github:url")?.Value;
+            Avatar = $"https://avatars.githubusercontent.com/{Username}";
         }
     }
 }
