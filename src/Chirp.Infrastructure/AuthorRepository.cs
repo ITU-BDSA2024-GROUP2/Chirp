@@ -143,7 +143,7 @@ public class AuthorRepository : IAuthorRepository
         if (author == null) return;
         
         author.ProfilePicture = profilePictureLink;
-        Console.WriteLine($"Changed profile picture to {profilePictureLink}");
+        
         await _dbContext.SaveChangesAsync();
     }
     
@@ -153,11 +153,12 @@ public class AuthorRepository : IAuthorRepository
         {
             return null;
         }
+        
         var query = from author in _dbContext.Authors
             where author.UserName == authorName
             select author.ProfilePicture;
-        
         var result = await query.Distinct().FirstOrDefaultAsync();
+        
         return result;
     }
 }

@@ -25,8 +25,11 @@ public class PublicModel : PageModel
     [BindProperty]
     public CheepInputModel CheepInput { get; set; }
     
-    public PublicModel(ICheepRepository cheepRepository, IAuthorRepository authorRepository)
+    private readonly UserManager<Author> _userManager;
+    
+    public PublicModel(UserManager<Author> userManager, ICheepRepository cheepRepository, IAuthorRepository authorRepository)
     {
+        _userManager = userManager;
         _cheepRepository = cheepRepository;
         _authorRepository = authorRepository;
         FollowerMap = new Dictionary<string, bool>();
@@ -157,9 +160,17 @@ public class PublicModel : PageModel
             var username = User.Identity?.Name;
             var storedProfilePicture = await _authorRepository.GetProfilePicture(username);
             if (storedProfilePicture == null)
-            {
-                var standartProfilePicture = $"https://avatars.githubusercontent.com/{username}" ;
-                await _authorRepository.ChangeProfilePicture(username!, standartProfilePicture);
+            { 
+                var user = await _userManager.FindByNameAsync(username);
+                var logins = await  _userManager.GetLoginsAsync(user);
+                var standardProfilePicture = "https://cdn.pixabay.com/photo/2024/01/29/09/06/ai-generated-8539307_1280.png";
+                
+                if (logins.Any())
+                {
+                    standardProfilePicture = $"https://avatars.githubusercontent.com/{username}";
+                }
+                
+                await _authorRepository.ChangeProfilePicture(username!, standardProfilePicture);
             }
         }
         
