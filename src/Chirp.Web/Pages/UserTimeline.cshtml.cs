@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using Azure;
 using Chirp.Core;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -18,17 +19,21 @@ public class UserTimelineModel : PageModel
     public bool _nextPageHasCheeps;
     public int followerCount { get; set; }
     public List<CheepDTO> Cheeps { get; set; }
+    private readonly UserManager<Author> _userManager;
 
     [BindProperty]
     public CheepInputModel CheepInput { get; set; } 
+    public CheepTimelineModel CheepTimelineModel { get; set; }
 
 
-    public UserTimelineModel(ICheepRepository cheepRepository, IAuthorRepository authorRepository)
+    public UserTimelineModel(UserManager<Author> userManager, ICheepRepository cheepRepository, IAuthorRepository authorRepository)
     {
         _cheepRepository = cheepRepository;
         _authorRepository = authorRepository;
         FollowerMap = new Dictionary<string, bool>();
         LikeMap = new Dictionary<string, bool>();
+        
+        CheepTimelineModel = new CheepTimelineModel(userManager, cheepRepository, authorRepository);
     }
 
     public async Task<ActionResult> OnGet(string author, [FromQuery] int? page)
@@ -36,6 +41,7 @@ public class UserTimelineModel : PageModel
         _currentPage = page ?? 1;
         ViewData["CurrentPage"] = _currentPage;
         
+        await CheepTimelineModel.OnGet(page);
         await FetchCheepAndAuthorData(author, _currentPage);
         followerCount = await _authorRepository.GetFollowerCount(author);
         _nextPageHasCheeps = await NextPageHasCheeps(author, _currentPage);

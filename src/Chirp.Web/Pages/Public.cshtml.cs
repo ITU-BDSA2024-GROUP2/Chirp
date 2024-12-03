@@ -24,6 +24,7 @@ public class PublicModel : PageModel
     
     [BindProperty]
     public CheepInputModel CheepInput { get; set; }
+    public CheepTimelineModel CheepTimelineModel { get; set; }
     
     private readonly UserManager<Author> _userManager;
     
@@ -34,7 +35,8 @@ public class PublicModel : PageModel
         _authorRepository = authorRepository;
         FollowerMap = new Dictionary<string, bool>();
         LikeMap = new Dictionary<string, bool>();
-
+        
+        CheepTimelineModel = new CheepTimelineModel(userManager, cheepRepository, authorRepository);
     }
 
     public async Task<ActionResult> OnGet([FromQuery] int? page)
@@ -42,6 +44,7 @@ public class PublicModel : PageModel
         _currentPage = page ?? 1;
         ViewData["CurrentPage"] = _currentPage;
         
+        await CheepTimelineModel.OnGet(page);
         await FetchCheepAndAuthorData(_currentPage);
         await UpdateProfilePicture();
         

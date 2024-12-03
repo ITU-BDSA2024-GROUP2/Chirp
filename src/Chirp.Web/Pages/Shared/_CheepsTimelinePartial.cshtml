@@ -1,7 +1,7 @@
 @using Chirp.Core
 @using Chirp.Infrastructure
 @using Microsoft.AspNetCore.Mvc.TagHelpers
-@model IEnumerable<Chirp.Core.CheepDTO>
+@model Chirp.Web.Pages.CheepTimelineModel
 
 @{
     var followerMap = ViewData["FollowerMap"] as Dictionary<string, bool> ?? new Dictionary<string, bool>();
@@ -9,14 +9,24 @@
     var currentPage = ViewData["CurrentPage"] as int? ?? 1;
 }
 
+<style>
+    .claim-img {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+</style>
+
 <ul id="messagelist" class="cheeps">
-    @foreach (var cheep in Model)
+    @foreach (var cheep in Model.Cheeps)
     {
         <div class="cheep">
             <li>
                 <div class="authorContainer">
                     <strong>
                         <a href="/@cheep.Author">@cheep.Author</a>
+                        <img src=@Model.AuthorAvatars[cheep.Author] class="claim-img" alt="1">
                     </strong>
                     <small>&mdash; @cheep.TimeStamp</small>
                     @if (User.Identity!.IsAuthenticated)
