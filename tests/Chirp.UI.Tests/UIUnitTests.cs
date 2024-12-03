@@ -86,11 +86,12 @@ namespace Chirp.UI.Tests
             await Page.GotoAsync("https://localhost:5273");
             
             //Act
-            var author = await Page.Locator("p a").First.InnerTextAsync();
-            var locator = Page.Locator("p a").First;
+            var locator = Page.Locator("li").Filter(new()
+                    { HasText = "Jacqualine Gilcoine — 08/01/23 13:17:39 Starbuck now is what we hear the worst." })
+                .GetByRole(AriaRole.Link);
             
             //Assert
-            await Expect(locator).ToHaveAttributeAsync("href", $"/{author}");
+            await Expect(locator).ToHaveAttributeAsync("href", "/Jacqualine Gilcoine");
             
         }
         
@@ -396,26 +397,34 @@ namespace Chirp.UI.Tests
         
         [Test]
         public async Task NextPageExistsAndWorks()
-        {
+        {   
+            //Arrange
             await Page.GotoAsync("https://localhost:5273/?page=1");
             
+            //Assert
             await Expect(Page.GetByRole(AriaRole.Button, new() { Name = "Next Page" })).ToBeVisibleAsync();
             
+            //Act
             await Page.GetByRole(AriaRole.Button, new() { Name = "Next Page" }).ClickAsync();
-
-            Assert.AreEqual("https://localhost:5273/?page=2",Page.Url);
+            
+            //Assert
+            Assert.That(Page.Url, Is.EqualTo("https://localhost:5273/?page=2"));
         }
         
         [Test]
         public async Task PreviousPageExistsAndWorks()
-        {
+        {   
+            //Arrange
             await Page.GotoAsync("https://localhost:5273/?page=2");
             
+            //Assert
             await Expect(Page.GetByRole(AriaRole.Button, new() { Name = "Previous Page" })).ToBeVisibleAsync();
             
+            //Act
             await Page.GetByRole(AriaRole.Button, new() { Name = "Previous Page" }).ClickAsync();
-
-            Assert.AreEqual("https://localhost:5273/?page=1",Page.Url);
+            
+            //Assert
+            Assert.That(Page.Url, Is.EqualTo("https://localhost:5273/?page=1"));
             
         }
         

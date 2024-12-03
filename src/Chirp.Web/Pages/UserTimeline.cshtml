@@ -3,12 +3,18 @@
 @{
     ViewData["Title"] = "Chirp!";
     ViewData["FollowerMap"] = Model.FollowerMap;
+    ViewData["LikeMap"] = Model.LikeMap;
     Layout = "Shared/_Layout";
     var routeName = HttpContext.GetRouteValue("author");
 }
 
 <div>
     <h2> @routeName's Timeline </h2>
+
+    <div class="follower-count">
+        @Model.followerCount Followers
+    </div>
+
     <partial name="Shared/_CheepBoxPartial" model="Model.CheepInput" />
 
     @if (Model.Cheeps.Any())

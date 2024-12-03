@@ -48,7 +48,14 @@ namespace Chirp.Web.Pages
         
         public async Task<IActionResult> OnPostDelete(string cheepId)
         {
-            await _cheepRepository.DeleteCheep(cheepId);
+            try
+            {
+                await _cheepRepository.DeleteCheep(cheepId, User.Identity.Name);
+            }
+            catch (ArgumentException e)
+            {
+                Console.WriteLine("Unable to delete cheep. Error: " + e.Message);
+            }
             return RedirectToPage("About");
         }
 

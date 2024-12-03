@@ -11,5 +11,6 @@ public interface IAuthorRepository
     public Task<Boolean> IsFollowing(string userName, string authorName);
     public Task<List<string>> GetFollowing(string userName);
     public Task<List<string>> GetFollowers(string userName);
+    public Task<int> GetFollowerCount(string userName);
 
 }

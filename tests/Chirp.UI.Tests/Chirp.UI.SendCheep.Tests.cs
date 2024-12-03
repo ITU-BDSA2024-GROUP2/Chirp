@@ -92,7 +92,7 @@ namespace Chirp.UI.Tests
             await Page.Locator("#Message").FillAsync("Cheeping cheeps on Chirp!" + randCheepId);
             await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
             
-            var newCheep = Page.Locator("li").Filter(new() { HasText = "username Cheeping cheeps on Chirp!" + randCheepId }).First;
+            var newCheep = Page.Locator("li").Filter(new() { HasText = "Cheeping cheeps on Chirp!" + randCheepId }).First;
             
             // Assert
             await Expect(newCheep).ToBeVisibleAsync();
@@ -153,7 +153,7 @@ namespace Chirp.UI.Tests
             await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
             
             await Page.GetByRole(AriaRole.Link, new() { Name = "my timeline" }).ClickAsync();
-            var newCheep = Page.Locator("li").Filter(new() { HasText = "username Cheeping cheeps on Chirp!" + randCheepId }).First;
+            var newCheep = Page.Locator("li").Filter(new() { HasText = "Cheeping cheeps on Chirp!" + randCheepId }).First;
             
             // Assert
             await Expect(newCheep).ToBeVisibleAsync();
