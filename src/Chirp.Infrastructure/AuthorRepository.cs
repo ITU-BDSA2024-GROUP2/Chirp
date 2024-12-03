@@ -27,6 +27,7 @@ public class AuthorRepository : IAuthorRepository
         var query = from author in _dbContext.Authors
                 .Include(a => a.Following)
                 .Include(a => a.Followers)
+                .Include(a => a.ProfilePicture)
             where (author.UserName == authorName)
             select author;
 

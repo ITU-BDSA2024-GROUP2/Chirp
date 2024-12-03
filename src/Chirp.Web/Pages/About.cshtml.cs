@@ -15,6 +15,7 @@ namespace Chirp.Web.Pages
         public ICollection<string> Following { get; set; }
         public ICollection<string> Followers { get; set; }
         public Dictionary<string, string> UserInfo { get; set; }
+        public string? GithubUsername { get; set; }
         public string Avatar { get; set; }
 
         private readonly UserManager<Author> _userManager;
@@ -95,7 +96,8 @@ namespace Chirp.Web.Pages
             Following = await _authorRepository.GetFollowing(username);
             UserInfo.Add("followingCount", Following.Count.ToString());
             
+            GithubUsername = User.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name")?.Value;
             Avatar = $"https://avatars.githubusercontent.com/{username}";
         }
-    }
+    } 
 }
