@@ -11,8 +11,20 @@
     var followerCount = @Model.UserInfo["followerCount"];
 }
 
+<style>
+    .claim-img {
+        width: 100px; 
+        height: 100px;
+        border-radius: 50%; 
+        object-fit: cover;
+    }
+</style>
+
 <div class="aboutContainer">
     <h2>Personal information</h2>
+    
+    <img src=@Model.Avatar class="claim-img" alt="1">
+    
     <ul>
         @{
             <li><strong>Username:</strong> @Model.UserInfo["username"]</li>
