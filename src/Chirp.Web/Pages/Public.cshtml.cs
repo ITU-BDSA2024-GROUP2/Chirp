@@ -40,6 +40,7 @@ public class PublicModel : PageModel
         ViewData["CurrentPage"] = _currentPage;
         
         await FetchCheepAndAuthorData(_currentPage);
+        await UpdateProfilePicture();
         
         _nextPageHasCheeps = await NextPageHasCheeps(_currentPage);
         
@@ -147,5 +148,20 @@ public class PublicModel : PageModel
     {
         var list = await _cheepRepository.GetCheeps(page + 1);
         return list.Any();
+    }
+
+    public async Task UpdateProfilePicture()
+    {
+        if (User.Identity!.IsAuthenticated)
+        {
+            var username = User.Identity?.Name;
+            var storedProfilePicture = await _authorRepository.GetProfilePicture(username);
+            if (storedProfilePicture == null)
+            {
+                var standartProfilePicture = $"https://avatars.githubusercontent.com/{username}" ;
+                await _authorRepository.ChangeProfilePicture(username!, standartProfilePicture);
+            }
+        }
+        
     }
 }

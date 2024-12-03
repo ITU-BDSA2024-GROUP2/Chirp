@@ -27,7 +27,6 @@ public class AuthorRepository : IAuthorRepository
         var query = from author in _dbContext.Authors
                 .Include(a => a.Following)
                 .Include(a => a.Followers)
-                .Include(a => a.ProfilePicture)
             where (author.UserName == authorName)
             select author;
 
@@ -132,5 +131,33 @@ public class AuthorRepository : IAuthorRepository
         
         var result = await query.ToListAsync();
         return result.Count;
+    }
+
+    public async Task ChangeProfilePicture(string authorName, string? profilePictureLink)
+    {
+        if (profilePictureLink == null)
+        {
+            return;
+        }
+        var author = await FindAuthor(authorName);
+        if (author == null) return;
+        
+        author.ProfilePicture = profilePictureLink;
+        Console.WriteLine($"Changed profile picture to {profilePictureLink}");
+        await _dbContext.SaveChangesAsync();
+    }
+    
+    public async Task<string?> GetProfilePicture(string authorName)
+    {
+        if (authorName == null)
+        {
+            return null;
+        }
+        var query = from author in _dbContext.Authors
+            where author.UserName == authorName
+            select author.ProfilePicture;
+        
+        var result = await query.Distinct().FirstOrDefaultAsync();
+        return result;
     }
 }

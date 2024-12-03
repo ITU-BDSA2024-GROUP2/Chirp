@@ -12,5 +12,5 @@ public class Author : IdentityUser
     public ICollection<Author> Followers { get; set; } = new List<Author>();
 
     [StringLength(1600, ErrorMessage = "links cant be longer than 1600")]
-    public string ProfilePicture { get; set; } = string.Empty;
+    public string? ProfilePicture { get; set; }
 }
