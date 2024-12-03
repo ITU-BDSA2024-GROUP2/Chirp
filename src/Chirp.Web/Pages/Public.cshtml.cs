@@ -89,8 +89,14 @@ public class PublicModel : PageModel
         return Redirect($"/?page={page}");
     }
     
-    public async Task<IActionResult> OnPostDelete(string cheepId)
+    public async Task<IActionResult> OnPostDelete(string cheepId, string author)
     {
+        if (author != User.Identity.Name)
+        {
+            ModelState.AddModelError(cheepId, "Cannot delete cheep.");
+            return RedirectToPage("Public");
+        }
+        
         try
         {
             await _cheepRepository.DeleteCheep(cheepId, User.Identity.Name);
@@ -99,6 +105,7 @@ public class PublicModel : PageModel
         {
             Console.WriteLine("Unable to delete cheep. Error: " + e.Message);
         }
+        
         return RedirectToPage("Public");
     }
     

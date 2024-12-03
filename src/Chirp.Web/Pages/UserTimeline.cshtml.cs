@@ -64,8 +64,14 @@ public class UserTimelineModel : PageModel
         return RedirectToPage("UserTimeline", new { page = _currentPage });
     }
     
-    public async Task<IActionResult> OnPostDelete(string cheepId)
+    public async Task<IActionResult> OnPostDelete(string cheepId, string author)
     {
+        if (author != User.Identity.Name)
+        {
+            ModelState.AddModelError(cheepId, "Cannot delete cheep.");
+            return RedirectToPage("Public");
+        }
+        
         try
         {
             await _cheepRepository.DeleteCheep(cheepId, User.Identity.Name);

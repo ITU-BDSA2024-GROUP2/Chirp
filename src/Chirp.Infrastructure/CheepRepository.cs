@@ -147,9 +147,11 @@ public class CheepRepository : ICheepRepository
     
     public async Task DeleteCheep(string cheepId, string userName)
     {
-        var cheep = await _dbContext.Cheeps.FindAsync(cheepId);
+        var cheep = await _dbContext.Cheeps
+            .Include(c => c.Author)
+            .FirstOrDefaultAsync(c => c.CheepId == cheepId);
         
-        if (cheep != null)
+        if (cheep != null && cheep.Author.UserName == userName)
         { 
             _dbContext.Cheeps.Remove(cheep);
         }
@@ -159,6 +161,16 @@ public class CheepRepository : ICheepRepository
 
     public async Task Like(string cheepId, string userName)
     {
+        var cheep = await _dbContext.Cheeps
+            .Where(c => c.CheepId == cheepId)
+            .Select(c => c.Author)
+            .FirstOrDefaultAsync();
+        
+        if (cheep == null || cheep.UserName == userName)
+        {
+            return;
+        }
+        
         var likeExists = await _dbContext.Likes
             .AnyAsync(l => l.CheepId == cheepId && l.Author == userName);
 

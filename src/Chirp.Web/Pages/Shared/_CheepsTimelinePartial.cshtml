@@ -1,3 +1,5 @@
+@using Chirp.Core
+@using Chirp.Infrastructure
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model IEnumerable<Chirp.Core.CheepDTO>
 
@@ -69,10 +71,11 @@
                     <div class="deleteBox">
                         @if (User.Identity!.IsAuthenticated && User.Identity.Name == cheep.Author)
                         {
-                        <form method="post" asp-page-handler="Delete">
-                            <input type="hidden" name="cheepId" value="@cheep.Id"/>
-                            <button class="deleteBtn" type="submit">DELETE</button>
-                        </form>
+                            <form method="post" asp-page-handler="Delete">
+                                <input type="hidden" name="cheepId" value="@cheep.Id"/>
+                                <input type="hidden" name="author" value="@cheep.Author"/>
+                                <button class="deleteBtn" type="submit">DELETE</button>
+                            </form>
                         }
                     </div>
                 </div>
@@ -92,7 +95,7 @@ Co-authored by https://stackoverflow.com/a/62881829
             window.scrollTo(0, parseInt(scrollData.scrollPosition));
         }
     });
-    
+
     window.addEventListener("beforeunload", () => {
         const scrollData = {
             url: window.location.href,
