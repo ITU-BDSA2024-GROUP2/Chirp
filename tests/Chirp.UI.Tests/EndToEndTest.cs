@@ -43,6 +43,8 @@ namespace Chirp.UI.Tests
             await ServerUtil.DeleteUser(Page, "test@mail.com", "Testpassword123!");
             await ServerUtil.DeleteUser(Page, "testmail@mail.com", "Testpassword123!");
             await ServerUtil.DeleteUser(Page, "atest@mail.com", "Testpassword123!");
+            await ServerUtil.DeleteUser(Page, "hello@mail.com", "Testpassword123!");
+            await ServerUtil.DeleteUser(Page, "hello2@mail.com", "Testpassword123!");
         }
 
         [Test]
@@ -175,8 +177,8 @@ namespace Chirp.UI.Tests
 
             //Act
             await ServerUtil.RegisterUser(Page, "ATestUser2", "hello2@mail.com");
-            await Page.Locator("li").Filter(new() { HasText = "Atestuser — 12/04/24 13:10:32" }).GetByRole(AriaRole.Button).Nth(1).ClickAsync();
-            await Page.Locator("li").Filter(new() { HasText = "Atestuser — 12/04/24 13:10:32" }).Locator("#follow").ClickAsync();
+            await Page.Locator("li").Filter(new() { HasText = "Atestuser " }).Locator(".cheepOptionsContainer .fa-heart-o.outlined-heart").ClickAsync();
+            await Page.Locator("li").Filter(new() { HasText = "Atestuser " }).Locator("#follow").ClickAsync();
             await Page.GetByRole(AriaRole.Button, new() { Name = "logout [Atestuser2]" }).ClickAsync();
 
             //Act
