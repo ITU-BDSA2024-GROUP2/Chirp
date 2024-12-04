@@ -218,4 +218,18 @@ public class CheepRepository : ICheepRepository
 
         return foundAuthor;
     }
+
+    public async Task DeleteLikes(string userName)
+    {
+        var delete = from like in _dbContext.Likes
+                where like.Author == userName
+                select like;
+
+        if (delete.Any())
+        {
+            _dbContext.Likes.RemoveRange(delete);
+        }
+
+        await _dbContext.SaveChangesAsync();
+    }
 }
