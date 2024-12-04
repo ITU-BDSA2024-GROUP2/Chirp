@@ -133,7 +133,7 @@ div.page ul.cheeps {
 
 div.page ul.cheeps li {
   margin: 10px 0;
-  padding: 5px 5px 0 5px;
+  padding: 8px 8px 0 8px;
   background: #F0FAF9;
   border: 1px solid #DBF3F1;
   border-radius: 2px;
@@ -299,6 +299,7 @@ ul.nav li a:hover {
 .authorContainer {
     display: flex;
     flex-direction: row;
+    align-items: center;
     gap: 3px;
 }
 
@@ -482,6 +483,7 @@ button.followBtn {
     word-wrap: break-word; 
     white-space: normal;
     box-sizing: border-box;
+    padding: 4px 2px 4px 2px;
 }
 
 #Message {
@@ -494,10 +496,6 @@ button.followBtn {
 .claim-img {
     width: 20px;
     height: 20px;
-    min-width: 20px;
-    min-height: 20px;
-    max-height: 20px;
-    max-width: 20px;
     border-radius: 50%;
     object-fit: cover;
     aspect-ratio: 1 / 1;
@@ -513,4 +511,6 @@ svg .claim-img {
     flex-direction: row;
     align-items: center;
     gap: 5px;
+    min-height: 20px;
+    min-width: 20px;
 }
