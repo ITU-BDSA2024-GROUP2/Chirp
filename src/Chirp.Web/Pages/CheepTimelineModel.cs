@@ -22,13 +22,21 @@ public class CheepTimelineModel : PageModel
         Cheeps = new List<CheepDTO>();
     }
 
-    public async Task<IActionResult> OnGet([FromQuery] int? page)
+    public async Task<IActionResult> GetCheeps([FromQuery] int? page)
     {
         var currentpage = page ?? 1;
         Cheeps = await _cheepRepository.GetCheepsByNewest(currentpage);
         await GetAvatar();
         
-        Console.WriteLine("I have updated Cheeps");
+        return Page();
+    }
+    
+    public async Task<IActionResult> GetCheeps([FromQuery] int? page, string author)
+    {
+        var currentpage = page ?? 1;
+        Cheeps = await _cheepRepository.GetCheepsFromFollowersAndOwnCheeps(author, currentpage);
+        await GetAvatar();
+
         return Page();
     }
 

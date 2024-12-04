@@ -41,7 +41,7 @@ public class UserTimelineModel : PageModel
         _currentPage = page ?? 1;
         ViewData["CurrentPage"] = _currentPage;
         
-        await CheepTimelineModel.OnGet(page);
+        await CheepTimelineModel.GetCheeps(page, author);
         await FetchCheepAndAuthorData(author, _currentPage);
         followerCount = await _authorRepository.GetFollowerCount(author);
         _nextPageHasCheeps = await NextPageHasCheeps(author, _currentPage);
