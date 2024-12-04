@@ -24,8 +24,6 @@ namespace Chirp.Web.Pages
             _cheepRepository = cheepRepository;
             _authorRepository = authorRepository;
             _userManager = userManager;
-            
-            
         }
 
         public async Task<IActionResult> OnGet([FromQuery] int? page)

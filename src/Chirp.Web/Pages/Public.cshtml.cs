@@ -44,7 +44,7 @@ public class PublicModel : PageModel
         _currentPage = page ?? 1;
         ViewData["CurrentPage"] = _currentPage;
         
-        await CheepTimelineModel.GetCheeps(page);
+        await CheepTimelineModel.GetCheeps(_currentPage);
         await FetchCheepAndAuthorData(_currentPage);
         await UpdateProfilePicture();
         
