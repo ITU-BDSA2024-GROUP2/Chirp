@@ -92,7 +92,6 @@ namespace Chirp.UI.Tests
             
             //Assert
             await Expect(locator).ToHaveAttributeAsync("href", "/Jacqualine Gilcoine");
-            
         }
         
         [Test]
@@ -223,59 +222,6 @@ namespace Chirp.UI.Tests
             await Expect(passwordValidationMessage).ToBeVisibleAsync();
             await Expect(passwordValidationMessage).ToHaveTextAsync("The Password field is required.");
         }
-
-        /*[Test] // can't confirm this actually works,
-         because the error popup can't be captured by playwright directly
-        public async Task TestValidEmail()
-        {
-            
-            await Page.GotoAsync("http://localhost:5273/Identity/Account/Register");
-
-            
-            var emailInput = Page.Locator("input[name='Input.Email']");
-
-            
-            await emailInput.FillAsync("valid.email@example.com");
-
-           
-            var registerButton = Page.Locator("#registerSubmit");
-            await registerButton.ClickAsync();
-
-            var validationMessage = Page.Locator("#Input_Email + span"); 
-            await Expect(validationMessage).Not.ToBeVisibleAsync(); 
-        }
-        
-        [Test]
-        public async Task TestInvalidEmail()
-        {
-            
-            await Page.GotoAsync("http://localhost:5273/Identity/Account/Register");
-
-            
-            var emailInput = Page.Locator("input[name='Input.Email']");
-
-            
-            await emailInput.FillAsync("invalidEmail.com");
-
-           
-            var registerButton = Page.Locator("#registerSubmit");
-            await registerButton.ClickAsync();
-
-            var validationMessage = Page.Locator("span[data-valmsg-for='Input.Email']");
-            Console.WriteLine("the validation message: " + validationMessage);
-            await Expect(validationMessage).ToBeVisibleAsync(); 
-        }*/
-        
-        /*[Test]	
-        public async Task TestValidPassword()
-        {
-            await Page.GotoAsync("http://localhost:5273/Identity/Account/Register");
-            
-            var passwordInput = Page.Locator("input[name='Input.Password']");
-            
-            await passwordInput.FillAsync("validPassword@example.com");
-            
-        }*/
         
         [Test]	
         public async Task TestInvalidValidPasswordLength()
@@ -356,34 +302,10 @@ namespace Chirp.UI.Tests
             await Expect(confirmPasswordValidationMessage).ToHaveTextAsync("The password and confirmation password do not match.");
         }
         
-        /*[Test]	
-        public async Task TestGithubLoginRedirect()
-        {
-            // Arrange
-            await Page.GotoAsync("http://localhost:5273/Identity/Account/Register");
-            
-            // Act
-            var githubButton = Page.Locator("button.provider-button.github-button");
-            await githubButton.ClickAsync();
-            
-            
-            string currentUrl = Page.Url;
-            Console.WriteLine("Current URL after redirection: " + currentUrl);
-
-            if (currentUrl.Contains("https://github.com/login"))
-            {
-                Console.WriteLine("Redirection to GitHub login page was successful!");
-            }
-            else
-            {
-                Console.WriteLine("Redirection failed or went to an unexpected URL.");
-            }
-        }*/
-        
         [Test]
         public async Task TestManageAccountVisibleInNavWhenLoggedIn()
         {
-            await RegisterUser();
+            await ServerUtil.RegisterUser(Page);
             // Arrange
             await Page.GotoAsync("https://localhost:5273");
         
@@ -392,7 +314,7 @@ namespace Chirp.UI.Tests
             
             // Assert
             await Expect(Page).ToHaveTitleAsync(new Regex("Profile"));
-            await DeleteUser();
+            await ServerUtil.DeleteUser(Page);
         }
         
         [Test]
@@ -426,59 +348,6 @@ namespace Chirp.UI.Tests
             //Assert
             Assert.That(Page.Url, Is.EqualTo("https://localhost:5273/?page=1"));
             
-        }
-        
-        // This method can be used to prepare a test that requires a logged in user
-        public async Task LoginUser(string email = "name@example.com", string password = "Password123!")
-        {
-
-            var isUserLoggedIn = await Page.GetByRole(AriaRole.Link, new() { Name = "my timeline" }).IsVisibleAsync();
-            if (isUserLoggedIn)
-            {
-                return;
-            }
-            
-            //Arrange
-            await Page.GotoAsync("https://localhost:5273/Identity/Account/Login");
-
-            await Page.GetByPlaceholder("name@example.com").FillAsync(email);
-            await Page.GetByPlaceholder("password").FillAsync(password);
-            
-            await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
-
-            var myTimelineButton = Page.GetByRole(AriaRole.Link, new() { Name = "my timeline" });
-            await Expect(myTimelineButton).ToBeVisibleAsync();
-
-        }
-        
-        public async Task RegisterUser()
-        {
-            await Page.GotoAsync("https://localhost:5273/");
-            await Page.GetByRole(AriaRole.Link, new() { Name = "register" }).ClickAsync();
-            await Page.GetByPlaceholder("user name").ClickAsync();
-            
-            await Page.GetByPlaceholder("user name").FillAsync("username");
-            await Page.GetByPlaceholder("name@example.com").FillAsync("name@example.com");
-            await Page.GetByLabel("Password", new() { Exact = true }).FillAsync("Password123!");
-            await Page.GetByLabel("Confirm Password").FillAsync("Password123!");
-            await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
-            
-            //await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" }).ClickAsync();
-        }
-
-        public async Task DeleteUser()
-        {
-            var isUserLoggedIn = await Page.GetByRole(AriaRole.Link, new() { Name = "my timeline" }).IsVisibleAsync();
-            if (!isUserLoggedIn)
-            {
-                await LoginUser();
-            }
-            
-            await Page.GetByRole(AriaRole.Link, new() { Name = "manage account" }).ClickAsync();
-            await Page.GetByRole(AriaRole.Link, new() { Name = "Personal data" }).ClickAsync();
-            await Page.GetByRole(AriaRole.Link, new() { Name = "Delete" }).ClickAsync();
-            await Page.GetByPlaceholder("Please enter your password.").FillAsync("Password123!");
-            await Page.GetByRole(AriaRole.Button, new() { Name = "Delete data and close my account" }).ClickAsync();
         }
     }
 }

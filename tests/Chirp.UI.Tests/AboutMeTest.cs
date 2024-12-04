@@ -30,15 +30,15 @@ public class AboutMeTest : PageTest
     [SetUp]
     public async Task Setup()
     {
-        await RegisterUser();
-        await LoginUser();
+        await ServerUtil.RegisterUser(Page);
+        await ServerUtil.LoginUser(Page);
     }
     
     [TearDown]
     public async Task TearDown()
     {
-        await LoginUser();
-        await DeleteUser();
+        await ServerUtil.LoginUser(Page);
+        await ServerUtil.DeleteUser(Page);
     }
         
     [OneTimeTearDown]
@@ -117,56 +117,17 @@ public class AboutMeTest : PageTest
         await Expect(listItemText.Nth(1)).ToHaveTextAsync("Email: name@example.com");
     }
     
-    // This method can be used to prepare a test that requires a logged in user
-    public async Task LoginUser(string email = "name@example.com", string password = "Password123!")
+    [Test]
+    public async Task AboutMePageDisplayProfilePicture()
     {
-
-        var isUserLoggedIn = await Page.GetByRole(AriaRole.Link, new() { Name = "my timeline" }).IsVisibleAsync();
-        if (isUserLoggedIn)
-        {
-            return;
-        }
+        // Arrange
+        await Page.GotoAsync("https://localhost:5273/about");
         
-        //Arrange
-        await Page.GotoAsync("https://localhost:5273/Identity/Account/Login");
-
-        await Page.GetByPlaceholder("name@example.com").FillAsync(email);
-        await Page.GetByPlaceholder("password").FillAsync(password);
-        
-        await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
-
-        var myTimelineButton = Page.GetByRole(AriaRole.Link, new() { Name = "my timeline" });
-        await Expect(myTimelineButton).ToBeVisibleAsync();
-
+        // Act
+        var listItemText = Page.Locator("div.aboutContainer > img");
+            
+        // Assert
+        await Expect(listItemText.Nth(0)).ToBeVisibleAsync();
     }
     
-    public async Task RegisterUser()
-    {
-        await Page.GotoAsync("https://localhost:5273/");
-        await Page.GetByRole(AriaRole.Link, new() { Name = "register" }).ClickAsync();
-        await Page.GetByPlaceholder("user name").ClickAsync();
-        
-        await Page.GetByPlaceholder("user name").FillAsync("username");
-        await Page.GetByPlaceholder("name@example.com").FillAsync("name@example.com");
-        await Page.GetByLabel("Password", new() { Exact = true }).FillAsync("Password123!");
-        await Page.GetByLabel("Confirm Password").FillAsync("Password123!");
-        await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
-        
-        //await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" }).ClickAsync();
-    }
-
-    public async Task DeleteUser()
-    {
-        var isUserLoggedIn = await Page.GetByRole(AriaRole.Link, new() { Name = "my timeline" }).IsVisibleAsync();
-        if (!isUserLoggedIn)
-        {
-            await LoginUser();
-        }
-        
-        await Page.GetByRole(AriaRole.Link, new() { Name = "manage account" }).ClickAsync();
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Personal data" }).ClickAsync();
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Delete" }).ClickAsync();
-        await Page.GetByPlaceholder("Please enter your password.").FillAsync("Password123!");
-        await Page.GetByRole(AriaRole.Button, new() { Name = "Delete data and close my" }).ClickAsync();
-    }
 }
