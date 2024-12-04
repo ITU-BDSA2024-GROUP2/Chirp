@@ -478,3 +478,17 @@ button.followBtn {
     align-items: center;
     justify-content: center;
 }
+
+#cheep {
+    width: 100%; 
+    word-wrap: break-word; 
+    white-space: normal;
+    box-sizing: border-box;
+}
+
+#Message {
+    width: 100%; 
+    box-sizing: border-box; 
+    overflow: hidden; 
+    resize: none;
+}

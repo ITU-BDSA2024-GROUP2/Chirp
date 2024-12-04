@@ -7,6 +7,8 @@
     var followerMap = ViewData["FollowerMap"] as Dictionary<string, bool> ?? new Dictionary<string, bool>();
     var likeMap = ViewData["LikeMap"] as Dictionary<string, bool> ?? new Dictionary<string, bool>();
     var currentPage = ViewData["CurrentPage"] as int? ?? 1;
+    <script src="/js/autosizeCheepBox.js"></script>
+    <script src="/js/scrollPosition.js"></script>
 }
 
 <style>
@@ -52,8 +54,9 @@
                         }
                     }
                 </div>
-                @cheep.Text
-
+                
+                <div id="cheep">@cheep.Text</div>
+                
                 <div class="cheepOptionsContainer">
                     @if (User.Identity!.IsAuthenticated && cheep.Author != User.Identity.Name)
                     {
@@ -94,23 +97,3 @@
     }
 </ul>
 
-<!--
-The script maintains scroll position on redirect
-Co-authored by https://stackoverflow.com/a/62881829
--->
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const scrollData = JSON.parse(sessionStorage.getItem("scrollData"));
-        if (scrollData && scrollData.url === window.location.href) { // If changing page it should scroll to the top
-            window.scrollTo(0, parseInt(scrollData.scrollPosition));
-        }
-    });
-
-    window.addEventListener("beforeunload", () => {
-        const scrollData = {
-            url: window.location.href,
-            scrollPosition: window.scrollY
-        };
-        sessionStorage.setItem("scrollData", JSON.stringify(scrollData));
-    });
-</script>
