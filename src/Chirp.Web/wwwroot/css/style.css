@@ -486,7 +486,7 @@ button.followBtn {
     box-sizing: border-box;
 }
 
-#messageBox {
+#Message {
     width: 100%; 
     box-sizing: border-box; 
     overflow: hidden; 
