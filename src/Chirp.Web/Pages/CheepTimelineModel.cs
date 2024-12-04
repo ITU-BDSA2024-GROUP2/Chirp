@@ -52,9 +52,10 @@ public class CheepTimelineModel : PageModel
     /// <param name="page"></param>
     /// <param name="author"></param>
     /// <returns></returns>
-    public async Task GetCheeps(int page, string author)
+    public async Task GetCheeps(int page, string author, string username)
     {
-        if (author == User.Identity.Name)
+        
+        if (author == username)
         {
             Cheeps = await _cheepRepository.GetCheepsFromFollowersAndOwnCheeps(author, page);
         }
@@ -62,7 +63,7 @@ public class CheepTimelineModel : PageModel
         {
             Cheeps = await _cheepRepository.GetCheepsFromAuthor(author, page);
         }
-
+        
         if (cheepsLength != Cheeps.Count())
         {
             await GetAvatar();
