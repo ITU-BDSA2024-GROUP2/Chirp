@@ -349,5 +349,19 @@ namespace Chirp.UI.Tests
             Assert.That(Page.Url, Is.EqualTo("https://localhost:5273/?page=1"));
             
         }
+        
+        [Test]
+        public async Task ProfilePictureVisibleAtCheeps()
+        {   
+            // Arrange
+            await Page.GotoAsync("https://localhost:5273");
+            
+            // Act
+            var imgLocator = Page.Locator("#messagelist .cheep .authorContainer img");
+            
+            // Assert
+            await Expect(imgLocator.Nth(0)).ToBeVisibleAsync();
+            
+        }
     }
 }
