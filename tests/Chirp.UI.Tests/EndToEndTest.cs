@@ -177,7 +177,7 @@ namespace Chirp.UI.Tests
 
             //Act
             await ServerUtil.RegisterUser(Page, "ATestUser2", "hello2@mail.com");
-            await Page.Locator("li").Filter(new() { HasText = "Atestuser " }).Locator(".cheepOptionsContainer .fa-heart-o.outlined-heart").ClickAsync();
+            await Page.Locator("li").Filter(new() { HasText = "Atestuser " }).Locator(".fa-heart-o.outlined-heart").ClickAsync();
             await Page.Locator("li").Filter(new() { HasText = "Atestuser " }).Locator("#follow").ClickAsync();
             await Page.GetByRole(AriaRole.Button, new() { Name = "logout [Atestuser2]" }).ClickAsync();
 
@@ -185,7 +185,8 @@ namespace Chirp.UI.Tests
             await ServerUtil.LoginUser(Page, "hello@mail.com");
 
             //Assert
-            //Assert for like on cheep
+            var like = Page.Locator("li").Filter(new() { HasText = "Atestuser " }).GetByText("1", new() { Exact = true });
+            Assert.IsTrue(await like.IsVisibleAsync());
 
             //Act
             await Page.GetByRole(AriaRole.Link, new() { Name = "about me" }).ClickAsync();
@@ -202,7 +203,7 @@ namespace Chirp.UI.Tests
             await ServerUtil.LoginUser(Page, "hello@mail.com");
 
             //Assert
-            //Assert like is removed
+            //Assert.IsFalse(await like.IsVisibleAsync());
 
             //Act
             await Page.GetByRole(AriaRole.Link, new() { Name = "about me" }).ClickAsync();
