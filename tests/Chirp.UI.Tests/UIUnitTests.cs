@@ -357,7 +357,7 @@ namespace Chirp.UI.Tests
             await Page.GotoAsync("https://localhost:5273");
             
             // Act
-            var imgLocator = Page.Locator("#messagelist .cheep .authorContainer .avatarContainer img");
+            var imgLocator = Page.Locator("#messagelist .cheep .authorContainer .avatarContainer .claim-img");
             
             // Assert
             await Expect(imgLocator.Nth(0)).ToBeVisibleAsync();
