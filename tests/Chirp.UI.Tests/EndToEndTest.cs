@@ -164,7 +164,7 @@ namespace Chirp.UI.Tests
         }
 
         [Test]
-        public async Task TestUserFollowsAccount()
+        public async Task UserLikesCheepAndFollowsAccount()
         {
             //Arrange
             await ServerUtil.RegisterUser(Page, "ATestUser", "hello@mail.com");
@@ -189,7 +189,8 @@ namespace Chirp.UI.Tests
             await Page.GetByRole(AriaRole.Link, new() { Name = "about me" }).ClickAsync();
 
             //Assert
-            //Assert for follower
+            var follower1 = Page.GetByRole(AriaRole.Link, new() { Name = "Atestuser2" });
+            Assert.IsTrue(await follower1.IsVisibleAsync());
 
             //Act
             await Page.GetByRole(AriaRole.Button, new() { Name = "logout [Atestuser]" }).ClickAsync();
@@ -205,7 +206,7 @@ namespace Chirp.UI.Tests
             await Page.GetByRole(AriaRole.Link, new() { Name = "about me" }).ClickAsync();
 
             //Assert
-            //Assert follower is removed
+            Assert.IsFalse(await follower1.IsVisibleAsync());
 
             //Act
             await ServerUtil.DeleteUser(Page, "hello@mail.com");
