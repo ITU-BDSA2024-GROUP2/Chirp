@@ -164,33 +164,27 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
             var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
             if (result.Succeeded)
             {
-                Console.WriteLine("first");
                 _logger.LogInformation("{Name} logged in with {LoginProvider} provider.", info.Principal.Identity.Name, info.LoginProvider);
                 return LocalRedirect(returnUrl);
             }
             if (result.IsLockedOut)
             {
-                Console.WriteLine("second");
                 return RedirectToPage("./Lockout");
             }
             else
             {
-                Console.WriteLine("else");
                 var user = CreateUser();
                 await _userStore.SetUserNameAsync(user, info.Principal.Identity.Name, CancellationToken.None);
                 
                 var createResult = await _userManager.CreateAsync(user);
                 if (createResult.Succeeded)
                 {
-                    Console.WriteLine("create");
                     createResult = await _userManager.AddLoginAsync(user, info);
                     if (createResult.Succeeded)
                     {
-                        Console.WriteLine("add login");
                         _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
                         
                         await _signInManager.SignInAsync(user, isPersistent: false, info.LoginProvider);
-                        Console.WriteLine("sign in");
                         return LocalRedirect(returnUrl);
                     }
                 }
