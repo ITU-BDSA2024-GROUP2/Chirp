@@ -18,7 +18,7 @@ namespace Chirp.UI.Tests
         public override BrowserNewContextOptions ContextOptions()
         {
 
-            return new BrowserNewContextOptions
+            return new BrowserNewContextOptions             
             {
                 IgnoreHTTPSErrors = true
             };
@@ -203,7 +203,7 @@ namespace Chirp.UI.Tests
             await ServerUtil.LoginUser(Page, "hello@mail.com");
 
             //Assert
-            //Assert.IsFalse(await like.IsVisibleAsync());
+            Assert.IsFalse(await like.IsVisibleAsync());
 
             //Act
             await Page.GetByRole(AriaRole.Link, new() { Name = "about me" }).ClickAsync();
