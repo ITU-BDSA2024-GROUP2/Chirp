@@ -207,7 +207,7 @@ public class CheepRepository : ICheepRepository
 
         return like != null;
     }
-
+    
     public async Task<Author> FindAuthorByName(string name)
     {
         var query = from author in _dbContext.Authors
