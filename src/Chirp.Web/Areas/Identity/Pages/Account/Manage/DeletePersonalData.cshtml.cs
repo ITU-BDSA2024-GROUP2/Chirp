@@ -18,15 +18,18 @@ namespace Chirp.Web.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<Author> _userManager;
         private readonly SignInManager<Author> _signInManager;
         private readonly ILogger<DeletePersonalDataModel> _logger;
+        private readonly ICheepRepository _cheepRepository;
 
         public DeletePersonalDataModel(
             UserManager<Author> userManager,
             SignInManager<Author> signInManager,
-            ILogger<DeletePersonalDataModel> logger)
+            ILogger<DeletePersonalDataModel> logger,
+            ICheepRepository CheepRepository)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _cheepRepository = CheepRepository;
         }
 
         /// <summary>
@@ -86,6 +89,8 @@ namespace Chirp.Web.Areas.Identity.Pages.Account.Manage
                     return Page();
                 }
             }
+
+            await _cheepRepository.DeleteLikes(user.UserName);
             
             var result = await _userManager.DeleteAsync(user);
             var userId = await _userManager.GetUserIdAsync(user);
@@ -93,6 +98,8 @@ namespace Chirp.Web.Areas.Identity.Pages.Account.Manage
             {
                 throw new InvalidOperationException($"Unexpected error occurred deleting user.");
             }
+            
+            
 
             await _signInManager.SignOutAsync();
 
