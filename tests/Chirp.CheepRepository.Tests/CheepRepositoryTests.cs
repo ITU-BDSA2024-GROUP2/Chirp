@@ -409,8 +409,42 @@ public class CheepRepositoryTests
         var isLiked = await cheepRepository.IsLiked(createdCheep.Id, createdCheep.Author);
         Assert.False(isLiked);
     }
-    
-    
+
+    [Fact]
+    public async Task DeleteLikes_Removes_All_Likes()
+    {
+        // Arrange
+        ICheepRepository cheepRepository = new Infrastructure.CheepRepository(_dbContext);
+        IAuthorRepository authorRepository = new Infrastructure.AuthorRepository(_dbContext);
+
+        var authorName = "John Doe";
+        await authorRepository.CreateAuthor(new AuthorDTO()
+        {
+            Name = authorName,
+            Email = "John@doe.com",
+        });
+        
+        var userName = "John Smith";
+        await authorRepository.CreateAuthor(new AuthorDTO()
+        {
+            Name = userName,
+            Email = "John@smith.com",
+        });
+
+        var createdCheep = await cheepRepository.CreateCheep(authorName, "This is a test");
+        
+        // Act
+        cheepRepository.Like(createdCheep.CheepId, userName);
+        
+        // Assert
+        var isLikedBefore = await cheepRepository.IsLiked(createdCheep.CheepId, userName);
+        Assert.True(isLikedBefore);
+        
+        // Act
+        await cheepRepository.DeleteLikes(userName);
+        var isLikedAfter = await cheepRepository.IsLiked(createdCheep.CheepId, userName);
+        Assert.False(isLikedAfter);
+    }
 
     private async Task PopulateDatabase(ChirpDBContext context)
     {

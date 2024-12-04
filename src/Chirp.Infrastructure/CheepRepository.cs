@@ -207,7 +207,7 @@ public class CheepRepository : ICheepRepository
 
         return like != null;
     }
-
+    
     public async Task<Author> FindAuthorByName(string name)
     {
         var query = from author in _dbContext.Authors
@@ -217,5 +217,19 @@ public class CheepRepository : ICheepRepository
         var foundAuthor = await query.FirstOrDefaultAsync();
 
         return foundAuthor;
+    }
+
+    public async Task DeleteLikes(string userName)
+    {
+        var delete = from like in _dbContext.Likes
+                where like.Author == userName
+                select like;
+
+        if (delete.Any())
+        {
+            _dbContext.Likes.RemoveRange(delete);
+        }
+
+        await _dbContext.SaveChangesAsync();
     }
 }
