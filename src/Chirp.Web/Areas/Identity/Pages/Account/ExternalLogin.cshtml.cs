@@ -30,13 +30,15 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<Author> _emailStore;
         private readonly IEmailSender _emailSender;
         private readonly ILogger<ExternalLoginModel> _logger;
+        private readonly IAuthorRepository _authorRepository;
 
         public ExternalLoginModel(
             SignInManager<Author> signInManager,
             UserManager<Author> userManager,
             IUserStore<Author> userStore,
             ILogger<ExternalLoginModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IAuthorRepository authorRepository)
         {
             _signInManager = signInManager;
             _userManager = userManager;
@@ -44,6 +46,7 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
             _emailStore = GetEmailStore();
             _logger = logger;
             _emailSender = emailSender;
+            _authorRepository = authorRepository;
         }
 
         /// <summary>
@@ -128,7 +131,7 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                         if (result.Succeeded)
                         {
                             _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
-                        
+                            
                             await _signInManager.SignInAsync(user, isPersistent: false, info.LoginProvider);
                             return LocalRedirect(returnUrl);
                         }
@@ -191,6 +194,10 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                         
                         await _signInManager.SignInAsync(user, isPersistent: false, info.LoginProvider);
                         Console.WriteLine("sign in");
+                        
+                        var username = info.Principal.Identity.Name;
+                        await _authorRepository.ChangeProfilePicture(username,$"https://avatars.githubusercontent.com/{username}");
+                        
                         return LocalRedirect(returnUrl);
                     }
                 }
@@ -199,7 +206,7 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
-
+            
             ProviderDisplayName = info.ProviderDisplayName;
             ReturnUrl = returnUrl;
             return Page();
