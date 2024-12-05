@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using Azure;
 using Chirp.Core;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -18,17 +19,21 @@ public class UserTimelineModel : PageModel
     public bool _nextPageHasCheeps;
     public int followerCount { get; set; }
     public List<CheepDTO> Cheeps { get; set; }
+    private readonly UserManager<Author> _userManager;
 
     [BindProperty]
     public CheepInputModel CheepInput { get; set; } 
+    public CheepTimelineModel CheepTimelineModel { get; set; }
 
 
-    public UserTimelineModel(ICheepRepository cheepRepository, IAuthorRepository authorRepository)
+    public UserTimelineModel(UserManager<Author> userManager, ICheepRepository cheepRepository, IAuthorRepository authorRepository)
     {
         _cheepRepository = cheepRepository;
         _authorRepository = authorRepository;
         FollowerMap = new Dictionary<string, bool>();
         LikeMap = new Dictionary<string, bool>();
+        
+        CheepTimelineModel = new CheepTimelineModel(userManager, cheepRepository, authorRepository);
     }
 
     public async Task<ActionResult> OnGet(string author, [FromQuery] int? page)
@@ -37,6 +42,7 @@ public class UserTimelineModel : PageModel
         ViewData["CurrentPage"] = _currentPage;
         
         await FetchCheepAndAuthorData(author, _currentPage);
+        await CheepTimelineModel.GetCheeps(_currentPage, author, User.Identity.Name);
         followerCount = await _authorRepository.GetFollowerCount(author);
         _nextPageHasCheeps = await NextPageHasCheeps(author, _currentPage);
         
@@ -129,6 +135,7 @@ public class UserTimelineModel : PageModel
     
     private async Task FetchCheepAndAuthorData(string author, int page)
     {
+        
         if (author == User.Identity.Name)
         {
             Cheeps = await _cheepRepository.GetCheepsFromFollowersAndOwnCheeps(author, page);

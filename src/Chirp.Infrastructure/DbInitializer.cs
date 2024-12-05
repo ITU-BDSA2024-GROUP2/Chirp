@@ -7,7 +7,7 @@ public static class DbInitializer
     {
         if (!(chirpContext.Authors.Any() && chirpContext.Cheeps.Any()))
         {
-            var a1 = new Author() { Id = "1", UserName = "Roger Histand", Email = "Roger+Histand@hotmail.com", Cheeps = new List<Cheep>() };
+            var a1 = new Author() { Id = "1", UserName = "Roger Histand", Email = "Roger+Histand@hotmail.com", Cheeps = new List<Cheep>()};
             var a2 = new Author() { Id = "2", UserName = "Luanna Muro", Email = "Luanna-Muro@ku.dk", Cheeps = new List<Cheep>() };
             var a3 = new Author() { Id = "3", UserName = "Wendell Ballan", Email = "Wendell-Ballan@gmail.com", Cheeps = new List<Cheep>() };
             var a4 = new Author() { Id = "4", UserName = "Nathan Sirmon", Email = "Nathan+Sirmon@dtu.dk", Cheeps = new List<Cheep>() };
@@ -18,7 +18,7 @@ public static class DbInitializer
             var a9 = new Author() { Id = "9", UserName = "Johnnie Calixto", Email = "Johnnie+Calixto@itu.dk", Cheeps = new List<Cheep>() };
             var a10 = new Author() { Id = "10", UserName = "Jacqualine Gilcoine", Email = "Jacqualine.Gilcoine@gmail.com", Cheeps = new List<Cheep>() };
             var a11 = new Author() { Id = "11", UserName = "Helge", Email = "ropf@itu.dk", Cheeps = new List<Cheep>() };
-            var a12 = new Author() { Id = "12", UserName = "Adrian", Email = "adho@itu.dk", Cheeps = new List<Cheep>() };
+            var a12 = new Author() { Id = "12", UserName = "Adrian", Email = "adho@itu.dk", Cheeps = new List<Cheep>()  };
 
             var authors = new List<Author>() { a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12 };
 

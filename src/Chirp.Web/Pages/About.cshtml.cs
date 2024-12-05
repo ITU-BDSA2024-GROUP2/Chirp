@@ -15,7 +15,7 @@ namespace Chirp.Web.Pages
         public ICollection<string> Following { get; set; }
         public ICollection<string> Followers { get; set; }
         public Dictionary<string, string> UserInfo { get; set; }
-        public string Avatar { get; set; }
+        public string? Avatar { get; set; }
 
         private readonly UserManager<Author> _userManager;
         
@@ -23,17 +23,17 @@ namespace Chirp.Web.Pages
         {
             _cheepRepository = cheepRepository;
             _authorRepository = authorRepository;
-            
             _userManager = userManager;
         }
 
         public async Task<IActionResult> OnGet([FromQuery] int? page)
         {
-            if (!User.Identity.IsAuthenticated)
+            if (!User.Identity!.IsAuthenticated)
             {
                 return Redirect("/Identity/Account/Login");
             }
             
+                
             UserInfo = new Dictionary<string, string>();
             await LoadUserInfo();
             
@@ -56,6 +56,9 @@ namespace Chirp.Web.Pages
         private async Task LoadUserInfo()
         {
             var username = User.Identity?.Name;
+            
+            // ProfilePicture
+            Avatar = await _authorRepository.GetProfilePicture(username);
             
             // Username
             UserInfo.Add("username", username);
@@ -95,7 +98,6 @@ namespace Chirp.Web.Pages
             Following = await _authorRepository.GetFollowing(username);
             UserInfo.Add("followingCount", Following.Count.ToString());
             
-            Avatar = $"https://avatars.githubusercontent.com/{username}";
         }
-    }
+    } 
 }

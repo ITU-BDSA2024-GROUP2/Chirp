@@ -21,6 +21,11 @@ ViewData["ActivePage"] = ManageNavPages.Index;
                 <label asp-for="Input.PhoneNumber" class="form-label"></label>
                 <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
             </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.ProfilePictureLink" class="form-control" placeholder="Please enter your image link."/>
+                <label asp-for="Input.ProfilePictureLink" class="form-label"></label>
+                <span asp-validation-for="Input.ProfilePictureLink" class="text-danger"></span>
+            </div>
             <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
         </form>
     </div>

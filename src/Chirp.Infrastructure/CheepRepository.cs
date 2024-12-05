@@ -116,7 +116,7 @@ public class CheepRepository : ICheepRepository
                 LikeCount = cheep.Likes.Count.ToString(),
             }).Skip(offset).Take(pageSize);
         var result = await query.ToListAsync();
-        
+
         return result;
     }
     

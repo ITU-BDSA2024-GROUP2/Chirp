@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Chirp.Core;
+using Chirp.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -17,13 +18,16 @@ namespace Chirp.Web.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<Author> _userManager;
         private readonly SignInManager<Author> _signInManager;
+        private readonly IAuthorRepository _authorRepository;
 
         public IndexModel(
             UserManager<Author> userManager,
-            SignInManager<Author> signInManager)
+            SignInManager<Author> signInManager,
+            IAuthorRepository authorRepository)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _authorRepository = authorRepository;
         }
 
         /// <summary>
@@ -66,19 +70,26 @@ namespace Chirp.Web.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+            
+            [Display(Name = "ProfilePicture Link")]
+            public string ProfilePictureLink { get; set; }
+            
         }
 
         private async Task LoadAsync(Author user)
         {
+            
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+            var profilePictureLink = await _authorRepository.GetProfilePicture(userName);
 
             Username = userName;
 
             Input = new InputModel
             {
                 PhoneNumber = phoneNumber,
-                UserName = userName
+                UserName = userName,
+                ProfilePictureLink = profilePictureLink
             };
         }
 
@@ -135,6 +146,11 @@ namespace Chirp.Web.Areas.Identity.Pages.Account.Manage
                     StatusMessage = "Unexpected error when trying to set username.";
                     return RedirectToPage();
                 }
+            }
+            
+            if (Input.ProfilePictureLink != user.ProfilePicture)
+            {
+               await _authorRepository.ChangeProfilePicture(user.UserName, Input.ProfilePictureLink);
             }
 
             await _signInManager.RefreshSignInAsync(user);

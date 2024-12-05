@@ -259,6 +259,44 @@ public class AuthorRepositoryTest
     }
     
     [Fact]
+    public async Task TestGetProfilePicture()
+    {
+        // Arrange
+        var user = new AuthorDTO { Name = "John Doe", Email = "johndoe@example.com" };
+       
+        IAuthorRepository authorRepository = new Infrastructure.AuthorRepository(_dbContext);
+
+        // Act
+        await authorRepository.CreateAuthor(user);
+
+        var expectedPicture = "https://cdn.pixabay.com/photo/2024/01/29/09/06/ai-generated-8539307_1280.png";
+        var userPicture = await authorRepository.GetProfilePicture(user.Name);
+
+        // Assert
+        Assert.Equal(expectedPicture,userPicture);
+    }
+
+    [Fact]
+    public async Task TestChangeProfilePicture()
+    {
+        // Arrange
+        var user = new AuthorDTO { Name = "John Doe", Email = "johndoe@example.com" };
+
+        IAuthorRepository authorRepository = new Infrastructure.AuthorRepository(_dbContext);
+        var author = await authorRepository.CreateAuthor(user);
+        
+        // Act
+        await authorRepository.ChangeProfilePicture(user.Name,
+            "https://i2.wp.com/www.testpic.com/wp-content/uploads/2019/12/logo.png?w=1080&ssl=1");
+        
+        // Assert
+        var defaultPicture = "https://cdn.pixabay.com/photo/2024/01/29/09/06/ai-generated-8539307_1280.png";
+        var expectedPicture = "https://i2.wp.com/www.testpic.com/wp-content/uploads/2019/12/logo.png?w=1080&ssl=1";
+        Assert.NotEqual(defaultPicture, author.ProfilePicture);
+        Assert.Equal(expectedPicture, author.ProfilePicture);
+    }
+
+    [Fact]
     public async Task GetFollowers_Returns_Correct_Followers()
     {
         // Arrange

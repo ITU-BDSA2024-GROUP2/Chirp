@@ -133,7 +133,7 @@ div.page ul.cheeps {
 
 div.page ul.cheeps li {
   margin: 10px 0;
-  padding: 5px 5px 0 5px;
+  padding: 8px 8px 0 8px;
   background: #F0FAF9;
   border: 1px solid #DBF3F1;
   border-radius: 2px;
@@ -148,7 +148,6 @@ div.page ul.cheeps p {
 
 div.page ul.cheeps li img {
   float: left;
-  padding: 0 10px 0 0;
 }
 
 div.page ul.cheeps li small {
@@ -477,4 +476,41 @@ button.followBtn {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+#cheep {
+    width: 100%; 
+    word-wrap: break-word; 
+    white-space: normal;
+    box-sizing: border-box;
+    padding: 4px 2px 4px 2px;
+}
+
+#Message {
+    width: 100%; 
+    box-sizing: border-box; 
+    overflow: hidden; 
+    resize: none;
+}
+
+.claim-img {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    object-fit: cover;
+    aspect-ratio: 1 / 1;
+}
+
+svg .claim-img {
+    padding: 0; !important;
+}
+
+
+.avatarContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+    min-height: 20px;
+    min-width: 20px;
 }

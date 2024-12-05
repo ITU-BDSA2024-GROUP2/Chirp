@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using Chirp.Web.Pages
 @model Chirp.Web.Pages.PublicModel
 @{
     ViewData["Title"] = "Chirp!";
@@ -13,7 +14,7 @@
 
     @if (Model.Cheeps.Any())
     {
-        <partial name="Shared/_CheepsTimelinePartial" model="Model.Cheeps" />
+        <partial name="Shared/_CheepsTimelinePartial" model="Model.CheepTimelineModel" />
     } 
     else
     {

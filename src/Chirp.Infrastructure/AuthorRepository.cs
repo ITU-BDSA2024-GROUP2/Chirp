@@ -15,9 +15,9 @@ public class AuthorRepository : IAuthorRepository
     
     public async Task<Author> CreateAuthor(AuthorDTO authorDto)
     {
-        Author newAuthor = new() { UserName = authorDto.Name, Email = authorDto.Email };
+        Author newAuthor = new() { UserName = authorDto.Name, Email = authorDto.Email, ProfilePicture = "https://cdn.pixabay.com/photo/2024/01/29/09/06/ai-generated-8539307_1280.png"};
         var queryResult = await _dbContext.Authors.AddAsync(newAuthor); // does not write to the database!
-
+        
         await _dbContext.SaveChangesAsync(); // persist the changes in the database
         return queryResult.Entity;
     }
@@ -131,5 +131,34 @@ public class AuthorRepository : IAuthorRepository
         
         var result = await query.ToListAsync();
         return result.Count;
+    }
+
+    public async Task ChangeProfilePicture(string authorName, string? profilePictureLink)
+    {
+        if (profilePictureLink == null)
+        {
+            return;
+        }
+        var author = await FindAuthor(authorName);
+        if (author == null) return;
+        
+        author.ProfilePicture = profilePictureLink;
+        
+        await _dbContext.SaveChangesAsync();
+    }
+    
+    public async Task<string?> GetProfilePicture(string authorName)
+    {
+        if (authorName == null)
+        {
+            return null;
+        }
+        
+        var query = from author in _dbContext.Authors
+            where author.UserName == authorName
+            select author.ProfilePicture;
+        var result = await query.Distinct().FirstOrDefaultAsync();
+        
+        return result;
     }
 }
