@@ -144,6 +144,9 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                     await _userManager.AddClaimAsync(user, claim);
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
+                    
+                    
+                    
                     return LocalRedirect(returnUrl);
                 }
                 foreach (var error in result.Errors)

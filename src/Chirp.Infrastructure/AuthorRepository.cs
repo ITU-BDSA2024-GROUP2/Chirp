@@ -41,6 +41,11 @@ public class AuthorRepository : IAuthorRepository
         return result;
     }
 
+    /// <summary>
+    /// This method is used to follow another user.
+    /// </summary>
+    /// <param name="userName"></param>
+    /// <param name="authorName"></param>
     public async Task Follow(string userName, string authorName)
     {
         if (userName == authorName)
@@ -64,6 +69,11 @@ public class AuthorRepository : IAuthorRepository
         await _dbContext.SaveChangesAsync();
     }
     
+    /// <summary>
+    /// This method is used for unfollowing another user.
+    /// </summary>
+    /// <param name="userName"></param>
+    /// <param name="authorName"></param>
     public async Task Unfollow(string userName, string authorName)
     {
         if (userName == authorName)
@@ -133,6 +143,12 @@ public class AuthorRepository : IAuthorRepository
         return result.Count;
     }
 
+    /// <summary>
+    /// Changes the profile picture of the user.
+    /// Finds the author in question from username, and then changes the users profile picture.
+    /// </summary>
+    /// <param name="authorName"></param>
+    /// <param name="profilePictureLink"></param>
     public async Task ChangeProfilePicture(string authorName, string? profilePictureLink)
     {
         if (profilePictureLink == null)

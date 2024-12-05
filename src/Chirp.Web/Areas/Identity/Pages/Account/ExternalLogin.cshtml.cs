@@ -190,6 +190,7 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                         
                         await _signInManager.SignInAsync(user, isPersistent: false, info.LoginProvider);
                         
+                        // Sets the users profile picture to be their github profile picture.
                         var username = info.Principal.Identity.Name;
                         await _authorRepository.ChangeProfilePicture(username,$"https://avatars.githubusercontent.com/{username}");
                         

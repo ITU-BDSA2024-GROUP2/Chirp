@@ -16,6 +16,11 @@ public class CheepRepository : ICheepRepository
         _dbContext = dbContext;
     }
     
+    /// <summary>
+    /// Gets all cheeps, and puts the newest at the top.
+    /// </summary>
+    /// <param name="currentPage"></param>
+    /// <returns></returns>
     public async Task<List<CheepDTO>> GetCheepsByNewest(int currentPage)
     {
         int offset = (currentPage - 1) * pageSize;
@@ -120,6 +125,15 @@ public class CheepRepository : ICheepRepository
         return result;
     }
     
+    /// <summary>
+    /// Method used for creating cheeps. The cheeps are checked for length
+    /// and whitespace to see if the cheep is valid.
+    /// If it is valid it creates a new cheep and inserts it into the database
+    /// </summary>
+    /// <param name="authorName"></param>
+    /// <param name="text"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     public async Task<Cheep>  CreateCheep(string authorName, string text)
     {
         if (string.IsNullOrWhiteSpace(text))

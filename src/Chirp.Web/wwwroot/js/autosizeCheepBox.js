@@ -1,5 +1,5 @@
 ﻿document.addEventListener("DOMContentLoaded", function () {
-    const messageBox = document.getElementById("messageBox");
+    const messageBox = document.getElementById("Message");
 
     if (messageBox) {
         messageBox.addEventListener("input", function () {

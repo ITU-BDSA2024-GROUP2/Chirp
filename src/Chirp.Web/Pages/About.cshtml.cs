@@ -25,7 +25,7 @@ namespace Chirp.Web.Pages
             _authorRepository = authorRepository;
             _userManager = userManager;
         }
-
+        
         public async Task<IActionResult> OnGet([FromQuery] int? page)
         {
             if (!User.Identity!.IsAuthenticated)
@@ -53,6 +53,9 @@ namespace Chirp.Web.Pages
             return RedirectToPage("About");
         }
 
+        /// <summary>
+        /// Gets all info about the user.
+        /// </summary>
         private async Task LoadUserInfo()
         {
             var username = User.Identity?.Name;
