@@ -124,7 +124,7 @@ public class AboutMeTest : PageTest
         await Page.GotoAsync("https://localhost:5273/about");
         
         // Act
-        var listItemText = Page.Locator("div.aboutContainer > img");
+        var listItemText = Page.Locator("div.aboutContainer > svg");
             
         // Assert
         await Expect(listItemText.Nth(0)).ToBeVisibleAsync();
