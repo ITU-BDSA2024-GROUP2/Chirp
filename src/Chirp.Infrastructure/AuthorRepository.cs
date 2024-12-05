@@ -15,7 +15,7 @@ public class AuthorRepository : IAuthorRepository
     
     public async Task<Author> CreateAuthor(AuthorDTO authorDto)
     {
-        Author newAuthor = new() { UserName = authorDto.Name, Email = authorDto.Email };
+        Author newAuthor = new() { UserName = authorDto.Name, Email = authorDto.Email, ProfilePicture = "https://cdn.pixabay.com/photo/2024/01/29/09/06/ai-generated-8539307_1280.png"};
         var queryResult = await _dbContext.Authors.AddAsync(newAuthor); // does not write to the database!
         
         await _dbContext.SaveChangesAsync(); // persist the changes in the database
