@@ -10,6 +10,7 @@ using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
 using Chirp.Core;
+using Chirp.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Identity;
@@ -30,13 +31,15 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<Author> _emailStore;
         private readonly IEmailSender _emailSender;
         private readonly ILogger<ExternalLoginModel> _logger;
+        private readonly IAuthorRepository _authorRepository;
 
         public ExternalLoginModel(
             SignInManager<Author> signInManager,
             UserManager<Author> userManager,
             IUserStore<Author> userStore,
             ILogger<ExternalLoginModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IAuthorRepository authorRepository)
         {
             _signInManager = signInManager;
             _userManager = userManager;
@@ -44,6 +47,7 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
             _emailStore = GetEmailStore();
             _logger = logger;
             _emailSender = emailSender;
+            _authorRepository = authorRepository;
         }
 
         /// <summary>
@@ -185,6 +189,10 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                         _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
                         
                         await _signInManager.SignInAsync(user, isPersistent: false, info.LoginProvider);
+                        
+                        var username = info.Principal.Identity.Name;
+                        await _authorRepository.ChangeProfilePicture(username,$"https://avatars.githubusercontent.com/{username}");
+                        
                         return LocalRedirect(returnUrl);
                     }
                 }
