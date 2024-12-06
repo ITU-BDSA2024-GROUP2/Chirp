@@ -1,13 +1,8 @@
 ﻿#nullable disable //fjern null warning
-using System.ComponentModel.DataAnnotations;
-using System.Security.Claims;
-using Azure.Identity;
 using Chirp.Core;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.VisualBasic;
 
 namespace Chirp.Web.Pages;
 
@@ -15,38 +10,23 @@ public class PublicModel : PageModel
 {
     private readonly ICheepRepository _cheepRepository;
     private readonly IAuthorRepository _authorRepository;
-    public Dictionary<string, bool> FollowerMap;
-    public Dictionary<string, bool> LikeMap;
     public int _currentPage;
     public bool _nextPageHasCheeps;
-    
-    public List<CheepDTO> Cheeps { get; set; }
-    
+    public CheepTimelineModel CheepTimelineModel { get; private set; } = new();
     [BindProperty]
     public CheepInputModel CheepInput { get; set; }
-    public CheepTimelineModel CheepTimelineModel { get; set; }
-    
-    private readonly UserManager<Author> _userManager;
     
     public PublicModel(UserManager<Author> userManager, ICheepRepository cheepRepository, IAuthorRepository authorRepository)
     {
-        _userManager = userManager;
         _cheepRepository = cheepRepository;
         _authorRepository = authorRepository;
-        FollowerMap = new Dictionary<string, bool>();
-        LikeMap = new Dictionary<string, bool>();
-        
-        CheepTimelineModel = new CheepTimelineModel(userManager, cheepRepository, authorRepository);
     }
 
     public async Task<ActionResult> OnGet([FromQuery] int? page)
     {
         _currentPage = page ?? 1;
-        ViewData["CurrentPage"] = _currentPage;
-        
-        await CheepTimelineModel.GetCheeps(_currentPage);
-        await FetchCheepAndAuthorData(_currentPage);
-        
+        CheepTimelineModel.Cheeps = await GetCheeps(_currentPage);
+        await CheepTimelineModel.FetchAuthorData(User, _authorRepository, _cheepRepository);
         _nextPageHasCheeps = await NextPageHasCheeps(_currentPage);
         
         return Page();
@@ -54,22 +34,23 @@ public class PublicModel : PageModel
     
     public async Task<IActionResult> OnPost()
     {
-        
-        if (string.IsNullOrWhiteSpace(CheepInput.Message))
+        var message = CheepInput.Message;
+        if (string.IsNullOrWhiteSpace(message))
         {
             ModelState.AddModelError("Message", "Message cannot be empty.");
         }
-        else if (CheepInput.Message.Length > 160)
+        else if (message.Length > 160)
         {
             ModelState.AddModelError("Message", "Message cannot be more 160 characters.");
         }
         if (!ModelState.IsValid)
         {
-            await FetchCheepAndAuthorData(_currentPage);
+            CheepTimelineModel.Cheeps = await GetCheeps(_currentPage);
+            await CheepTimelineModel.FetchAuthorData(User, _authorRepository, _cheepRepository);
             return Page();
         }
 
-        await _cheepRepository.CreateCheep(User.Identity.Name, CheepInput.Message);
+        await _cheepRepository.CreateCheep(User.Identity.Name, message);
         return Redirect("/");
     }
 
@@ -82,7 +63,7 @@ public class PublicModel : PageModel
         }
         
         await _authorRepository.Follow(User.Identity.Name, authorName);
-        FollowerMap[authorName] = true;
+        CheepTimelineModel.FollowerMap[authorName] = true;
             
         return Redirect($"/?page={page}");
     }
@@ -90,7 +71,7 @@ public class PublicModel : PageModel
     public async Task<IActionResult> OnPostUnfollow(string authorName, int? page)
     {
         await _authorRepository.Unfollow(User.Identity.Name, authorName);
-        FollowerMap[authorName] = false;
+        CheepTimelineModel.FollowerMap[authorName] = false;
 
         return Redirect($"/?page={page}");
     }
@@ -121,38 +102,25 @@ public class PublicModel : PageModel
         if (isLiked)
         {
             await _cheepRepository.Unlike(cheepId, User.Identity.Name);
-            LikeMap[cheepId] = false;
+            CheepTimelineModel.LikeMap[cheepId] = false;
         }
         else
         {
             await _cheepRepository.Like(cheepId, User.Identity.Name);
-            LikeMap[cheepId] = true;
+            CheepTimelineModel.LikeMap[cheepId] = true;
         }
 
         return Redirect($"/?page={page}");
     }
-    
-    private async Task FetchCheepAndAuthorData(int page)
-    {
-        Cheeps = await _cheepRepository.GetCheepsByNewest(page);
 
-        if (User.Identity.IsAuthenticated)
-        {
-            foreach (var cheep in Cheeps)
-            {
-                if (cheep.Author != User.Identity.Name)
-                {
-                    FollowerMap[cheep.Author] = await _authorRepository.IsFollowing(User.Identity.Name, cheep.Author);
-                    LikeMap[cheep.Id] = await _cheepRepository.IsLiked(cheep.Id, User.Identity.Name);
-                }
-            }
-        }
+    private async Task<List<CheepDTO>> GetCheeps(int page)
+    {
+         return await _cheepRepository.GetCheepsByNewest(page);
     }
 
-    public async Task<bool> NextPageHasCheeps(int page)
+    private async Task<bool> NextPageHasCheeps(int page)
     {
         var list = await _cheepRepository.GetCheeps(page + 1);
         return list.Any();
     }
-    
 }
