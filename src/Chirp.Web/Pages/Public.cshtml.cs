@@ -1,14 +1,8 @@
 ﻿#nullable disable //fjern null warning
-using System.ComponentModel.DataAnnotations;
-using System.Security.Claims;
-using Azure.Identity;
 using Chirp.Core;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualBasic;
 
 namespace Chirp.Web.Pages;
 
@@ -16,7 +10,6 @@ public class PublicModel : PageModel
 {
     private readonly ICheepRepository _cheepRepository;
     private readonly IAuthorRepository _authorRepository;
-    private readonly UserManager<Author> _userManager;
     public int _currentPage;
     public bool _nextPageHasCheeps;
     public CheepTimelineModel CheepTimelineModel { get; private set; } = new();
@@ -25,7 +18,6 @@ public class PublicModel : PageModel
     
     public PublicModel(UserManager<Author> userManager, ICheepRepository cheepRepository, IAuthorRepository authorRepository)
     {
-        _userManager = userManager;
         _cheepRepository = cheepRepository;
         _authorRepository = authorRepository;
     }
@@ -131,5 +123,4 @@ public class PublicModel : PageModel
         var list = await _cheepRepository.GetCheeps(page + 1);
         return list.Any();
     }
-    
 }

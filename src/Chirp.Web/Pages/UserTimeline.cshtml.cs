@@ -1,6 +1,4 @@
 ﻿#nullable disable //fjern null warning
-using System.ComponentModel.DataAnnotations;
-using Azure;
 using Chirp.Core;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -12,18 +10,15 @@ public class UserTimelineModel : PageModel
 {
     private readonly ICheepRepository _cheepRepository;
     private readonly IAuthorRepository _authorRepository;
-    private readonly UserManager<Author> _userManager;
     public int _currentPage;
     public bool _nextPageHasCheeps;
     public int followerCount { get; set; }
     public CheepTimelineModel CheepTimelineModel { get; private set; } = new();
     [BindProperty]
     public CheepInputModel CheepInput { get; set; }
-
-
+    
     public UserTimelineModel(UserManager<Author> userManager, ICheepRepository cheepRepository, IAuthorRepository authorRepository)
     {
-        _userManager = userManager;
         _cheepRepository = cheepRepository;
         _authorRepository = authorRepository;
     }
@@ -126,7 +121,6 @@ public class UserTimelineModel : PageModel
 
         return Redirect($"/{author}?page={page}");
     }
-    
     
     private async Task<List<CheepDTO>> GetCheeps(string author, int page)
     {

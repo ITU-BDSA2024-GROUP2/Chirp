@@ -1,9 +1,5 @@
 ﻿using System.Security.Claims;
-using Azure;
 using Chirp.Core;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Chirp.Web.Pages;
 
