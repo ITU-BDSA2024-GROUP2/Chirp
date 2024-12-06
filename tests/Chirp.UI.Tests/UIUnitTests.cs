@@ -363,5 +363,101 @@ namespace Chirp.UI.Tests
             await Expect(imgLocator.Nth(0)).ToBeVisibleAsync();
             
         }
+
+        [Test]
+        public async Task ChangeUsernameFromManageAccount()
+        {
+            await ServerUtil.DeleteUser(Page);
+            await ServerUtil.RegisterUser(Page);
+            // Arrange
+            await Page.GotoAsync("https://localhost:5273/about");
+            var listItemText1 = Page.Locator("div.aboutContainer > ul > li");
+            
+            // Assert username is username
+            await Expect(listItemText1.Nth(0)).ToHaveTextAsync("Username: username");
+            
+            // Act
+            await Page.GotoAsync("https://localhost:5273/Identity/Account/Manage");
+            var locator = Page.Locator("#profile-form input[placeholder='Please choose your username.']");
+            await locator.ClickAsync();
+            await locator.FillAsync("NewName");
+            await Page.Locator("#update-profile-button").ClickAsync();
+            var username = await locator.InputValueAsync();
+            
+            // Assert
+            Assert.AreNotEqual(username, "username");
+            
+            await Page.GotoAsync("https://localhost:5273/about");
+            var listItemText2 = Page.Locator("div.aboutContainer > ul > li");
+            
+            // Assert username is changed
+            await Expect(listItemText2.Nth(0)).ToHaveTextAsync("Username: NewName");
+            await ServerUtil.DeleteUser(Page);
+        }
+        
+        [Test]
+        public async Task ChangeEmailFromManageAccount()
+        {
+            await ServerUtil.DeleteUser(Page);
+            await ServerUtil.RegisterUser(Page);
+            // Arrange
+            await Page.GotoAsync("https://localhost:5273/about");
+            var listItemText1 = Page.Locator("div.aboutContainer > ul > li");
+            
+            // Assert Email is name@example.com
+            await Expect(listItemText1.Nth(1)).ToHaveTextAsync("Email: name@example.com");
+            
+            // Act
+            await Page.GotoAsync("https://localhost:5273/Identity/Account/Manage/Email");
+            var locator = Page.Locator(".form-control");
+            await locator.ClickAsync();
+            await locator.FillAsync("NewName@example.com");
+            await Page.Locator("#change-email-button").ClickAsync();
+            var email = await locator.InputValueAsync();
+            
+            // Assert
+            Assert.AreNotEqual(email, "name@example.com");
+            
+            await Page.GotoAsync("https://localhost:5273/about");
+            var listItemText2 = Page.Locator("div.aboutContainer > ul > li");
+            
+            // Assert Email is changed
+            await Expect(listItemText2.Nth(1)).ToHaveTextAsync("Email: NewName@example.com");
+            await ServerUtil.DeleteUser(Page);
+        }
+        
+        [Test]
+        public async Task ChangeProfilePictureFromManageAccount()
+        {
+            await ServerUtil.DeleteUser(Page);
+            await ServerUtil.RegisterUser(Page);
+            // Arrange
+            await Page.GotoAsync("https://localhost:5273/about");
+            var listItemText1 = Page.Locator("div.aboutContainer > svg");
+            var listItemText2 = Page.Locator("div.aboutContainer > img");
+            
+            // Assert ProfilePicture is visible, but not an img
+            await Expect(listItemText1.Nth(0)).ToBeVisibleAsync();
+            await Expect(listItemText2.Nth(0)).Not.ToBeVisibleAsync();
+            
+            // Act
+            var NewProfilePicture = 
+                "https://as1.ftcdn.net/v2/jpg/03/07/33/84/1000_F_307338469_HJlhqHUhowtwOVdjDUm1lwxaSvxDxXV4.jpg";
+            
+            await Page.GotoAsync("https://localhost:5273/Identity/Account/Manage");
+            var locator = Page.Locator("#profile-form input[placeholder='Please enter your image link.']");
+            await locator.ClickAsync();
+            await locator.FillAsync(NewProfilePicture);
+            await Page.Locator("#update-profile-button").ClickAsync();
+            
+            await Page.GotoAsync("https://localhost:5273/about");
+            var listItemText3 = Page.Locator("div.aboutContainer > img");
+            var imageSrc = await Page.Locator("img.claim-img").GetAttributeAsync("src");
+
+            // Assert Profile picture is changed
+            await Expect(listItemText3.Nth(0)).ToBeVisibleAsync();
+            Assert.AreEqual(NewProfilePicture, imageSrc);
+            await ServerUtil.DeleteUser(Page);
+        }
     }
 }

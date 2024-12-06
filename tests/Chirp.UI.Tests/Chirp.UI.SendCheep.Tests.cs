@@ -196,5 +196,36 @@ namespace Chirp.UI.Tests
             await Expect(newCheep).ToBeVisibleAsync();
             await Expect(newCheep).ToContainTextAsync("This is a cheep'); DROP TABLE Cheeps;--");
         }
+        
+        [Test]
+        public async Task CheepboxDoesNotAllowUserToSendEmptyCheepsAndCheepsStillAppearPublicTimeline()
+        {
+            // Arrange
+            await Page.GotoAsync("https://localhost:5273");
+            
+            // Act
+            await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
+            var cheepbox = Page.GetByText("Cheep cannot be empty Share");
+            
+            // Assert cheepbox still there, and all timline still displays cheeps
+            await Expect(Page.GetByText("Starbuck now is what we hear the worst")).ToBeVisibleAsync();
+            await Expect(cheepbox).ToBeVisibleAsync();
+        }
+        
+        [Test]
+        public async Task CheepboxDoesNotAllowUserToSendEmptyCheepsAndCheepsStillAppearPrivateTimeline()
+        {
+            // Arrange
+            await Page.GotoAsync("https://localhost:5273");
+            await Page.Locator("li").Filter(new() { HasText = "Starbuck now is what we hear the worst" }).Locator("#follow").ClickAsync();
+            await Page.GotoAsync("https://localhost:5273/username");
+            // Act
+            await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
+            var cheepbox = Page.GetByText("Cheep cannot be empty Share");
+            
+            // Assert cheepbox still there, and all timline still displays cheeps
+            await Expect(Page.GetByText("Starbuck now is what we hear the worst")).ToBeVisibleAsync();
+            await Expect(cheepbox).ToBeVisibleAsync();
+        }
     }
 }
