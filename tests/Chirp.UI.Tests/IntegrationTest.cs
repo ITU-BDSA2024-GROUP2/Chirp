@@ -276,7 +276,7 @@ public class IntegrationTest : PageTest
             
             await Page.GotoAsync("https://localhost:5273/about");
             var listItemText3 = Page.Locator("div.aboutContainer > img");
-            var imageSrc = await Page.Locator("img.claim-img").GetAttributeAsync("src");
+            var imageSrc = await Page.Locator("img.claim-img-large").GetAttributeAsync("src");
 
             // Assert Profile picture is changed
             await Expect(listItemText3.Nth(0)).ToBeVisibleAsync();
