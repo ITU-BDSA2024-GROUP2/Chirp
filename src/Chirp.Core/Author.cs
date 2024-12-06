@@ -3,6 +3,11 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Chirp.Core;
 
+/// <summary>
+/// This class repesents the user of the Chirp application.
+/// Since Chirp is a micro-blogging application, all authenticated
+/// users are expected to author cheeps and can follow other users.
+/// </summary>
 public class Author : IdentityUser
 {
     public ICollection<Cheep>? Cheeps { get; set; } = new List<Cheep>();

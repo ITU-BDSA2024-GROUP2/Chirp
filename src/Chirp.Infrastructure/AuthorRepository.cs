@@ -1,4 +1,4 @@
-#nullable disable //fjern null warning
+#nullable disable //remove null warnings
 using Chirp.Core;
 using Microsoft.EntityFrameworkCore;
 
