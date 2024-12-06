@@ -34,7 +34,7 @@ public class PublicModel : PageModel
     {
         _currentPage = page ?? 1;
         CheepTimelineModel.Cheeps = await GetCheeps(_currentPage);
-        await FetchAuthorData();
+        await CheepTimelineModel.FetchAuthorData(User, _authorRepository, _cheepRepository);
         _nextPageHasCheeps = await NextPageHasCheeps(_currentPage);
         
         return Page();
@@ -54,7 +54,7 @@ public class PublicModel : PageModel
         if (!ModelState.IsValid)
         {
             CheepTimelineModel.Cheeps = await GetCheeps(_currentPage);
-            await FetchAuthorData();
+            await CheepTimelineModel.FetchAuthorData(User, _authorRepository, _cheepRepository);
             return Page();
         }
 
@@ -124,22 +124,6 @@ public class PublicModel : PageModel
     private async Task<List<CheepDTO>> GetCheeps(int page)
     {
          return await _cheepRepository.GetCheepsByNewest(page);
-    }
-    
-    private async Task FetchAuthorData()
-    {
-        foreach (var cheep in CheepTimelineModel.Cheeps)
-        {
-            if (cheep.Author != User.Identity.Name)
-            {
-                if (User.Identity.IsAuthenticated)
-                {
-                    CheepTimelineModel.FollowerMap[cheep.Author] = await _authorRepository.IsFollowing(User.Identity.Name, cheep.Author);
-                    CheepTimelineModel.LikeMap[cheep.Id] = await _cheepRepository.IsLiked(cheep.Id, User.Identity.Name);
-                }
-            }
-            CheepTimelineModel.AvatarMap[cheep.Author] = await _authorRepository.GetProfilePicture(cheep.Author);
-        }
     }
 
     private async Task<bool> NextPageHasCheeps(int page)
