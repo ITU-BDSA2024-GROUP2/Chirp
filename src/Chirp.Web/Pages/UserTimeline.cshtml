@@ -4,6 +4,8 @@
     ViewData["Title"] = "Chirp!";
     Layout = "Shared/_Layout";
     var routeName = HttpContext.GetRouteValue("author");
+    ViewData["CurrentPage"] = Model._currentPage;
+    ViewData["NextPageHasCheeps"] = Model._nextPageHasCheeps;
 }
 
 <div>
@@ -23,25 +25,5 @@
     {
         <em>There are no cheeps so far.</em>
     }
-    
 </div>
-
-<div class="pagination">
-    @if (Model._currentPage > 1)
-    {
-        <form method="get" class="paginationButton">
-            <input type="hidden" name="page" value="@(Model._currentPage - 1)"/>
-            <button type="submit">Previous Page</button>
-        </form>
-    }
-    <div class="paginationButton">
-        <button type="submit">Current page @Model._currentPage</button>
-    </div>
-    @if (Model._nextPageHasCheeps)
-    {
-        <form method="get" class="paginationButton">
-            <input type="hidden" name="page" value="@(Model._currentPage + 1)"/>
-            <button type="submit">Next Page</button>
-        </form>
-    }
-</div>
+<partial name="Shared/_PaginationPartial"/>
