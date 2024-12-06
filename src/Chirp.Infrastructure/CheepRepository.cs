@@ -149,7 +149,7 @@ public class CheepRepository : ICheepRepository
         Cheep newCheep = new()
         {
             Text = text,
-            TimeStamp = DateTime.UtcNow, 
+            TimeStamp = DateTime.Now, 
             Author = author,
         };
         
