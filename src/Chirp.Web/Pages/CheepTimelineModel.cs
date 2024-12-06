@@ -31,5 +31,9 @@ public class CheepTimelineModel
             }
             AvatarMap[cheep.Author] = await authorRepository.GetProfilePicture(cheep.Author);
         }
+        if (user.Identity.Name != null)
+        {
+            AvatarMap[user.Identity.Name] = await authorRepository.GetProfilePicture(user.Identity.Name);
+        }
     }
 }

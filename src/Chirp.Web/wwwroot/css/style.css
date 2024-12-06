@@ -501,6 +501,13 @@ button.followBtn {
     aspect-ratio: 1 / 1;
 }
 
+.claim-img-large {
+     width: 90px;
+     height: 90px;
+     border-radius: 50%;
+     object-fit: cover;
+}
+
 svg .claim-img {
     padding: 0; !important;
 }
@@ -513,4 +520,12 @@ svg .claim-img {
     gap: 5px;
     min-height: 20px;
     min-width: 20px;
+}
+
+.userInfoContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    justify-content: flex-start;
 }
