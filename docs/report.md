@@ -77,6 +77,9 @@ With a UML sequence diagram, illustrate the flow of messages and data through yo
 Make sure that your illustration is complete. That is, likely for many of you there will be different kinds of "calls" and responses. Some HTTP calls and responses, some calls and responses in C# and likely some more. (Note the previous sentence is vague on purpose. I want that you create a complete illustration.)
 -->
 
+The diagram of sequences shown below illustrates a sequence of calls in the Chirp application initiated by the user, for both an Unauthenticated user and an authenticated user. First an HTTP request is made for the Chirp Web, which gets an HTTPS redirectURL as a response from the browser. Next the request for the public timeline is made, which goes through Chirp Web to the Chirp database, that response with cheeps from the public timeline, that goes back to the user. 
+For the authenticated user, the same happens, only change is that an authenticated user has access to their private timeline and can also post cheeps.
+
 ![UserStoryUserInformation image](images/SequenceOfFunctionality.png)
 
 
