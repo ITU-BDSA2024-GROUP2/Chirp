@@ -12,6 +12,17 @@ numbersections: true
 
 # Design and Architecture of _Chirp!_
 
+**Onion Architecture**
+
+The chirp project is heavily inspired by the onion architecture, which is seen the general composition of the code. The code is split into three different layers, that are designed to operate independently from each other. These layers are as follows: 
+A chirp core layer, that is the domain of the project. This layer is responsible for defining what the project is. The code for a cheep, like or a user is defined here. 
+Furthermore the project has an infrastructure layer, that defines how data is handled and received by the application. True to the onion architecture, this layer is build upon the core layer, which means that infrastructure uses core and builds upon it. E.g there is a repository that handles cheeps from core. 
+Lastly there exists a chirp web layer, that covers the razor pages and generally the frontend development of the project. Again true to onion architecture this layer uses core and infrastructure.
+
+![onion image](images/onion.png)
+
+Having the project split up into separate layers is optimal for testing. Since they are loosely coupled the core of the project can be tested independently without the other layers. This makes a foundation for good testing. In addition this means that the outer layers can be modified without affecting the inner layers. This results in easy scalability and maintainability. All in all this architecture greatly benefits the project in the long run.
+
 
 ## Domain model
 <!---
@@ -27,21 +38,22 @@ Here comes a description of our domain model.
 Illustrate the organization of your code base. That is, illustrate which layers exist in your (onion) architecture. Make sure to illustrate which part of your code is residing in which layer.
 -->
 
-**Onion Architecture**
-
-The chirp project is heavily inspired by the onion architecture, which is seen the general composition of the code. The code is split into three different layers, that are designed to operate independently from each other. These layers are as follows: 
-A chirp core layer, that is the domain of the project. This layer is responsible for defining what the project is. The code for a cheep, like or a user is defined here. 
-Furthermore the project has an infrastructure layer, that defines how data is handled and received by the application. True to the onion architecture, this layer is build upon the core layer, which means that infrastructure uses core and builds upon it. E.g there is a repository that handles cheeps from core. 
-Lastly there exists a chirp web layer, that covers the razor pages and generally the frontend development of the project. Again true to onion architecture this layer uses core and infrastructure.
-
-![onion image](images/onion.png)
-
-Having the project split up into separate layers is optimal for testing. Since they are loosely coupled the core of the project can be tested independently without the other layers. This makes a foundation for good testing. In addition this means that the outer layers can be modified without affecting the inner layers. This results in easy scalability and maintainability. All in all this architecture greatly benefits the project in the long run.
-
-
 ## Architecture of deployed application
 <!---
 Illustrate the architecture of your deployed application. Remember, you developed a client-server application. Illustrate the server component and to where it is deployed, illustrate a client component, and show how these communicate with each other.
+-->
+The architecture of the deployed application is illustrated below.
+![Illustration of deployed application](images/DeployedApp.png)
+
+The application follows a client-server architecture. Users interact with the application through a web browser, which communicates with the server via HTTPS.
+
+The server is a web application deployed on Azure App Service. It provides the necessary interface and API endpoints for communication with the client.
+
+The server uses a backend SQLite database for storing and retrieval of user data, cheeps etc. The database is hosted on Azure.
+
+<!--
+Evt. tilføj web, infrastructure, core til billede
+Evt. tilføj at brugeren ikke interegere direkte med databasen, men gennem et interface.
 -->
 
 ## User activities
@@ -61,7 +73,7 @@ The beginning of the user story is the same as in the make cheep diagram. The us
 <!---
 With a UML sequence diagram, illustrate the flow of messages and data through your Chirp! application. Start with an HTTP request that is send by an unauthorized user to the root endpoint of your application and end with the completely rendered web-page that is returned to the user.
 
-Make sure that your illustration is complete. That is, likely for many of you there will be different kinds of "calls" and responses. Some HTTP calls and responses, some calls and responses in C# and likely some more. (Note the previous sentence is vague on purpose. I want that you create a complete illustration.) FREE
+Make sure that your illustration is complete. That is, likely for many of you there will be different kinds of "calls" and responses. Some HTTP calls and responses, some calls and responses in C# and likely some more. (Note the previous sentence is vague on purpose. I want that you create a complete illustration.)
 -->
 
 # Process
