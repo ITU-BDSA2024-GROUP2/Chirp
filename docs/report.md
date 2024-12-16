@@ -105,6 +105,12 @@ If you want to run the tests, you have to open the Chirp folder in the terminal.
 
 # Ethics
 
+## Responsible handling of data
+The project is made in accordance to european laws and regulations. The GDPR laws are therefor central to how the application handles data, which is why the user is able to delete their data permanently. In addition chirp does not store any unnecessary data about it's users - only the minimum to be able to distinguish users from each other. 
+
+Users privacy is key, which is why chirp only operates under https to ensure that all communication with the users happens encrypted. Passwords in the database are also encrypted through hashing with ASP.NET Core Identity.
+
+
 ## License
 <!---
 State which software license you chose for your application.
