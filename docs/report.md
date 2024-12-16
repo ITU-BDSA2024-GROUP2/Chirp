@@ -54,6 +54,8 @@ Make sure that the illustrations are in line with the actual behavior of your ap
 ![UserStoryMakeCheep image](images/UserStoryMakeCheep.drawio.png)
 
 ![UserStoryUserInformation image](images/UserStoryUserInformation.png)
+The beginning of the user story is the same as in the make cheep diagram. The user logs in and gets to the public timeline. The user can then follow a user and like cheeps. When the user enters their own private timeline, it shows all of the cheeps from the users you follow. The user can then go to Manage account, and change their name, phone number, email, or profile picture. If the user wants to delete their data and profile, they can go to the Personal Data section and press Delete. 
+
 
 ## Sequence of functionality/calls trough _Chirp!_
 <!---
