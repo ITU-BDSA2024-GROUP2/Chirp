@@ -47,6 +47,10 @@ Illustrate typical scenarios of a user journey through your Chirp! application. 
 Make sure that the illustrations are in line with the actual behavior of your application.
 -->
 
+![UserStoryMakeCheep image](images/UserStoryMakeCheep.drawio.png)
+
+![UserStoryUserInformation image](images/UserStoryUserInformation.png)
+
 ## Sequence of functionality/calls trough _Chirp!_
 <!---
 With a UML sequence diagram, illustrate the flow of messages and data through your Chirp! application. Start with an HTTP request that is send by an unauthorized user to the root endpoint of your application and end with the completely rendered web-page that is returned to the user.
