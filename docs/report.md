@@ -9,7 +9,7 @@ numbersections: true
 
 # Design and Architecture of _Chirp!_
 
-Onion Architecture
+**Onion Architecture**
 
 The chirp project is heavily inspired by the onion architecture, which is seen the general composition of the code. The code is split into three different layers, that are designed to operate independently from each other. These layers are as follows: 
 A chirp core layer, that is the domain of the project. This layer is responsible for defining what the project is. The code for a cheep, like or a user is defined here. 
@@ -18,7 +18,7 @@ Lastly there exists a chirp web layer, that covers the razor pages and generally
 
 ![onion image](/images/onion.png)
 
-Having the project split up into separate layers is optimal for testing. Since they are so loosely coupled the core of the project can be tested independently without the other layers. This makes a foundation for good testing. In addition this means that the outer layers can be modified without affecting the inner layers. This results in easy scalability and maintainability. All in all this architecture greatly benefits the project in the long run.
+Having the project split up into separate layers is optimal for testing. Since they are loosely coupled the core of the project can be tested independently without the other layers. This makes a foundation for good testing. In addition this means that the outer layers can be modified without affecting the inner layers. This results in easy scalability and maintainability. All in all this architecture greatly benefits the project in the long run.
 
 
 ## Domain model
