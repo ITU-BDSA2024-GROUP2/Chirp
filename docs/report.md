@@ -52,8 +52,10 @@ Make sure that the illustrations are in line with the actual behavior of your ap
 -->
 
 ![UserStoryMakeCheep image](images/UserStoryMakeCheep.drawio.png)
+As shown above, the user story begins on the public timeline, where all cheeps are displayed, if the user wants to cheeps themselves they'll have to log in, either via. GitHub or just creating an account. Only if the login is successful will a user be able to type a cheep, and if the cheep is valid, it will be displayed on the public timeline like every other cheep.
 
 ![UserStoryUserInformation image](images/UserStoryUserInformation.png)
+
 
 ## Sequence of functionality/calls trough _Chirp!_
 <!---
