@@ -141,7 +141,7 @@ Open the project in your terminal, and type the following command, and replace `
 `dotnet user-secrets set "authentication_github_clientId" "<YOUR_CLIENTID>"`
 `dotnet user-secrets set "authentication_github_clientSecret" "<YOUR_CLIENTSECRET>"`
 
-After the secrets have been set, cd into the src folder, and then cd into the src/Chirp.Web folder. From here you simply type `dotnet run`
+After the secrets have been set, cd into the src folder, and then cd into the src/Chirp.Web folder. From here you simply type `dotnet run`. Note that you have to use dotnet 8.0 for the program to function properly.
 
 ## How to run test suite locally
 <!---
