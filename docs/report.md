@@ -1,9 +1,9 @@
 ---
 title: _Chirp!_ Project Report
-subtitle: ITU BDSA 2024 Group `<no>`
+subtitle: ITU BDSA 2024 Group `<2>`
 author:
 - "Helge Pfeiffer <ropf@itu.dk>"
-- "Adrian Hoff <adho@itu.dk>"
+- "Nikolai Tilgreen Nielsen <nitn@itu.dk>"
 numbersections: true
 ---
 
@@ -36,7 +36,6 @@ Illustrate the organization of your code base. That is, illustrate which layers 
 <!---
 Illustrate the architecture of your deployed application. Remember, you developed a client-server application. Illustrate the server component and to where it is deployed, illustrate a client component, and show how these communicate with each other.
 -->
-
 
 ## User activities
 <!---
@@ -91,16 +90,17 @@ Briefly describe what kinds of tests you have in your test suites and what they 
 
 If you want to run the tests, you have to open Chirp folder in the terminal. Then type `dotnet test`. 
 
-
-
 # Ethics
 
 ## License
 <!---
 State which software license you chose for your application.
 -->
+Chirp uses the MIT License. 
 
 ## LLMs, ChatGPT, CoPilot, and others
 <!---
-State which LLM(s) were used during development of your project. In case you were not using any, just state so. In case you were using an LLM to support your development, briefly describe when and how it was applied. Reflect in writing to which degree the responses of the LLM were helpful. Discuss briefly if application of LLMs sped up your development or if the contrary was the case.
+State which LLM(s) were used during development of your project. In case you were not using any, just state so. In case you were using an LLM to support your development, briefly describe when and how it was applied. Reflect in writing to which degree the responses of the LLM were helpful. Discuss briefly if application of LLMs sped up your development or if the contrary was the case. 
 -->
+During the preparation of Chirp we have used ChatGPT to assist our development and learning process. In general we have been very cautious with our consumption of ChatGPT and always consulted the official documentation, TAs or websites like Stack Overflow first. The primary goal and intend by using a LLM is to improve our understanding of the course material and frameworks used. We think that the responses from ChatGPT was especially helpful in understanding complex concepts. Contrary we think that responses from ChatGPT was not very helpful in speeding up development as it overcomplicates many aspects an does not have a deep understanding of our domain model like we do ourselves.
+
