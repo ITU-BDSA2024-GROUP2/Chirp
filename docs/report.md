@@ -90,10 +90,13 @@ All new features and enhancements are added as issues to the `ITU-BDSA2024-GROUP
 
 Depending on the extend of the task, each issue is assigned to the responsible person(s). When developing in teams we have made extensive use of pair programming as well as code reviews on an external monitor.
 
+<!--
 **Development**
 During the development process we have followed a trunk-based branching strategy using short-lived feature branches for each issue.
+RYK TIL ANDEN SEKTION
+ -->
 
-**Code review**
+**Code reviews**
 To ensure software quality and participation, all commits have undergone a review process from a team member who have not worked on the issue. We have used pull requests for this purpose.
 
 
