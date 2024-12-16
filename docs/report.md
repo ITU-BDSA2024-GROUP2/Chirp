@@ -77,6 +77,9 @@ With a UML sequence diagram, illustrate the flow of messages and data through yo
 Make sure that your illustration is complete. That is, likely for many of you there will be different kinds of "calls" and responses. Some HTTP calls and responses, some calls and responses in C# and likely some more. (Note the previous sentence is vague on purpose. I want that you create a complete illustration.)
 -->
 
+The diagram of sequences shown below illustrates a sequence of calls in the Chirp application initiated by the user, for both an Unauthenticated user and an authenticated user. First an HTTP request is made for the Chirp Web, which gets an HTTPS redirectURL as a response from the browser. Next the request for the public timeline is made, which goes through Chirp Web to the Chirp database, that response with cheeps from the public timeline, that goes back to the user. 
+For the authenticated user, the same happens, only change is that an authenticated user has access to their private timeline and can also post cheeps.
+
 ![UserStoryUserInformation image](images/SequenceOfFunctionality.png)
 
 
@@ -137,7 +140,7 @@ To ensure software quality and participation, all commits have undergone a revie
 There has to be some documentation on how to come from cloning your project to a running system. That is, Adrian or Helge have to know precisely what to do in which order. Likely, it is best to describe how we clone your project, which commands we have to execute, and what we are supposed to see then.
 -->
 
-To run the program locally, you will first have to clone the repository. Then you have to type in the secrets for the program. The secrets are as following:
+To run the program locally, you will first have to clone the repository. The link to the repository is `https://github.com/ITU-BDSA2024-GROUP2/Chirp.git`. Then run the command `git clone`. Then you have to type in the secrets for the program. The secrets are as following:
 ClientID: `Ov23li6lCKKhGGXefnEf`
 ClientSecret: `460047215cdea005fd386c508c0ae3dc1412c20d`
 Open the project in your terminal, and type the following command, and replace `<YOUR_CLIENTID>` with the ClientID. Then do the same for client secret:
