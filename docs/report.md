@@ -9,6 +9,14 @@ numbersections: true
 
 # Design and Architecture of _Chirp!_
 
+Onion Architecture
+
+The chirp project is heavily inspired by the onion architecture, which is seen the general composition of the code. The code is split into different segments, that is designed to  operate independtly from each other. These segments are as follows: 
+A chirp web segment, which covers the razor pages and generally all the frontend development of the project.
+Furthermore there is the chirp infrastructure segment, that covers the database and how the projects handles the data, that is recieved.
+The project also has a chirp core part, which defines what the website is. Here the code for a cheep, like or a user is defined.
+Having the project so split up into seperate parts is optimal for testing. Since they operate independtly they can also be tested independtly which makes a foundation for good testing.
+
 ## Domain model
 <!---
 Provide an illustration of your domain model. Make sure that it is correct and complete. In case you are using ASP.NET Identity, make sure to illustrate that accordingly.
