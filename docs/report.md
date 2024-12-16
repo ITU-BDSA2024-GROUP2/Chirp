@@ -134,7 +134,7 @@ To ensure software quality and participation, all commits have undergone a revie
 There has to be some documentation on how to come from cloning your project to a running system. That is, Adrian or Helge have to know precisely what to do in which order. Likely, it is best to describe how we clone your project, which commands we have to execute, and what we are supposed to see then.
 -->
 
-To run the program locally, you will first have to clone the repository. Then you have to type in the secrets for the program. The secrets are as following:
+To run the program locally, you will first have to clone the repository. The link to the repository is `https://github.com/ITU-BDSA2024-GROUP2/Chirp.git`. Then run the command `git clone`. Then you have to type in the secrets for the program. The secrets are as following:
 ClientID: `Ov23li6lCKKhGGXefnEf`
 ClientSecret: `460047215cdea005fd386c508c0ae3dc1412c20d`
 Open the project in your terminal, and type the following command, and replace `<YOUR_CLIENTID>` with the ClientID. Then do the same for client secret:
