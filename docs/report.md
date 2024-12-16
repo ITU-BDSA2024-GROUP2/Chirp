@@ -109,6 +109,7 @@ Briefly describe and illustrate the flow of activities that happen from the new 
 <!--
 HVAD SKAL TILFØJES HER??
  -->
+ skibidi
 
 
 ![Illustration of development workflow.](images/ProjectBoard.png)
