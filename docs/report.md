@@ -24,7 +24,7 @@ Provide an illustration of your domain model. Make sure that it is correct and c
  
 Here comes a description of our domain model.
 
-![Illustration of the _Chirp!_ data model as UML class diagram.](docs/images/domain_model.png)
+![Illustration of the _Chirp!_ data model as UML class diagram.](images/domain_model.png)
 
 ## Architecture — In the small
 <!---
@@ -66,6 +66,7 @@ Show a screenshot of your project board right before hand-in. Briefly describe w
 
 Briefly describe and illustrate the flow of activities that happen from the new creation of an issue (task description), over development, etc. until a feature is finally merged into the main branch of your repository.
 -->
+![Illustration of development workflow.](images/ProjectBoard.png)
 
 ## How to make _Chirp!_ work locally
 <!---
