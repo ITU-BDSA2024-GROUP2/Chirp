@@ -30,10 +30,10 @@ Illustrate the organization of your code base. That is, illustrate which layers 
 
 **Onion Architecture**
 
-The chirp project is heavily inspired by the onion architecture, which is seen the general composition of the code. The code is split into three different layers, that are designed to operate independently from each other. These layers are as follows: 
-A chirp core layer, that is the domain of the project. This layer is responsible for defining what the project is. The code for a cheep, like or a user is defined here. 
-Furthermore the project has an infrastructure layer, that defines how data is handled and received by the application. True to the onion architecture, this layer is build upon the core layer, which means that infrastructure uses core and builds upon it. E.g there is a repository that handles cheeps from core. 
-Lastly there exists a chirp web layer, that covers the razor pages and generally the frontend development of the project. Again true to onion architecture this layer uses core and infrastructure.
+The Chirp! project is heavily inspired by the onion architecture, which is seen in the general composition of the code. The code is split into three different layers. These layers are as follows: 
+A chirp **core** layer, that is the domain of the project. This layer is responsible for defining what the project is. The code for a *cheep*, *like* or a *user* is defined here. 
+Furthermore the project has an **infrastructure** layer, that defines how data is handled and received by the application. True to the onion architecture, this layer is built upon the **core** layer, which means that **infrastructure** uses **core** and builds upon it. E.g there is a repository that handles *cheeps* from **core**. 
+Lastly there exists a chirp **web** layer, that covers the razor pages and generally the frontend development of the project. Again true to onion architecture this layer uses **core** and **infrastructure**.
 
 ![onion image](images/onion.png)
 
