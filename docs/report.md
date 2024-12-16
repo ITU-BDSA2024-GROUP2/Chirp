@@ -12,17 +12,6 @@ numbersections: true
 
 # Design and Architecture of _Chirp!_
 
-**Onion Architecture**
-
-The chirp project is heavily inspired by the onion architecture, which is seen the general composition of the code. The code is split into three different layers, that are designed to operate independently from each other. These layers are as follows: 
-A chirp core layer, that is the domain of the project. This layer is responsible for defining what the project is. The code for a cheep, like or a user is defined here. 
-Furthermore the project has an infrastructure layer, that defines how data is handled and received by the application. True to the onion architecture, this layer is build upon the core layer, which means that infrastructure uses core and builds upon it. E.g there is a repository that handles cheeps from core. 
-Lastly there exists a chirp web layer, that covers the razor pages and generally the frontend development of the project. Again true to onion architecture this layer uses core and infrastructure.
-
-![onion image](images/onion.png)
-
-Having the project split up into separate layers is optimal for testing. Since they are loosely coupled the core of the project can be tested independently without the other layers. This makes a foundation for good testing. In addition this means that the outer layers can be modified without affecting the inner layers. This results in easy scalability and maintainability. All in all this architecture greatly benefits the project in the long run.
-
 
 ## Domain model
 <!---
@@ -37,6 +26,18 @@ Here comes a description of our domain model.
 <!---
 Illustrate the organization of your code base. That is, illustrate which layers exist in your (onion) architecture. Make sure to illustrate which part of your code is residing in which layer.
 -->
+
+**Onion Architecture**
+
+The chirp project is heavily inspired by the onion architecture, which is seen the general composition of the code. The code is split into three different layers, that are designed to operate independently from each other. These layers are as follows: 
+A chirp core layer, that is the domain of the project. This layer is responsible for defining what the project is. The code for a cheep, like or a user is defined here. 
+Furthermore the project has an infrastructure layer, that defines how data is handled and received by the application. True to the onion architecture, this layer is build upon the core layer, which means that infrastructure uses core and builds upon it. E.g there is a repository that handles cheeps from core. 
+Lastly there exists a chirp web layer, that covers the razor pages and generally the frontend development of the project. Again true to onion architecture this layer uses core and infrastructure.
+
+![onion image](images/onion.png)
+
+Having the project split up into separate layers is optimal for testing. Since they are loosely coupled the core of the project can be tested independently without the other layers. This makes a foundation for good testing. In addition this means that the outer layers can be modified without affecting the inner layers. This results in easy scalability and maintainability. All in all this architecture greatly benefits the project in the long run.
+
 
 ## Architecture of deployed application
 <!---
@@ -61,11 +62,19 @@ Illustrate typical scenarios of a user journey through your Chirp! application. 
 Make sure that the illustrations are in line with the actual behavior of your application.
 -->
 
+![UserStoryMakeCheep image](images/UserStoryMakeCheep.drawio.png)
+As shown above, the user story begins by logging in and starting on the public timeline, where all cheeps are displayed, if the user wants to cheeps themselves they'll have to log in, either via. GitHub or just creating an account. Only if the login is successful will a user be able to type a cheep, and if the cheep is valid, it will be displayed on the public timeline like every other cheep.
+
+![UserStoryUserInformation image](images/UserStoryUserInformation.png)
+The beginning of the user story is the same as in the make cheep diagram. The user logs in and gets to the public timeline. The user can then follow a user and like cheeps. When the user enters their own private timeline, it shows all of the cheeps from the users you follow. The user can then go to Manage account, and change their name, phone number, email, or profile picture. If the user wants to delete their data and profile, they can go to the Personal Data section and press Delete. 
+
+
+
 ## Sequence of functionality/calls trough _Chirp!_
 <!---
 With a UML sequence diagram, illustrate the flow of messages and data through your Chirp! application. Start with an HTTP request that is send by an unauthorized user to the root endpoint of your application and end with the completely rendered web-page that is returned to the user.
 
-Make sure that your illustration is complete. That is, likely for many of you there will be different kinds of "calls" and responses. Some HTTP calls and responses, some calls and responses in C# and likely some more. (Note the previous sentence is vague on purpose. I want that you create a complete illustration.)
+Make sure that your illustration is complete. That is, likely for many of you there will be different kinds of "calls" and responses. Some HTTP calls and responses, some calls and responses in C# and likely some more. (Note the previous sentence is vague on purpose. I want that you create a complete illustration.) FREE
 -->
 
 # Process
