@@ -77,6 +77,9 @@ With a UML sequence diagram, illustrate the flow of messages and data through yo
 Make sure that your illustration is complete. That is, likely for many of you there will be different kinds of "calls" and responses. Some HTTP calls and responses, some calls and responses in C# and likely some more. (Note the previous sentence is vague on purpose. I want that you create a complete illustration.)
 -->
 
+The diagram of sequences shown below illustrates a sequence of calls in the Chirp application initiated by the user, for both an Unauthenticated user and an authenticated user. First an HTTP request is made for the Chirp Web, which gets an HTTPS redirectURL as a response from the browser. Next the request for the public timeline is made, which goes through Chirp Web to the Chirp database, that response with cheeps from the public timeline, that goes back to the user. 
+For the authenticated user, the same happens, only change is that an authenticated user has access to their private timeline and can also post cheeps.
+
 ![UserStoryUserInformation image](images/SequenceOfFunctionality.png)
 
 
@@ -105,15 +108,18 @@ Show a screenshot of your project board right before hand-in. Briefly describe w
 
 Briefly describe and illustrate the flow of activities that happen from the new creation of an issue (task description), over development, etc. until a feature is finally merged into the main branch of your repository.
 -->
-![Project board before hand-in.](images/Projectboard_16-12-2024.png)
-<!--
-HVAD SKAL TILFØJES HER??
- -->
- skibidi
+All issues related to the mandatory project work as well as our own extra features are done.
 
+![Project board before hand-in.](images/Projectboard_16-12-2024.png)
+
+
+**Potential future issues**
+- Add email confirmation and two-factor authentication to improve security of Chirp.
+
+**From issue to main**
+All new features and enhancements are added as issues to the `ITU-BDSA2024-GROUP2 Chirp` backlog in GitHub. Issues follow the workflow as depicted below until they are merged to the main branch and deployed to Azure.
 
 ![Illustration of development workflow.](images/ProjectBoard.png)
-All new features and enhancements are added as issues to the `ITU-BDSA2024-GROUP2 Chirp` backlog in GitHub. Issues follow the workflow as depicted above.
 
 **Collaboration**
 
