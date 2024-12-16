@@ -9,16 +9,16 @@ numbersections: true
 
 # Design and Architecture of _Chirp!_
 
-Onion Architecture
+**Onion Architecture**
 
 The chirp project is heavily inspired by the onion architecture, which is seen the general composition of the code. The code is split into three different layers, that are designed to operate independently from each other. These layers are as follows: 
 A chirp core layer, that is the domain of the project. This layer is responsible for defining what the project is. The code for a cheep, like or a user is defined here. 
 Furthermore the project has an infrastructure layer, that defines how data is handled and received by the application. True to the onion architecture, this layer is build upon the core layer, which means that infrastructure uses core and builds upon it. E.g there is a repository that handles cheeps from core. 
 Lastly there exists a chirp web layer, that covers the razor pages and generally the frontend development of the project. Again true to onion architecture this layer uses core and infrastructure.
 
-![onion image](/images/onion.png)
+![onion image](images/onion.png)
 
-Having the project split up into separate layers is optimal for testing. Since they are so loosely coupled the core of the project can be tested independently without the other layers. This makes a foundation for good testing. In addition this means that the outer layers can be modified without affecting the inner layers. This results in easy scalability and maintainability. All in all this architecture greatly benefits the project in the long run.
+Having the project split up into separate layers is optimal for testing. Since they are loosely coupled the core of the project can be tested independently without the other layers. This makes a foundation for good testing. In addition this means that the outer layers can be modified without affecting the inner layers. This results in easy scalability and maintainability. All in all this architecture greatly benefits the project in the long run.
 
 
 ## Domain model
@@ -63,11 +63,14 @@ Illustrate with a UML activity diagram how your Chirp! applications are build, t
 Describe the illustration briefly, i.e., how your application is built, tested, released, and deployed.
 -->
 
-![OnPushPullRequestYML image](/images/OnPushPullRequestYML.png)
+![OnPushPullRequestYML image](images/OnPushPullRequestYML.png)
+The image above illustrates what happens when either a push is committed or a pull request i accepted. The first step of the yml, is running the command `dotnet restore`, this command restores the dependencies and tools of the project. Next step of the yml is running `dotnet build`, which then builds the project and its dependencies. After building the project, the yml then installs playwright, which is used for some of the tests, and is necessary for running test on GitHub. Final step of the yml is then running the command `dotnet test`, where all of the tests will run and show if any test will fail and which succeed.
 
-![OnPushToMainYML image](/images/OnPushToMainYML.png)
+![OnPushToMainYML image](images/OnPushToMainYML.png)
+When pushing to main, the procedure is a bit different. It does all the steps from the push UML diagram, but it also logins to Azure by using the Azure secrets and deploys Chirp to the Azure web service.
 
-![OnReleaseYML image](/images/OnReleaseYML.png)
+![OnReleaseYML image](images/OnReleaseYML.png)
+When making a release to github, it firstly runs `dotnet restore`, then it runs `dotnet build --no--restore`. It then installs playwright, and tests the program using `dotnet test`. It then makes zip files of the program, and makes a zip file for each operating system. It then releases it to github.
 
 
 ## Team work
@@ -118,6 +121,12 @@ Briefly describe what kinds of tests you have in your test suites and what they 
 If you want to run the tests, you have to open the Chirp folder in the terminal. Then type `dotnet test`. If some tests are failing, try deleting the database from the src/Chirp.Web folder. Additionally check if there is a .db file in the test/Chirp.API.Tests/bin. If there is one, delete that too. Then run it again.
 
 # Ethics
+
+## Responsible handling of data
+The project is made in accordance to european laws and regulations. The GDPR laws are therefor central to how the application handles data, which is why the user is able to delete their data permanently. In addition chirp does not store any unnecessary data about it's users - only the minimum to be able to distinguish users from each other. 
+
+Users privacy is key, which is why chirp only operates under https to ensure that all communication with the users happens encrypted. Passwords in the database are also encrypted through hashing with ASP.NET Core Identity.
+
 
 ## License
 <!---
