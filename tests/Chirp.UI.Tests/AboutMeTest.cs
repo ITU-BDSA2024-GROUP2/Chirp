@@ -30,6 +30,7 @@ public class AboutMeTest : PageTest
     [SetUp]
     public async Task Setup()
     {
+        await ServerUtil.DeleteUser(Page);
         await ServerUtil.RegisterUser(Page);
         await ServerUtil.LoginUser(Page);
     }
@@ -103,7 +104,7 @@ public class AboutMeTest : PageTest
         // Assert
         await Expect(listItemText.Nth(0)).ToHaveTextAsync("Username: username");
     }
-    
+        
     [Test]
     public async Task AboutMePageDisplayEmail()
     {

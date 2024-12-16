@@ -1,9 +1,9 @@
 ---
 title: _Chirp!_ Project Report
-subtitle: ITU BDSA 2024 Group `<no>`
+subtitle: ITU BDSA 2024 Group `<2>`
 author:
 - "Helge Pfeiffer <ropf@itu.dk>"
-- "Adrian Hoff <adho@itu.dk>"
+- "Nikolai Tilgreen Nielsen <nitn@itu.dk>"
 numbersections: true
 ---
 
@@ -11,11 +11,15 @@ numbersections: true
 
 Onion Architecture
 
-The chirp project is heavily inspired by the onion architecture, which is seen the general composition of the code. The code is split into different segments, that is designed to  operate independtly from each other. These segments are as follows: 
-A chirp web segment, which covers the razor pages and generally all the frontend development of the project.
-Furthermore there is the chirp infrastructure segment, that covers the database and how the projects handles the data, that is recieved.
-The project also has a chirp core part, which defines what the website is. Here the code for a cheep, like or a user is defined.
-Having the project so split up into seperate parts is optimal for testing. Since they operate independtly they can also be tested independtly which makes a foundation for good testing.
+The chirp project is heavily inspired by the onion architecture, which is seen the general composition of the code. The code is split into three different layers, that are designed to operate independently from each other. These layers are as follows: 
+A chirp core layer, that is the domain of the project. This layer is responsible for defining what the project is. The code for a cheep, like or a user is defined here. 
+Furthermore the project has an infrastructure layer, that defines how data is handled and received by the application. True to the onion architecture, this layer is build upon the core layer, which means that infrastructure uses core and builds upon it. E.g there is a repository that handles cheeps from core. 
+Lastly there exists a chirp web layer, that covers the razor pages and generally the frontend development of the project. Again true to onion architecture this layer uses core and infrastructure.
+
+![onion image](/images/onion.png)
+
+Having the project split up into separate layers is optimal for testing. Since they are so loosely coupled the core of the project can be tested independently without the other layers. This makes a foundation for good testing. In addition this means that the outer layers can be modified without affecting the inner layers. This results in easy scalability and maintainability. All in all this architecture greatly benefits the project in the long run.
+
 
 ## Domain model
 <!---
@@ -35,7 +39,6 @@ Illustrate the organization of your code base. That is, illustrate which layers 
 <!---
 Illustrate the architecture of your deployed application. Remember, you developed a client-server application. Illustrate the server component and to where it is deployed, illustrate a client component, and show how these communicate with each other.
 -->
-
 
 ## User activities
 <!---
@@ -60,6 +63,13 @@ Illustrate with a UML activity diagram how your Chirp! applications are build, t
 Describe the illustration briefly, i.e., how your application is built, tested, released, and deployed.
 -->
 
+![OnPushPullRequestYML image](/images/OnPushPullRequestYML.png)
+
+![OnPushToMainYML image](/images/OnPushToMainYML.png)
+
+![OnReleaseYML image](/images/OnReleaseYML.png)
+
+
 ## Team work
 <!---
 Show a screenshot of your project board right before hand-in. Briefly describe which tasks are still unresolved, i.e., which features are missing from your applications or which functionality is incomplete.
@@ -67,6 +77,8 @@ Show a screenshot of your project board right before hand-in. Briefly describe w
 Briefly describe and illustrate the flow of activities that happen from the new creation of an issue (task description), over development, etc. until a feature is finally merged into the main branch of your repository.
 -->
 ![Illustration of development workflow.](images/ProjectBoard.png)
+
+
 
 ## How to make _Chirp!_ work locally
 <!---
@@ -80,7 +92,7 @@ Open the project in your terminal, and type the following command, and replace `
 `dotnet user-secrets set "authentication_github_clientId" "<YOUR_CLIENTID>"`
 `dotnet user-secrets set "authentication_github_clientSecret" "<YOUR_CLIENTSECRET>"`
 
-After the secrets have been set, cd into the src folder, and then cd into the Chirp.Web folder. From here you simply type `dotnet run`
+After the secrets have been set, cd into the src folder, and then cd into the src/Chirp.Web folder. From here you simply type `dotnet run`
 
 ## How to run test suite locally
 <!---
@@ -89,9 +101,7 @@ List all necessary steps that Adrian or Helge have to perform to execute your te
 Briefly describe what kinds of tests you have in your test suites and what they are testing.
 -->
 
-If you want to run the tests, you have to open Chirp folder in the terminal. Then type `dotnet test`. 
-
-
+If you want to run the tests, you have to open the Chirp folder in the terminal. Then type `dotnet test`. If some tests are failing, try deleting the database from the src/Chirp.Web folder. Additionally check if there is a .db file in the test/Chirp.API.Tests/bin. If there is one, delete that too. Then run it again.
 
 # Ethics
 
@@ -99,8 +109,11 @@ If you want to run the tests, you have to open Chirp folder in the terminal. The
 <!---
 State which software license you chose for your application.
 -->
+Chirp uses the MIT License. 
 
 ## LLMs, ChatGPT, CoPilot, and others
 <!---
-State which LLM(s) were used during development of your project. In case you were not using any, just state so. In case you were using an LLM to support your development, briefly describe when and how it was applied. Reflect in writing to which degree the responses of the LLM were helpful. Discuss briefly if application of LLMs sped up your development or if the contrary was the case.
+State which LLM(s) were used during development of your project. In case you were not using any, just state so. In case you were using an LLM to support your development, briefly describe when and how it was applied. Reflect in writing to which degree the responses of the LLM were helpful. Discuss briefly if application of LLMs sped up your development or if the contrary was the case. 
 -->
+During the preparation of Chirp we have used ChatGPT to assist our development and learning process. In general we have been very cautious with our consumption of ChatGPT and always consulted the official documentation, TAs or websites like Stack Overflow first. The primary goal and intend by using a LLM is to improve our understanding of the course material and frameworks used. We think that the responses from ChatGPT was especially helpful in understanding complex concepts. Contrary we think that responses from ChatGPT was not very helpful in speeding up development as it overcomplicates many aspects an does not have a deep understanding of our domain model like we do ourselves.
+
