@@ -66,9 +66,10 @@ Describe the illustration briefly, i.e., how your application is built, tested, 
 ![OnPushPullRequestYML image](/images/OnPushPullRequestYML.png)
 
 ![OnPushToMainYML image](/images/OnPushToMainYML.png)
-When pushing to main, the procedure is a bit different. It does all the steps from the push UML diagram, but it also logins to Azure, and deploys Chirp to the Azure web service.
+When pushing to main, the procedure is a bit different. It does all the steps from the push UML diagram, but it also logins to Azure by using the Azure secrets and deploys Chirp to the Azure web service.
 
 ![OnReleaseYML image](/images/OnReleaseYML.png)
+When making a release to github, it firstly runs `dotnet restore`, then it runs `dotnet build --no--restore`. It then installs playwright, and tests the program using `dotnet test`. It then makes zip files of the program, and makes a zip file for each operating system. It then releases it to github.
 
 
 ## Team work
