@@ -16,7 +16,7 @@ A chirp core layer, that is the domain of the project. This layer is responsible
 Furthermore the project has an infrastructure layer, that defines how data is handled and received by the application. True to the onion architecture, this layer is build upon the core layer, which means that infrastructure uses core and builds upon it. E.g there is a repository that handles cheeps from core. 
 Lastly there exists a chirp web layer, that covers the razor pages and generally the frontend development of the project. Again true to onion architecture this layer uses core and infrastructure.
 
-![onion image](/images/onion.png)
+![onion image](images/onion.png)
 
 Having the project split up into separate layers is optimal for testing. Since they are so loosely coupled the core of the project can be tested independently without the other layers. This makes a foundation for good testing. In addition this means that the outer layers can be modified without affecting the inner layers. This results in easy scalability and maintainability. All in all this architecture greatly benefits the project in the long run.
 
@@ -28,7 +28,7 @@ Provide an illustration of your domain model. Make sure that it is correct and c
  
 Here comes a description of our domain model.
 
-![Illustration of the _Chirp!_ data model as UML class diagram.](docs/images/domain_model.png)
+![Illustration of the _Chirp!_ data model as UML class diagram.](images/domain_model.png)
 
 ## Architecture — In the small
 <!---
@@ -63,12 +63,12 @@ Illustrate with a UML activity diagram how your Chirp! applications are build, t
 Describe the illustration briefly, i.e., how your application is built, tested, released, and deployed.
 -->
 
-![OnPushPullRequestYML image](/images/OnPushPullRequestYML.png)
+![OnPushPullRequestYML image](images/OnPushPullRequestYML.png)
 
-![OnPushToMainYML image](/images/OnPushToMainYML.png)
+![OnPushToMainYML image](images/OnPushToMainYML.png)
 When pushing to main, the procedure is a bit different. It does all the steps from the push UML diagram, but it also logins to Azure by using the Azure secrets and deploys Chirp to the Azure web service.
 
-![OnReleaseYML image](/images/OnReleaseYML.png)
+![OnReleaseYML image](images/OnReleaseYML.png)
 When making a release to github, it firstly runs `dotnet restore`, then it runs `dotnet build --no--restore`. It then installs playwright, and tests the program using `dotnet test`. It then makes zip files of the program, and makes a zip file for each operating system. It then releases it to github.
 
 
