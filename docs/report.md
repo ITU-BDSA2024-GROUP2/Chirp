@@ -105,15 +105,18 @@ Show a screenshot of your project board right before hand-in. Briefly describe w
 
 Briefly describe and illustrate the flow of activities that happen from the new creation of an issue (task description), over development, etc. until a feature is finally merged into the main branch of your repository.
 -->
-![Project board before hand-in.](images/Projectboard_16-12-2024.png)
-<!--
-HVAD SKAL TILFØJES HER??
- -->
- skibidi
+All issues related to the mandatory project work as well as our own extra features are done.
 
+![Project board before hand-in.](images/Projectboard_16-12-2024.png)
+
+
+**Potential future issues**
+- Add email confirmation and two-factor authentication to improve security of Chirp.
+
+**From issue to main**
+All new features and enhancements are added as issues to the `ITU-BDSA2024-GROUP2 Chirp` backlog in GitHub. Issues follow the workflow as depicted below until they are merged to the main branch and deployed to Azure.
 
 ![Illustration of development workflow.](images/ProjectBoard.png)
-All new features and enhancements are added as issues to the `ITU-BDSA2024-GROUP2 Chirp` backlog in GitHub. Issues follow the workflow as depicted above.
 
 **Collaboration**
 
