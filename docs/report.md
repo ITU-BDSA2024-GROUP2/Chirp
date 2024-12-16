@@ -17,6 +17,7 @@ Furthermore there is the chirp infrastructure segment, that covers the database 
 The project also has a chirp core part, which defines what the website is. Here the code for a cheep, like or a user is defined.
 Having the project so split up into seperate parts is optimal for testing. Since they operate independtly they can also be tested independtly which makes a foundation for good testing.
 
+
 ## Domain model
 <!---
 Provide an illustration of your domain model. Make sure that it is correct and complete. In case you are using ASP.NET Identity, make sure to illustrate that accordingly.
@@ -60,12 +61,21 @@ Illustrate with a UML activity diagram how your Chirp! applications are build, t
 Describe the illustration briefly, i.e., how your application is built, tested, released, and deployed.
 -->
 
+![OnPushPullRequestYML image](/images/OnPushPullRequestYML.png)
+
+![OnPushToMainYML image](/images/OnPushToMainYML.png)
+
+![OnReleaseYML image](/images/OnReleaseYML.png)
+
+
 ## Team work
 <!---
 Show a screenshot of your project board right before hand-in. Briefly describe which tasks are still unresolved, i.e., which features are missing from your applications or which functionality is incomplete.
 
 Briefly describe and illustrate the flow of activities that happen from the new creation of an issue (task description), over development, etc. until a feature is finally merged into the main branch of your repository.
 -->
+
+
 
 ## How to make _Chirp!_ work locally
 <!---
@@ -79,7 +89,7 @@ Open the project in your terminal, and type the following command, and replace `
 `dotnet user-secrets set "authentication_github_clientId" "<YOUR_CLIENTID>"`
 `dotnet user-secrets set "authentication_github_clientSecret" "<YOUR_CLIENTSECRET>"`
 
-After the secrets have been set, cd into the src folder, and then cd into the Chirp.Web folder. From here you simply type `dotnet run`
+After the secrets have been set, cd into the src folder, and then cd into the src/Chirp.Web folder. From here you simply type `dotnet run`
 
 ## How to run test suite locally
 <!---
@@ -88,9 +98,7 @@ List all necessary steps that Adrian or Helge have to perform to execute your te
 Briefly describe what kinds of tests you have in your test suites and what they are testing.
 -->
 
-If you want to run the tests, you have to open Chirp folder in the terminal. Then type `dotnet test`. 
-
-
+If you want to run the tests, you have to open the Chirp folder in the terminal. Then type `dotnet test`. If some tests are failing, try deleting the database from the src/Chirp.Web folder. Additionally check if there is a .db file in the test/Chirp.API.Tests/bin. If there is one, delete that too. Then run it again.
 
 # Ethics
 
