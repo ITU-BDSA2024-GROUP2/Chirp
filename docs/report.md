@@ -2,8 +2,11 @@
 title: _Chirp!_ Project Report
 subtitle: ITU BDSA 2024 Group `<2>`
 author:
-- "Helge Pfeiffer <ropf@itu.dk>"
+- "Anders Georg Frølich Hansen <ageh@itu.dk>"
+- "Mads Østrup <moes@itu.dk>"
+- "Mathias Bindslev Hansen <bimh@itu.dk>"
 - "Nikolai Tilgreen Nielsen <nitn@itu.dk>"
+- "Rasmus Mygind Poulsen <rpou@itu.dk>"
 numbersections: true
 ---
 
@@ -84,7 +87,9 @@ Show a screenshot of your project board right before hand-in. Briefly describe w
 Briefly describe and illustrate the flow of activities that happen from the new creation of an issue (task description), over development, etc. until a feature is finally merged into the main branch of your repository.
 -->
 ![Project board before hand-in.](images/Projectboard_16-12-2024.png)
-
+<!--
+HVAD SKAL TILFØJES HER??
+ -->
 
 
 ![Illustration of development workflow.](images/ProjectBoard.png)
