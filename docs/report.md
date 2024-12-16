@@ -57,8 +57,6 @@ As shown above, the user story begins by logging in and starting on the public t
 ![UserStoryUserInformation image](images/UserStoryUserInformation.png)
 The beginning of the user story is the same as in the make cheep diagram. The user logs in and gets to the public timeline. The user can then follow a user and like cheeps. When the user enters their own private timeline, it shows all of the cheeps from the users you follow. The user can then go to Manage account, and change their name, phone number, email, or profile picture. If the user wants to delete their data and profile, they can go to the Personal Data section and press Delete. 
 
-
-
 ## Sequence of functionality/calls trough _Chirp!_
 <!---
 With a UML sequence diagram, illustrate the flow of messages and data through your Chirp! application. Start with an HTTP request that is send by an unauthorized user to the root endpoint of your application and end with the completely rendered web-page that is returned to the user.
