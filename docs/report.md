@@ -64,6 +64,7 @@ Describe the illustration briefly, i.e., how your application is built, tested, 
 -->
 
 ![OnPushPullRequestYML image](images/OnPushPullRequestYML.png)
+The image above illustrates what happens when either a push is committed or a pull request i accepted. The first step of the yml, is running the command `dotnet restore`, this command restores the dependencies and tools of the project. Next step of the yml is running `dotnet build`, which then builds the project and its dependencies. After building the project, the yml then installs playwright, which is used for some of the tests, and is necessary for running test on GitHub. Final step of the yml is then running the command `dotnet test`, where all of the tests will run and show if any test will fail and which succeed.
 
 ![OnPushToMainYML image](images/OnPushToMainYML.png)
 When pushing to main, the procedure is a bit different. It does all the steps from the push UML diagram, but it also logins to Azure by using the Azure secrets and deploys Chirp to the Azure web service.
