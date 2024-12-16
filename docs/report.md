@@ -52,9 +52,11 @@ Make sure that the illustrations are in line with the actual behavior of your ap
 -->
 
 ![UserStoryMakeCheep image](images/UserStoryMakeCheep.drawio.png)
+As shown above, the user story begins by logging in and starting on the public timeline, where all cheeps are displayed, if the user wants to cheeps themselves they'll have to log in, either via. GitHub or just creating an account. Only if the login is successful will a user be able to type a cheep, and if the cheep is valid, it will be displayed on the public timeline like every other cheep.
 
 ![UserStoryUserInformation image](images/UserStoryUserInformation.png)
 The beginning of the user story is the same as in the make cheep diagram. The user logs in and gets to the public timeline. The user can then follow a user and like cheeps. When the user enters their own private timeline, it shows all of the cheeps from the users you follow. The user can then go to Manage account, and change their name, phone number, email, or profile picture. If the user wants to delete their data and profile, they can go to the Personal Data section and press Delete. 
+
 
 
 ## Sequence of functionality/calls trough _Chirp!_
