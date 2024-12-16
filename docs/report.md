@@ -76,8 +76,22 @@ Show a screenshot of your project board right before hand-in. Briefly describe w
 
 Briefly describe and illustrate the flow of activities that happen from the new creation of an issue (task description), over development, etc. until a feature is finally merged into the main branch of your repository.
 -->
-![Illustration of development workflow.](images/ProjectBoard.png)
+![Project board before hand-in.](images/Projectboard_16-12-2024.png)
 
+
+
+![Illustration of development workflow.](images/ProjectBoard.png)
+All new features and enhancements are added as issues to the `ITU-BDSA2024-GROUP2 Chirp` backlog in GitHub. Issues follow the workflow as depicted above.
+
+**Collaboration**
+
+Depending on the extend of the task, each issue is assigned to the responsible person(s). When developing in teams we have made extensive use of pair programming as well as code reviews on an external monitor.
+
+**Development**
+During the development process we have followed a trunk-based branching strategy using short-lived feature branches for each issue.
+
+**Code review**
+To ensure software quality and participation, all commits have undergone a review process from a team member who have not worked on the issue. We have used pull requests for this purpose.
 
 
 ## How to make _Chirp!_ work locally
