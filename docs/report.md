@@ -11,11 +11,12 @@ numbersections: true
 
 Onion Architecture
 
-The chirp project is heavily inspired by the onion architecture, which is seen the general composition of the code. The code is split into different segments, that is designed to  operate independtly from each other. These segments are as follows: 
-A chirp web segment, which covers the razor pages and generally all the frontend development of the project.
-Furthermore there is the chirp infrastructure segment, that covers the database and how the projects handles the data, that is recieved.
-The project also has a chirp core part, which defines what the website is. Here the code for a cheep, like or a user is defined.
-Having the project so split up into seperate parts is optimal for testing. Since they operate independtly they can also be tested independtly which makes a foundation for good testing.
+The chirp project is heavily inspired by the onion architecture, which is seen the general composition of the code. The code is split into three different layers, that are designed to operate independently from each other. These layers are as follows: 
+A chirp core layer, that is the domain of the project. This layer is responsible for defining what the project is. The code for a cheep, like or a user is defined here. 
+Furthermore the project has an infrastructure layer, that defines how data is handled and received by the application. True to the onion architecture, this layer is build upon the core layer, which means that infrastructure uses core and builds upon it. E.g there is a repository that handles cheeps from core. 
+Lastly there exists a chirp web layer, that covers the razor pages and generally the frontend development of the project. Again true to onion architecture this layer uses core and infrastructure.
+
+Having the project split up into separate layers is optimal for testing. Since they are so loosely coupled the core of the project can be tested independently without the other layers. This makes a foundation for good testing. In addition this means that the outer layers can be modified without affecting the inner layers. This results in easy scalability and maintainability. All in all this architecture greatly benefits the project in the long run.
 
 ## Domain model
 <!---
