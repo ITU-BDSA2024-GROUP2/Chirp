@@ -16,6 +16,8 @@ A chirp core layer, that is the domain of the project. This layer is responsible
 Furthermore the project has an infrastructure layer, that defines how data is handled and received by the application. True to the onion architecture, this layer is build upon the core layer, which means that infrastructure uses core and builds upon it. E.g there is a repository that handles cheeps from core. 
 Lastly there exists a chirp web layer, that covers the razor pages and generally the frontend development of the project. Again true to onion architecture this layer uses core and infrastructure.
 
+![onion image](/images/onion.png)
+
 Having the project split up into separate layers is optimal for testing. Since they are so loosely coupled the core of the project can be tested independently without the other layers. This makes a foundation for good testing. In addition this means that the outer layers can be modified without affecting the inner layers. This results in easy scalability and maintainability. All in all this architecture greatly benefits the project in the long run.
 
 ## Domain model
