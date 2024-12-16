@@ -42,6 +42,17 @@ Illustrate the organization of your code base. That is, illustrate which layers 
 <!---
 Illustrate the architecture of your deployed application. Remember, you developed a client-server application. Illustrate the server component and to where it is deployed, illustrate a client component, and show how these communicate with each other.
 -->
+The architecture of the deployed application is illustrated below.
+![Illustration of deployed application](images/DeployedApp.png)
+
+**Client**
+The application follows a client-server architecture. Users interact with the application through a web browser, which communicates with the server via HTTPS.
+
+**Server**
+The server is a web application deployed on Azure App Service. It provides the necessary interface and API endpoints for communication with the client.
+
+**Database**
+The server uses a backend SQLite database for storing and retrieval of user data, cheeps etc. The database is hosted on Azure.
 
 ## User activities
 <!---
