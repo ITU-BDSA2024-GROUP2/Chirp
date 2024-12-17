@@ -15,7 +15,7 @@ numbersections: true
 ## Domain model
 
 ![Illustration of domain model (highlighted in red).](images/DomainModel.png)
-
+\newpage
 
 ## Architecture — In the small
 
@@ -54,6 +54,7 @@ Below are illustrated examples of different user activities.
 The diagram of sequences shown below illustrates a sequence of calls in the _Chirp!_ application initiated by a user, for both an unauthenticated and an authenticated user.
 
 ![Flow of calls and data through Chirp!](images/SequenceOfFunctionality.png)
+\newpage
 
 # Process
 
@@ -80,6 +81,7 @@ When pushing to main, the build and test flows are run. It also logs in to Azure
 
 ![Deployment workflow.](images/OnPushToMain.png){ width=60% }
 <br>
+\newpage
 
 **Release**
 
@@ -103,6 +105,7 @@ All issues related to the mandatory project work as well as our own extra featur
 **From issue to main**
 
 All new features and enhancements are added as issues to the `ITU-BDSA2024-GROUP2 Chirp` backlog in GitHub. Issues follow the workflow as depicted below until they are merged to the main branch and deployed to Azure.
+\newpage
 
 ![Development workflow.](images/ProjectBoard.png)
 
@@ -136,6 +139,7 @@ To ensure software quality and participation, commits have undergone a review pr
 4. Type: `dotnet run`
 
 **Note:** You have to use dotnet 8 for the program to function properly.
+\newpage
 
 ## How to run test suite locally
 
