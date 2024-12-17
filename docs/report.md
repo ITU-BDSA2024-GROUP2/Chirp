@@ -78,7 +78,7 @@ The image below illustrates what happens when either a push is committed or a pu
 
 When pushing to main, the build and test flows are run. It also logs in to Azure by using the Azure secrets and deploys Chirp to the Azure web service.
 
-![Deployment workflow](images/OnPushToMainYML.png){ width=60% }
+![Deployment workflow](images/OnPushToMain.png){ width=60% }
 <br>
 
 **Release**
