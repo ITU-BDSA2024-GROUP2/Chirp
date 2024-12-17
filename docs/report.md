@@ -1,6 +1,6 @@
 ---
 title: _Chirp!_ Project Report
-subtitle: ITU BDSA 2024 Group `<2>`
+subtitle: ITU BDSA 2024 Group `2`
 author:
 - "Anders Georg Frølich Hansen <ageh@itu.dk>"
 - "Mads Østrup <moes@itu.dk>"
@@ -35,7 +35,7 @@ The Chirp! project implements the onion architecture, which is seen in the compo
 * A chirp **infrastructure** layer, that is responsible for manipulation and retrieval of data. True to the onion architecture, this layer is built upon the **core** layer, which means that **infrastructure** depends on **core**. 
 * A chirp **web** layer, that is responsible for the UI of the project. Again, true to onion architecture this layer depends on **core** and **infrastructure**.
 
-![onion image](images/onion.png)
+![Organization of codebase](images/onion.png)
 
 Having the project split up into separate layers is optimal for testing. Since they are loosely coupled the core of the project can be tested independently without the other layers. This makes a foundation for good testing. In addition this means that the outer layers can be modified without affecting the inner layers. This results in easy scalability and maintainability. All in all this architecture greatly benefits the project in the long run.
 
@@ -43,8 +43,7 @@ Having the project split up into separate layers is optimal for testing. Since t
 <!---
 Illustrate the architecture of your deployed application. Remember, you developed a client-server application. Illustrate the server component and to where it is deployed, illustrate a client component, and show how these communicate with each other.
 -->
-The architecture of the deployed application is illustrated below.
-![Illustration of deployed application](images/DeployedApp.png)
+![Deployed application](images/DeployedApp.png)
 
 The application follows a client-server architecture. The server is a web application deployed on Azure App Service. It provides the necessary interface and API endpoints for communication with the client.
 
@@ -60,14 +59,13 @@ Illustrate typical scenarios of a user journey through your Chirp! application. 
 Make sure that the illustrations are in line with the actual behavior of your application.
 -->
 
-![UserStoryMakeCheep image](images/UserStoryForShareCheep.png)
+![User Story for making a cheep](images/UserStoryForShareCheep.png){ width=80% }
 
 
-![UserStoryUserInformation image](images/UserStoryFollowAndLike.png)
-
-![UserStoryUserInformation image](images/UserStoryChangeInfoDeleteAccount.png)
+![User story for following and liking](images/UserStoryFollowAndLike.png){ width=80% }
 
 
+![User story for managing personal information](images/UserStoryChangeInfoDeleteAccount.png){ width=80% }
 
 ## Sequence of functionality/calls through _Chirp!_
 <!---
@@ -78,7 +76,7 @@ Make sure that your illustration is complete. That is, likely for many of you th
 
 The diagram of sequences shown below illustrates a sequence of calls in the Chirp application initiated by the user, for both an unauthenticated user and an authenticated user.
 
-![UserStoryUserInformation image](images/SequenceOfFunctionality.png)
+![Flow of messages and data through Chirp](images/SequenceOfFunctionality.png)
 
 
 # Process
@@ -98,12 +96,13 @@ The image below illustrates what happens when either a push is committed or a pu
   * The yml installs playwright, which is necessary for running test on GitHub.
   * `dotnet test`, where all of the tests will run and show if any test will fail and which succeed.
 
-![OnPushPullRequestYML image](images/OnPushPullRequestYML.png)
+![Build and test workflow](images/OnPushPullRequestYML.png){ width=50% }
 
 
 **Deployment**
 When pushing to main, the build and test flows are run. It also logs in to Azure by using the Azure secrets and deploys Chirp to the Azure web service.
-![OnPushToMainYML image](images/OnPushToMainYML.png)
+
+![Deployment workflow](images/OnPushToMainYML.png){ width=50% }
 
 **Release**
 When pushing with a new tag, a release is made to GitHub:
@@ -111,7 +110,7 @@ When pushing with a new tag, a release is made to GitHub:
 * The artifacts for each publish is zipped to its own zip file
 * The zip files are released to GitHub under a new release.
 
-![OnReleaseYML image](images/OnReleaseYML.png)
+![Release workflow](images/OnReleaseYML.png){ width=50% }
 
 
 ## Team work
@@ -127,7 +126,7 @@ All issues related to the mandatory project work as well as our own extra featur
 **From issue to main**
 All new features and enhancements are added as issues to the `ITU-BDSA2024-GROUP2 Chirp` backlog in GitHub. Issues follow the workflow as depicted below until they are merged to the main branch and deployed to Azure.
 
-![Illustration of development workflow.](images/ProjectBoard.png)
+![Development workflow.](images/ProjectBoard.png)
 
 **Collaboration**
 Depending on the extend of the task, each issue is assigned to the responsible person(s). When developing in teams we have made extensive use of pair programming as well as code reviews on an external monitor.
@@ -141,11 +140,17 @@ To ensure software quality and participation, commits have undergone a review pr
 There has to be some documentation on how to come from cloning your project to a running system. That is, Adrian or Helge have to know precisely what to do in which order. Likely, it is best to describe how we clone your project, which commands we have to execute, and what we are supposed to see then.
 -->
 **Running _Chirp!_ locally**
-1. Clone the repository by running the following command `git clone https://github.com/ITU-BDSA2024-GROUP2/Chirp.git`. 
+
+1. Clone the repository by running the following command `git clone https://github.com/ITU-BDSA2024-GROUP2/Chirp.git`.
+
 2. Setup program secrets.
-2.1. Go to the root of the project `/Chirp`.
-2.2. Type the following command:
+
+    2.1. Go to the root of the project `/Chirp`.
+
+    2.2. Type the following command:
+
 **ClientID:** `dotnet user-secrets set "authentication_github_clientId" "Ov23li6lCKKhGGXefnEf"`
+
 **ClientSecret:** `dotnet user-secrets set "authentication_github_clientSecret" "460047215cdea005fd386c508c0ae3dc1412c20d"`
 3. Cd into the folder `Chirp/src/Chirp.Web`.
 4. Type `dotnet run`. 
@@ -159,6 +164,7 @@ List all necessary steps that Adrian or Helge have to perform to execute your te
 Briefly describe what kinds of tests you have in your test suites and what they are testing.
 -->
 **Running _Chirp!_ tests locally**
+
 1. Cd into the folder `Chirp/src/Chirp.Web`.
 2. Run the following command `pwsh bin/Debug/net8.0/playwright.ps1 install --with-deps`.
 3. Go to the root of the project `/Chirp`.
