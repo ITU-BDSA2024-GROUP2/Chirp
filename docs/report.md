@@ -14,46 +14,46 @@ numbersections: true
 
 ## Domain model
 
-![Illustration of domain model (highlighted in red)](images/DomainModel.png)
+![Illustration of domain model (highlighted in red).](images/DomainModel.png)
 
 
 ## Architecture — In the small
 
 **Onion Architecture**
 
-The Chirp! project implements the onion architecture, which is seen in the composition of the code. The code is split into three different layers:
+The _Chirp!_ project implements the onion architecture, which is seen in the composition of the code. The code is split into three different layers:
 
-- A chirp **core** layer, that is the domain of the project, and how it differentiates from other programs.
+- A chirp **core** layer, that contains the domain model of the project.
 
 - A chirp **infrastructure** layer, that is responsible for manipulation and retrieval of data. True to the onion architecture, this layer is built upon the **core** layer, which means that **infrastructure** depends on **core**.
 
 - A chirp **web** layer, that is responsible for the UI of the project. Again, true to onion architecture this layer depends on **core** and **infrastructure**.
 
-![Organization of codebase](images/Onion.png){ width=60% }
+![Organization of codebase.](images/Onion.png){ width=60% }
 
-Having the project split up into separate layers is optimal for testing. Since they are loosely coupled the core of the project can be tested independently without the other layers. This makes a foundation for good testing. In addition this means that the outer layers can be modified without affecting the inner layers. This results in easy scalability and maintainability. All in all this architecture greatly benefits the project in the long run.
+Having the project split up into separate layers is optimal for testing. Since the layers are loosely coupled the core of the project can be tested independently. This makes a foundation for good testing. In addition this means that the outer layers can be modified without affecting the inner layers. This results in easy scalability and maintainability. All in all this architecture greatly benefits the project in the long run.
 
 ## Architecture of deployed application
 
 The application follows a client-server architecture. The server is a web application deployed on Azure App Service. It provides the necessary interface and API endpoints for communication with the client.
 
-![Deployed application](images/DeployedApp.png)
+![Deployed application.](images/DeployedApp.png)
 
 ## User activities
 
 Below are illustrated examples of different user activities.
 
-![User Story for making a cheep](images/UserStoryForShareCheep.png)
+![User Story for making a cheep.](images/UserStoryForShareCheep.png)
 
-![User story for follow and like](images/UserStoryFollowAndLike.png)
+![User story for follow and like.](images/UserStoryFollowAndLike.png)
 
-![User story for managing personal information](images/UserStoryChangeInfoDeleteAccount.png)
+![User story for managing personal information.](images/UserStoryChangeInfoDeleteAccount.png)
 
 ## Sequence of functionality/calls through _Chirp!_
 
-The diagram of sequences shown below illustrates a sequence of calls in the Chirp application initiated by the user, for both an unauthenticated user and an authenticated user.
+The diagram of sequences shown below illustrates a sequence of calls in the _Chirp!_ application initiated by a user, for both an unauthenticated and an authenticated user.
 
-![Flow of calls and data through Chirp](images/SequenceOfFunctionality.png)
+![Flow of calls and data through Chirp!](images/SequenceOfFunctionality.png)
 
 # Process
 
@@ -61,13 +61,13 @@ The diagram of sequences shown below illustrates a sequence of calls in the Chir
 
 **Build and test**
 
-The image below illustrates what happens when either a push is committed or a pull request is made.
+The image below illustrates what happens when either a commit is pushed or a pull request is made.
 
-- `dotnet restore`, this command restores the dependencies and tools of the project.
+- `dotnet restore`, restores the dependencies and tools of the project.
 
-- `dotnet build`, which then builds the project and its dependencies. 
+- `dotnet build`, builds the project and its dependencies. 
 
-- The yml installs playwright, which is necessary for running test on GitHub.
+- Installs PlayWright, which is necessary for running PlayWright tests on GitHub.
 
 - `dotnet test`, where all of the tests will run and show if any test will fail and which succeed.
 
@@ -78,17 +78,20 @@ The image below illustrates what happens when either a push is committed or a pu
 
 When pushing to main, the build and test flows are run. It also logs in to Azure by using the Azure secrets and deploys Chirp to the Azure web service.
 
-![Deployment workflow](images/OnPushToMain.png){ width=60% }
+![Deployment workflow.](images/OnPushToMain.png){ width=60% }
 <br>
 
 **Release**
 
 When pushing with a new tag, a release is made to GitHub:
+
 - The application is published for Windows, Linux and MacOS.
+
 - The artifacts for each publish is zipped to its own zip file
+
 - The zip files are released to GitHub under a new release.
 
-![Release workflow](images/OnReleaseYML.png){ width=80% }
+![Release workflow.](images/OnReleaseYML.png){ width=80% }
 <br>
 
 ## Team work
@@ -146,7 +149,7 @@ To ensure software quality and participation, commits have undergone a review pr
 
 2. Type: `dotnet test` 
 
-**Note:** If some tests are failing, try deleting the database from the `src/Chirp.Web` folder. Additionally check if there is a .db file in the `test/Chirp.API.Tests/bin`. If there is one, delete that too. Then run the tests again.
+**Note:** If some tests fail the database file might be deprecated. To fix this delete the database file from the `src/Chirp.Web` folder. Additionally check if there is a .db file in the `test/Chirp.API.Tests/bin`. If there is one, delete that too. Then run the tests again.
 
 The test suites contain the following tests:
 
@@ -164,15 +167,15 @@ Testing a complete user journey through the application. E.g. logging in, making
 
 **UI tests** 
 
-Made using PlayWright. Testing and simulating user interactions and navigation through the user interface. E.g. that the submit button is accessible when sharing a cheep.
+Made using PlayWright. Testing and simulating user interactions and navigation through the user interface. E.g. testing that the submit button is accessible when sharing a cheep.
 
 # Ethics
 ## License
 
-Chirp uses the MIT License. 
+_Chirp!_ uses the MIT License. 
 
 ## LLMs, ChatGPT, CoPilot, and others
 
-During the preparation of Chirp we have used ChatGPT to assist our development and learning process. In most cases we have been cautious with our usage of ChatGPT and always consulted the official documentation, TAs or websites like Stack Overflow first. 
+During the preparation of _Chirp!_ we have used ChatGPT to assist our development and learning process. In most cases we have been cautious with our usage of ChatGPT and always consulted the official documentation, TAs or websites like Stack Overflow first. 
 
-The primary goal and intend of using an LLM is to improve our understanding of the course material and frameworks used. We think that the responses from ChatGPT were especially helpful in understanding complex concepts. Contrary, responses from ChatGPT were not very helpful in speeding up development as it overcomplicates many aspects and does not have a deep understanding of our domain model like we do ourselves.
+The primary goal and intend of using an LLM is to improve our understanding of the course material and frameworks used. We think that the responses from ChatGPT were especially helpful in understanding complex concepts. Contrary, responses from ChatGPT were not very helpful in speeding up development. It overcomplicates many aspects and does not have a deep understanding of our domain model like we do ourselves.
