@@ -35,7 +35,7 @@ The Chirp! project implements the onion architecture, which is seen in the compo
 * A chirp **infrastructure** layer, that is responsible for manipulation and retrieval of data. True to the onion architecture, this layer is built upon the **core** layer, which means that **infrastructure** depends on **core**. 
 * A chirp **web** layer, that is responsible for the UI of the project. Again, true to onion architecture this layer depends on **core** and **infrastructure**.
 
-![Organization of codebase](images/Onion.png)
+![Organization of codebase](images/Onion.png){ width=50% }
 
 Having the project split up into separate layers is optimal for testing. Since they are loosely coupled the core of the project can be tested independently without the other layers. This makes a foundation for good testing. In addition this means that the outer layers can be modified without affecting the inner layers. This results in easy scalability and maintainability. All in all this architecture greatly benefits the project in the long run.
 
@@ -89,20 +89,18 @@ Describe the illustration briefly, i.e., how your application is built, tested, 
 -->
 
 **Build and test**
-
 The image below illustrates what happens when either a push is committed or a pull request is made.
   * `dotnet restore`, this command restores the dependencies and tools of the project.
   * `dotnet build`, which then builds the project and its dependencies. 
   * The yml installs playwright, which is necessary for running test on GitHub.
   * `dotnet test`, where all of the tests will run and show if any test will fail and which succeed.
 
-![Build and test workflow](images/OnPushPullRequestYML.png){ width=50% }
-
+![Build and test workflow](images/OnPushPullRequestYML.png){ width=60% }
 
 **Deployment**
 When pushing to main, the build and test flows are run. It also logs in to Azure by using the Azure secrets and deploys Chirp to the Azure web service.
 
-![Deployment workflow](images/OnPushToMainYML.png){ width=50% }
+![Deployment workflow](images/OnPushToMainYML.png){ width=60% }
 
 **Release**
 When pushing with a new tag, a release is made to GitHub:
@@ -110,7 +108,7 @@ When pushing with a new tag, a release is made to GitHub:
 * The artifacts for each publish is zipped to its own zip file
 * The zip files are released to GitHub under a new release.
 
-![Release workflow](images/OnReleaseYML.png){ width=50% }
+![Release workflow](images/OnReleaseYML.png){ width=80% }
 
 
 ## Team work
@@ -172,11 +170,15 @@ Briefly describe what kinds of tests you have in your test suites and what they 
 
 **Note:** If some tests are failing, try deleting the database from the `src/Chirp.Web` folder. Additionally check if there is a .db file in the `test/Chirp.API.Tests/bin`. If there is one, delete that too. Then run the tests again.
 
-There are four kinds of tests:
-* **UNIT tests** are testing 1 method or one feature. This could be testing changing profile picture.
-* **INTEGRATION tests** are testing a combination of methods, or a component of the website. This could be testing the register form.
-* **END TO END tests** are testing a full user experience. This could be making a profile, sending a cheep and entering the private timeline.
-* **UI tests** were made using playwright, for easy navigation through the UI elements.
+The test suites contain 4 kind of tests:
+* **UNIT tests** 
+Testing individual methods in isolation. E.g. creating a new cheep or author in the database.
+* **INTEGRATION tests** 
+Testing a combination of methods or a component of the website. E.g. testing that liking a cheep stores the like in the database.
+* **END TO END tests** 
+Testing a complete user journey through the application. E.g. logging in, making a cheep, and having the cheep displayed in the respective authors private timeline.
+* **UI tests** 
+Made using PlayWright. Testing and simulating user interactions and navigation through the user interface. E.g. that the submit button is accessible when sharing a cheep.
 
 
 
