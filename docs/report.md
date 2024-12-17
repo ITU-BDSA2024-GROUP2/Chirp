@@ -10,8 +10,6 @@ author:
 numbersections: true
 ---
 
-# Introduction to Chirp
-
 # Design and Architecture of _Chirp!_
 
 ## Domain model
@@ -49,7 +47,7 @@ Below are illustrated examples of different user activities.
 
 ![User Story for making a cheep](images/UserStoryForShareCheep.png)
 
-![User story for following and liking](images/UserStoryFollowAndLike.png)
+![User story for follow and like](images/UserStoryFollowAndLike.png)
 
 ![User story for managing personal information](images/UserStoryChangeInfoDeleteAccount.png)
 
@@ -57,7 +55,7 @@ Below are illustrated examples of different user activities.
 
 The diagram of sequences shown below illustrates a sequence of calls in the Chirp application initiated by the user, for both an unauthenticated user and an authenticated user.
 
-![Flow of messages and data through Chirp](images/SequenceOfFunctionality.png)
+![Flow of calls and data through Chirp](images/SequenceOfFunctionality.png)
 
 # Process
 
