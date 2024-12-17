@@ -219,7 +219,7 @@ public class CheepRepositoryTests
         var cheeps = await cheepRepository.GetCheepsFromAuthor(authorName, 1);
         Assert.NotEmpty(cheeps);
 
-        Assert.Contains(cheeps.FirstOrDefault().Text, "This cheep should not be deleted");
+        Assert.Contains(cheeps.FirstOrDefault()!.Text, "This cheep should not be deleted");
         
         var deletedCheep = await _dbContext.Cheeps.FindAsync(createdCheep.CheepId);
         Assert.NotNull(deletedCheep);
@@ -300,7 +300,7 @@ public class CheepRepositoryTests
         });
         
         // Act
-        cheepRepository.Like(createdCheep.Id, userName);
+        await cheepRepository.Like(createdCheep!.Id, userName);
         
         // Assert
         var isLiked = await cheepRepository.IsLiked(createdCheep.Id, userName);
@@ -333,14 +333,14 @@ public class CheepRepositoryTests
         });
         
         // Act
-        cheepRepository.Like(createdCheep.Id, userName);
+        await cheepRepository.Like(createdCheep!.Id, userName);
         
         // Assert
         var isLikedBefore = await cheepRepository.IsLiked(createdCheep.Id, userName);
         Assert.True(isLikedBefore);
         
         // Act
-        cheepRepository.Unlike(createdCheep.Id, userName);
+        await cheepRepository.Unlike(createdCheep.Id, userName);
         
         // Assert
         var isLikedAfter = await cheepRepository.IsLiked(createdCheep.Id, userName);
@@ -373,11 +373,11 @@ public class CheepRepositoryTests
         });
         
         // Assert
-        var isLikedBefore = await cheepRepository.IsLiked(createdCheep.Id, userName);
+        var isLikedBefore = await cheepRepository.IsLiked(createdCheep!.Id, userName);
         Assert.False(isLikedBefore);
         
         // Act
-        cheepRepository.Like(createdCheep.Id, userName);
+        await cheepRepository.Like(createdCheep.Id, userName);
         
         // Assert
         var isLikedAfter = await cheepRepository.IsLiked(createdCheep.Id, userName);
@@ -403,7 +403,7 @@ public class CheepRepositoryTests
         var createdCheep = cheeps.FirstOrDefault();
         
         // Act
-        cheepRepository.Like(createdCheep.Id, createdCheep.Author);
+        await cheepRepository.Like(createdCheep!.Id, createdCheep.Author);
         
         // Assert
         var isLiked = await cheepRepository.IsLiked(createdCheep.Id, createdCheep.Author);
@@ -434,7 +434,7 @@ public class CheepRepositoryTests
         var createdCheep = await cheepRepository.CreateCheep(authorName, "This is a test");
         
         // Act
-        cheepRepository.Like(createdCheep.CheepId, userName);
+        await cheepRepository.Like(createdCheep.CheepId, userName);
         
         // Assert
         var isLikedBefore = await cheepRepository.IsLiked(createdCheep.CheepId, userName);

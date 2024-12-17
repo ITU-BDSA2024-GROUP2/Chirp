@@ -149,7 +149,7 @@ public class AuthorRepository : IAuthorRepository
     /// </summary>
     /// <param name="authorName"></param>
     /// <param name="profilePictureLink"></param>
-    public async Task ChangeProfilePicture(string authorName, string? profilePictureLink)
+    public async Task ChangeProfilePicture(string authorName, string profilePictureLink)
     {
         if (profilePictureLink == null)
         {
@@ -163,7 +163,7 @@ public class AuthorRepository : IAuthorRepository
         await _dbContext.SaveChangesAsync();
     }
     
-    public async Task<string?> GetProfilePicture(string authorName)
+    public async Task<string> GetProfilePicture(string authorName)
     {
         if (authorName == null)
         {
