@@ -66,18 +66,24 @@ The diagram of sequences shown below illustrates a sequence of calls in the Chir
 **Build and test**
 
 The image below illustrates what happens when either a push is committed or a pull request is made.
+
 - `dotnet restore`, this command restores the dependencies and tools of the project.
+
 - `dotnet build`, which then builds the project and its dependencies. 
+
 - The yml installs playwright, which is necessary for running test on GitHub.
+
 - `dotnet test`, where all of the tests will run and show if any test will fail and which succeed.
 
 ![Build and test workflow](images/OnPushPullRequestYML.png){ width=60% }
+<br>
 
 **Deployment**
 
 When pushing to main, the build and test flows are run. It also logs in to Azure by using the Azure secrets and deploys Chirp to the Azure web service.
 
 ![Deployment workflow](images/OnPushToMainYML.png){ width=60% }
+<br>
 
 **Release**
 
@@ -87,6 +93,7 @@ When pushing with a new tag, a release is made to GitHub:
 - The zip files are released to GitHub under a new release.
 
 ![Release workflow](images/OnReleaseYML.png){ width=80% }
+<br>
 
 ## Team work
 
@@ -110,11 +117,13 @@ To ensure software quality and participation, commits have undergone a review pr
 
 **Running _Chirp!_ locally**
 
-1. Clone the repository by running the following command `git clone https://github.com/ITU-BDSA2024-GROUP2/Chirp.git`.
+1. Clone the repository by running the following command
+`git clone https://github.com/ITU-BDSA2024-GROUP2/Chirp.git`.
 
 2. Setup program secrets.
 
-    2.1. Go to the root of the project `/Chirp`.
+    2.1. Go to the root of the project 
+    `/Chirp`.
 
     2.2. Type the following commands:
 
@@ -124,7 +133,8 @@ To ensure software quality and participation, commits have undergone a review pr
 
 3. Cd into the folder `Chirp/src/Chirp.Web`.
 
-4. Type `dotnet run`. 
+4. Type 
+`dotnet run`. 
 
 **Note:** You have to use dotnet 8 for the program to function properly.
 
@@ -132,28 +142,36 @@ To ensure software quality and participation, commits have undergone a review pr
 
 **Running _Chirp!_ tests locally**
 
-1. Cd into the folder `Chirp/src/Chirp.Web`.
+1. Cd into the folder
+`Chirp/src/Chirp.Web`.
 
-2. Run the following command `pwsh bin/Debug/net8.0/playwright.ps1 install --with-deps`.
+2. Run the following command
+`pwsh bin/Debug/net8.0/playwright.ps1 install --with-deps`.
 
-3. Go to the root of the project `/Chirp`.
+3. Go to the root of the project
+`/Chirp`.
 
-2. Type `dotnet test`. 
+2. Type
+`dotnet test`. 
 
 **Note:** If some tests are failing, try deleting the database from the `src/Chirp.Web` folder. Additionally check if there is a .db file in the `test/Chirp.API.Tests/bin`. If there is one, delete that too. Then run the tests again.
 
 The test suites contain 4 kind of tests:
 
 * **UNIT tests** 
+
 Testing individual methods in isolation. E.g. creating a new cheep or author in the database.
 
 * **INTEGRATION tests** 
+
 Testing a combination of methods or a component of the website. E.g. testing that liking a cheep stores the like in the database.
 
 * **END TO END tests** 
+
 Testing a complete user journey through the application. E.g. logging in, making a cheep, and having the cheep displayed in the respective authors private timeline.
 
 * **UI tests** 
+
 Made using PlayWright. Testing and simulating user interactions and navigation through the user interface. E.g. that the submit button is accessible when sharing a cheep.
 
 # Ethics
