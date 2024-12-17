@@ -11,10 +11,9 @@
 <div>
     <div class="userInfoContainer">
         <div>
-            @if (@Model.CheepTimelineModel.AvatarMap.ContainsKey(routeName.ToString()) && !string.IsNullOrEmpty(@Model.CheepTimelineModel.AvatarMap[routeName.ToString()]))
+            @if (@Model.CheepTimelineModel.AvatarMap.ContainsKey(routeName!.ToString()!) && !string.IsNullOrEmpty(@Model.CheepTimelineModel.AvatarMap[routeName!.ToString()!]))
             {
-                <img src="@Model.CheepTimelineModel.AvatarMap[@routeName.ToString()]" class="claim-img-large" alt="Avatar">
-
+                <img src="@Model.CheepTimelineModel.AvatarMap[@routeName!.ToString()!]" class="claim-img-large" alt="Avatar">
             }
             else
             {

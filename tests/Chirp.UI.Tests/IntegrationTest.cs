@@ -209,7 +209,7 @@ public class IntegrationTest : PageTest
         var username = await locator.InputValueAsync();
         
         // Assert
-        Assert.AreNotEqual(username, "username");
+        Assert.That(username, Is.Not.EqualTo("username"));
         
         await Page.GotoAsync("https://localhost:5273/about");
         var listItemText2 = Page.Locator("div.aboutContainer > ul > li");
@@ -240,7 +240,7 @@ public class IntegrationTest : PageTest
         var email = await locator.InputValueAsync();
         
         // Assert
-        Assert.AreNotEqual(email, "name@example.com");
+        Assert.That(email, Is.Not.EqualTo("name@example.com"));
         
         await Page.GotoAsync("https://localhost:5273/about");
         var listItemText2 = Page.Locator("div.aboutContainer > ul > li");
@@ -280,7 +280,8 @@ public class IntegrationTest : PageTest
 
         // Assert Profile picture is changed
         await Expect(listItemText3.Nth(0)).ToBeVisibleAsync();
-        Assert.AreEqual(NewProfilePicture, imageSrc);
+        Assert.That(NewProfilePicture, Is.EqualTo(imageSrc));
+        
         await ServerUtil.DeleteUser(Page);
     }
     [Test]
