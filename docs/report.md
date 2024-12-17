@@ -15,6 +15,7 @@ numbersections: true
 ## Domain model
 
 ![Illustration of domain model (highlighted in red).](images/DomainModel.png)
+
 \newpage
 
 ## Architecture — In the small
@@ -54,6 +55,7 @@ Below are illustrated examples of different user activities.
 The diagram of sequences shown below illustrates a sequence of calls in the _Chirp!_ application initiated by a user, for both an unauthenticated and an authenticated user.
 
 ![Flow of calls and data through Chirp!](images/SequenceOfFunctionality.png)
+
 \newpage
 
 # Process
