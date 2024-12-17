@@ -118,29 +118,21 @@ To ensure software quality and participation, commits have undergone a review pr
 
 **Running _Chirp!_ locally**
 
-1. Clone the repository by running the following command
-
-`git clone https://github.com/ITU-BDSA2024-GROUP2/Chirp.git`.
+1. Clone the repository by running the following command `git clone https://github.com/ITU-BDSA2024-GROUP2/Chirp.git`
 
 2. Setup program secrets.
 
-    2.1. Go to the root of the project 
-
-    `/Chirp`.
+    2.1. Go to the root of the project `/Chirp`
 
     2.2. Type the following commands:
 
-**ClientID:** `dotnet user-secrets set "authentication_github_clientId" "Ov23li6lCKKhGGXefnEf"`
+    **ClientID:** `dotnet user-secrets set "authentication_github_clientId" "Ov23li6lCKKhGGXefnEf"`
 
-**ClientSecret:** `dotnet user-secrets set "authentication_github_clientSecret" "460047215cdea005fd386c508c0ae3dc1412c20d"`
+    **ClientSecret:** `dotnet user-secrets set "authentication_github_clientSecret" "460047215cdea005fd386c508c0ae3dc1412c20d"`
 
-3. Cd into the folder 
+3. Cd into the folder `Chirp/src/Chirp.Web`
 
-`Chirp/src/Chirp.Web`
-
-4. Type
-
-`dotnet run`
+4. Type `dotnet run`
 
 **Note:** You have to use dotnet 8 for the program to function properly.
 
@@ -148,21 +140,13 @@ To ensure software quality and participation, commits have undergone a review pr
 
 **Running _Chirp!_ tests locally**
 
-1. Cd into the folder
+1. Cd into the folder `Chirp/src/Chirp.Web`
 
-`Chirp/src/Chirp.Web`
+2. Run the following command `pwsh bin/Debug/net8.0/playwright.ps1 install --with-deps`
 
-2. Run the following command
+3. Go to the root of the project `/Chirp`
 
-`pwsh bin/Debug/net8.0/playwright.ps1 install --with-deps`
-
-3. Go to the root of the project
-
-`/Chirp`
-
-2. Type
-
-`dotnet test` 
+2. Type `dotnet test` 
 
 **Note:** If some tests are failing, try deleting the database from the `src/Chirp.Web` folder. Additionally check if there is a .db file in the `test/Chirp.API.Tests/bin`. If there is one, delete that too. Then run the tests again.
 
