@@ -100,14 +100,17 @@ All issues related to the mandatory project work as well as our own extra featur
 ![Project board before hand-in.](images/Projectboard_16-12-2024.png)
 
 **From issue to main**
+
 All new features and enhancements are added as issues to the `ITU-BDSA2024-GROUP2 Chirp` backlog in GitHub. Issues follow the workflow as depicted below until they are merged to the main branch and deployed to Azure.
 
 ![Development workflow.](images/ProjectBoard.png)
 
 **Collaboration**
+
 Depending on the extend of the task, each issue is assigned to the responsible person(s). When developing in teams we have made extensive use of pair programming as well as code reviews on an external monitor.
 
 **Code reviews**
+
 To ensure software quality and participation, commits have undergone a review process from a team member who have not worked on the issue. We have used pull requests for this purpose.
 
 
@@ -116,11 +119,13 @@ To ensure software quality and participation, commits have undergone a review pr
 **Running _Chirp!_ locally**
 
 1. Clone the repository by running the following command
+
 `git clone https://github.com/ITU-BDSA2024-GROUP2/Chirp.git`.
 
 2. Setup program secrets.
 
     2.1. Go to the root of the project 
+
     `/Chirp`.
 
     2.2. Type the following commands:
@@ -129,10 +134,13 @@ To ensure software quality and participation, commits have undergone a review pr
 
 **ClientSecret:** `dotnet user-secrets set "authentication_github_clientSecret" "460047215cdea005fd386c508c0ae3dc1412c20d"`
 
-3. Cd into the folder `Chirp/src/Chirp.Web`.
+3. Cd into the folder 
 
-4. Type 
-`dotnet run`. 
+`Chirp/src/Chirp.Web`
+
+4. Type
+
+`dotnet run`
 
 **Note:** You have to use dotnet 8 for the program to function properly.
 
@@ -141,34 +149,38 @@ To ensure software quality and participation, commits have undergone a review pr
 **Running _Chirp!_ tests locally**
 
 1. Cd into the folder
-`Chirp/src/Chirp.Web`.
+
+`Chirp/src/Chirp.Web`
 
 2. Run the following command
-`pwsh bin/Debug/net8.0/playwright.ps1 install --with-deps`.
+
+`pwsh bin/Debug/net8.0/playwright.ps1 install --with-deps`
 
 3. Go to the root of the project
-`/Chirp`.
+
+`/Chirp`
 
 2. Type
-`dotnet test`. 
+
+`dotnet test` 
 
 **Note:** If some tests are failing, try deleting the database from the `src/Chirp.Web` folder. Additionally check if there is a .db file in the `test/Chirp.API.Tests/bin`. If there is one, delete that too. Then run the tests again.
 
-The test suites contain 4 kind of tests:
+The test suites contain the following tests:
 
-* **UNIT tests** 
+**UNIT tests** 
 
 Testing individual methods in isolation. E.g. creating a new cheep or author in the database.
 
-* **INTEGRATION tests** 
+**INTEGRATION tests** 
 
 Testing a combination of methods or a component of the website. E.g. testing that liking a cheep stores the like in the database.
 
-* **END TO END tests** 
+**END TO END tests** 
 
 Testing a complete user journey through the application. E.g. logging in, making a cheep, and having the cheep displayed in the respective authors private timeline.
 
-* **UI tests** 
+**UI tests** 
 
 Made using PlayWright. Testing and simulating user interactions and navigation through the user interface. E.g. that the submit button is accessible when sharing a cheep.
 
