@@ -89,20 +89,18 @@ Describe the illustration briefly, i.e., how your application is built, tested, 
 -->
 
 **Build and test**
-
 The image below illustrates what happens when either a push is committed or a pull request is made.
   * `dotnet restore`, this command restores the dependencies and tools of the project.
   * `dotnet build`, which then builds the project and its dependencies. 
   * The yml installs playwright, which is necessary for running test on GitHub.
   * `dotnet test`, where all of the tests will run and show if any test will fail and which succeed.
 
-![Build and test workflow](images/OnPushPullRequestYML.png){ width=50% }
-
+![Build and test workflow](images/OnPushPullRequestYML.png){ width=60% }
 
 **Deployment**
 When pushing to main, the build and test flows are run. It also logs in to Azure by using the Azure secrets and deploys Chirp to the Azure web service.
 
-![Deployment workflow](images/OnPushToMainYML.png){ width=50% }
+![Deployment workflow](images/OnPushToMainYML.png){ width=60% }
 
 **Release**
 When pushing with a new tag, a release is made to GitHub:
@@ -110,7 +108,7 @@ When pushing with a new tag, a release is made to GitHub:
 * The artifacts for each publish is zipped to its own zip file
 * The zip files are released to GitHub under a new release.
 
-![Release workflow](images/OnReleaseYML.png){ width=50% }
+![Release workflow](images/OnReleaseYML.png){ width=80% }
 
 
 ## Team work
