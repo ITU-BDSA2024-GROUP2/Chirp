@@ -166,9 +166,14 @@ Briefly describe what kinds of tests you have in your test suites and what they 
 
 **Note:** If some tests are failing, try deleting the database from the `src/Chirp.Web` folder. Additionally check if there is a .db file in the `test/Chirp.API.Tests/bin`. If there is one, delete that too. Then run the tests again.
 
-UI
-INTEGRATION
-END TO END
+There are three kinds of tests:
+* **UNIT tests** are testing 1 method or one feature. This could be testing changing profile picture.
+* **INTEGRATION tests** are testing a combination of methods, or a component of the website. This could be testing the register form.
+* **END TO END tests** are testing a full user experience. This could be making a profile, sending a cheep and entering the private timeline.
+
+
+
+
 
 # Ethics
 ## License
