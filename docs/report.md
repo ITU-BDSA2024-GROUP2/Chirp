@@ -35,7 +35,7 @@ The Chirp! project implements the onion architecture, which is seen in the compo
 * A chirp **infrastructure** layer, that is responsible for manipulation and retrieval of data. True to the onion architecture, this layer is built upon the **core** layer, which means that **infrastructure** depends on **core**. 
 * A chirp **web** layer, that is responsible for the UI of the project. Again, true to onion architecture this layer depends on **core** and **infrastructure**.
 
-![Organization of codebase](images/onion.png)
+![Organization of codebase](images/Onion.png)
 
 Having the project split up into separate layers is optimal for testing. Since they are loosely coupled the core of the project can be tested independently without the other layers. This makes a foundation for good testing. In addition this means that the outer layers can be modified without affecting the inner layers. This results in easy scalability and maintainability. All in all this architecture greatly benefits the project in the long run.
 
@@ -170,11 +170,11 @@ Briefly describe what kinds of tests you have in your test suites and what they 
 
 **Note:** If some tests are failing, try deleting the database from the `src/Chirp.Web` folder. Additionally check if there is a .db file in the `test/Chirp.API.Tests/bin`. If there is one, delete that too. Then run the tests again.
 
-There are three kinds of tests:
+There are four kinds of tests:
 * **UNIT tests** are testing 1 method or one feature. This could be testing changing profile picture.
 * **INTEGRATION tests** are testing a combination of methods, or a component of the website. This could be testing the register form.
 * **END TO END tests** are testing a full user experience. This could be making a profile, sending a cheep and entering the private timeline.
-
+* **UI tests** were made using playwright, for easy navigation through the UI elements.
 
 
 
