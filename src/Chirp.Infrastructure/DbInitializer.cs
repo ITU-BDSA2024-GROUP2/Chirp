@@ -1,6 +1,9 @@
 using Chirp.Core;
 using Chirp.Infrastructure;
 
+/// <summary>
+/// Seeds sample data to the Chirp database.
+/// </summary>
 public static class DbInitializer
 {
     public static void SeedDatabase(ChirpDBContext chirpContext)
