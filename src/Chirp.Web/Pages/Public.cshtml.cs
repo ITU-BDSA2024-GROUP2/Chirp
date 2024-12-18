@@ -120,7 +120,7 @@ public class PublicModel : PageModel
 
     private async Task<bool> NextPageHasCheeps(int page)
     {
-        var list = await _cheepRepository.GetCheeps(page + 1);
+        var list = await _cheepRepository.GetCheepsByNewest(page + 1);
         return list.Any();
     }
 }
