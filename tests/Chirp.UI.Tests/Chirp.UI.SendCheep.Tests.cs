@@ -1,4 +1,3 @@
-using NUnit.Framework;
 using System.Diagnostics;
 using Microsoft.Playwright;
 using Microsoft.Playwright.NUnit;

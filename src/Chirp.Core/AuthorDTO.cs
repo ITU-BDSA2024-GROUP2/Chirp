@@ -1,4 +1,3 @@
-
 namespace Chirp.Core;
 
 /// <summary>

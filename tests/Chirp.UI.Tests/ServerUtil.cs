@@ -1,8 +1,5 @@
 using System.Diagnostics;
-using System.Threading.Tasks;
-using Azure;
 using Microsoft.Playwright;
-using Microsoft.Playwright.NUnit;
 
 namespace Chirp.UI.Tests
 {

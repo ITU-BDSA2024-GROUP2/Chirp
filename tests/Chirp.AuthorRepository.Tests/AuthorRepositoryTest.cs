@@ -2,13 +2,8 @@ using Chirp.Infrastructure;
 using JetBrains.Annotations;
 using Xunit;
 using Chirp.Core;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace Chirp.AuthorRepository.Tests;
 
