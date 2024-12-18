@@ -1,9 +1,13 @@
-﻿#nullable disable
+﻿#nullable disable //Remove null Warnings
 using System.Security.Claims;
 using Chirp.Core;
 
 namespace Chirp.Web.Pages;
 
+
+/// <summary>
+/// Contains shared data and functionality between the public and private timeline.
+/// </summary>
 public class CheepTimelineModel
 {
     public List<CheepDTO> Cheeps { get; set; }

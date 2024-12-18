@@ -1,4 +1,4 @@
-﻿#nullable disable
+﻿#nullable disable 
 using Chirp.Core;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Chirp.Web.Pages
 {
+    /// <summary>
+    /// Covers the about me page, that is used to access everything about the logged in user.
+    /// </summary>
     public class About : PageModel
     {
         private readonly ICheepRepository _cheepRepository;

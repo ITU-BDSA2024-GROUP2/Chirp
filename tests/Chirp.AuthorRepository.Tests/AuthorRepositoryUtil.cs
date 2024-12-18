@@ -9,7 +9,13 @@ using Microsoft.Extensions.Options;
 namespace Chirp.AuthorRepository.Tests;
 
 public static class AuthorRepositoryUtil
-{
+{   
+    /// <summary>
+    /// Get a usermanager, that is used to modify the database.
+    /// Used for removing author.
+    /// </summary>
+    /// <param name="context"></param>
+    /// <returns></returns>
     public static UserManager<Author> GetUserManager(ChirpDBContext context)
     {
         var userStore = new UserStore<Author>(context);
