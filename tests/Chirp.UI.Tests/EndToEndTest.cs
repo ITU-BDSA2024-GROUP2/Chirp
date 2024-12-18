@@ -17,12 +17,18 @@ namespace Chirp.UI.Tests
             };
         }
 
+        /// <summary>
+        /// Start a server process.
+        /// </summary>
         [OneTimeSetUp]
         public async Task Setup()
         {
             _serverProcess = await ServerUtil.StartServer();
         }
 
+        /// <summary>
+        /// Close the server process.
+        /// </summary>
         [OneTimeTearDown]
         public void Cleanup()
         {
@@ -30,6 +36,9 @@ namespace Chirp.UI.Tests
             _serverProcess.Dispose();
         }
 
+        /// <summary>
+        /// Deletes all created test users in the database.
+        /// </summary>
         [TearDown]
         public async Task CleanupAccount()
         {
@@ -40,6 +49,9 @@ namespace Chirp.UI.Tests
             await ServerUtil.DeleteUser(Page, "hello2@mail.com", "Testpassword123!");
         }
 
+        /// <summary>
+        /// User creates a new account. User logs in and out of account. User deletes account.
+        /// </summary>
         [Test]
         public async Task UserRegistersANewAccountIsDirectlySignedInLogsOutAndLogsInWithNewAccountLogsOutLogsInDeletesAccount()
         {
@@ -71,7 +83,9 @@ namespace Chirp.UI.Tests
             await Expect(Page.GetByText("No user found")).ToBeVisibleAsync();
         }
 
-        
+        /// <summary>
+        /// User creates a new account. User writes cheeps. User deletes account.
+        /// </summary>
         [Test]
         public async Task UserRegistersANewAccountAndLogsInWithNewAccountWritesCheepDeletesAccount()
         {
@@ -104,6 +118,9 @@ namespace Chirp.UI.Tests
             await Expect(Page.GetByText("No user found")).ToBeVisibleAsync();
         }
         
+        /// <summary>
+        /// User creates a new account. User follows another account. The newly follow account is displayed correctly in about me page.
+        /// </summary>
         [Test]
         public async Task UserFollowsAccountsAndWritesCheepsCorrectAmountOfAccountsAndCheepsInAboutMePage()
         {
@@ -158,6 +175,9 @@ namespace Chirp.UI.Tests
             Assert.IsFalse(await follower3.IsVisibleAsync());
         }
 
+        /// <summary>
+        /// User creates a new account. User follows another account and likes cheeps. The followed account has a follower and a like on their cheep.
+        /// </summary>
         [Test]
         public async Task UserLikesCheepAndFollowsAccount()
         {
