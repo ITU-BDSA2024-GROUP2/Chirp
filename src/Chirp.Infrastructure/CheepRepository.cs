@@ -159,6 +159,12 @@ public class CheepRepository : ICheepRepository
         return newCheep;
     }
     
+    /// <summary>
+    /// Deletes a specified cheep from the database.
+    /// Cheeps can only be deleted by the author of the cheep.
+    /// </summary>
+    /// <param name="cheepId">The cheep to be deleted</param>
+    /// <param name="userName">The username of the user initiating the deletion</param>
     public async Task DeleteCheep(string cheepId, string userName)
     {
         var cheep = await _dbContext.Cheeps
@@ -172,7 +178,12 @@ public class CheepRepository : ICheepRepository
         
         await _dbContext.SaveChangesAsync();
     }
-
+    
+    /// <summary>
+    /// Creates a new like relation in the database between the specified cheep and user.
+    /// </summary>
+    /// <param name="cheepId"></param>
+    /// <param name="userName"></param>
     public async Task Like(string cheepId, string userName)
     {
         var cheep = await _dbContext.Cheeps
@@ -205,6 +216,11 @@ public class CheepRepository : ICheepRepository
         await _dbContext.SaveChangesAsync();
     }
     
+    /// <summary>
+    /// Finds and removes a like relation from the database between a specified cheep and user.
+    /// </summary>
+    /// <param name="cheepId"></param>
+    /// <param name="userName"></param>
     public async Task Unlike(string cheepId, string userName)
     {
         var author = await FindAuthorByName(userName);
@@ -218,6 +234,12 @@ public class CheepRepository : ICheepRepository
         await _dbContext.SaveChangesAsync();
     }
 
+    /// <summary>
+    /// Determines whether the specified cheep is liked by the specified user.
+    /// </summary>
+    /// <param name="cheepId"></param>
+    /// <param name="userName"></param>
+    /// <returns></returns>
     public async Task<bool> IsLiked(string cheepId, string userName)
     {
         var author = await FindAuthorByName(userName);
@@ -237,6 +259,10 @@ public class CheepRepository : ICheepRepository
         return foundAuthor;
     }
 
+    /// <summary>
+    /// Deletes all likes associated with a user from the database.
+    /// </summary>
+    /// <param name="userName"></param>
     public async Task DeleteLikes(string userName)
     {
         var author = await FindAuthorByName(userName);
