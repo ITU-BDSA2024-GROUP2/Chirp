@@ -15,7 +15,7 @@ namespace Chirp.Web.Pages
         public ICollection<string> Following { get; set; }
         public ICollection<string> Followers { get; set; }
         public Dictionary<string, string> UserInfo { get; set; }
-        public string? Avatar { get; set; }
+        public string Avatar { get; set; }
 
         private readonly UserManager<Author> _userManager;
         

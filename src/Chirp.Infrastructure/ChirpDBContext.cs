@@ -31,7 +31,7 @@ public class ChirpDBContext : IdentityDbContext<Author>
             .HasIndex(c => c.CheepId)
             .IsUnique();
         modelBuilder.Entity<Like>()
-            .HasIndex(l => new {l.CheepId, l.Author})
+            .HasIndex(l => new {l.CheepId, l.AuthorId})
             .IsUnique();
     }
 }

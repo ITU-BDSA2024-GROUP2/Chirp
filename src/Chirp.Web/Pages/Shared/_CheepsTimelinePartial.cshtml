@@ -4,8 +4,6 @@
 @model Chirp.Web.Pages.CheepTimelineModel
 
 @{
-    var followerMap = ViewData["FollowerMap"] as Dictionary<string, bool> ?? new Dictionary<string, bool>();
-    var likeMap = ViewData["LikeMap"] as Dictionary<string, bool> ?? new Dictionary<string, bool>();
     var currentPage = ViewData["CurrentPage"] as int? ?? 1;
     <script src="/js/autosizeCheepBox.js"></script>
     <script src="/js/scrollPosition.js"></script>
@@ -19,9 +17,10 @@
                 <div class="authorContainer">
                     <strong>
                         <div class="avatarContainer">
-                            @if (!string.IsNullOrEmpty(@Model.AuthorAvatars[cheep.Author]))
+                            @if (!string.IsNullOrEmpty(@Model.AvatarMap[cheep.Author]))
                             {
-                                <img src="@Model.AuthorAvatars[cheep.Author]" class="claim-img" alt="Avatar">
+                                <img src="@Model.AvatarMap[cheep.Author]" class="claim-img" alt="Avatar">
+                                
                             }
                             else
                             {
@@ -38,7 +37,7 @@
                     {
                         @if (User.Identity?.Name != cheep.Author)
                         {
-                            @if (followerMap.ContainsKey(cheep.Author) && followerMap[cheep.Author] == false)
+                            @if (Model.FollowerMap.ContainsKey(cheep.Author) && Model.FollowerMap[cheep.Author] == false)
                             {
                                 <form method="post" asp-page-handler="Follow">
                                     <input type="hidden" name="authorName" value="@cheep.Author"/>
@@ -67,7 +66,7 @@
                             <input type="hidden" name="cheepId" value="@cheep.Id"/>
                             <input type="hidden" name="page" value="@currentPage"/>
                             <button class="heartBtn" type="submit">
-                                @if (likeMap.ContainsKey(cheep.Id) && likeMap[cheep.Id])
+                                @if (Model.LikeMap.ContainsKey(cheep.Id) && Model.LikeMap[cheep.Id])
                                 {
                                     <i class="fa fa-heart filled-heart" aria-hidden="true"></i>
                                 }

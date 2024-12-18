@@ -149,7 +149,7 @@ public class CheepRepository : ICheepRepository
         Cheep newCheep = new()
         {
             Text = text,
-            TimeStamp = DateTime.UtcNow, 
+            TimeStamp = DateTime.Now, 
             Author = author,
         };
         
@@ -184,15 +184,20 @@ public class CheepRepository : ICheepRepository
         {
             return;
         }
-        
-        var likeExists = await _dbContext.Likes
-            .AnyAsync(l => l.CheepId == cheepId && l.Author == userName);
 
+        var author = await FindAuthorByName(userName);
+        var likeExists = false;
+        if (author != null)
+        {
+            likeExists = await _dbContext.Likes
+                .AnyAsync(l => l.CheepId == cheepId && l.AuthorId == author.Id);
+        }
+        
         if (!likeExists)
         {
             var like = new Like
             {
-                Author = userName,
+                AuthorId = author.Id,
                 CheepId = cheepId
             };
            await  _dbContext.Likes.AddAsync(like);
@@ -202,22 +207,21 @@ public class CheepRepository : ICheepRepository
     
     public async Task Unlike(string cheepId, string userName)
     {
-        var like = await _dbContext.Likes
-            .FirstOrDefaultAsync(l => l.CheepId == cheepId && l.Author == userName);
-
-        if (like == null)
+        var author = await FindAuthorByName(userName);
+        if (author != null)
         {
-            return;
+            var like = await _dbContext.Likes
+                .FirstOrDefaultAsync(l => l.CheepId == cheepId && l.AuthorId == author.Id);
+            _dbContext.Likes.Remove(like);
         }
-
-        _dbContext.Likes.Remove(like);
 
         await _dbContext.SaveChangesAsync();
     }
 
     public async Task<bool> IsLiked(string cheepId, string userName)
     {
-        var like = await _dbContext.Likes.FirstOrDefaultAsync(l => l.CheepId == cheepId && l.Author == userName);
+        var author = await FindAuthorByName(userName);
+        var like = await _dbContext.Likes.FirstOrDefaultAsync(l => l.CheepId == cheepId && l.AuthorId == author.Id);
 
         return like != null;
     }
@@ -235,8 +239,9 @@ public class CheepRepository : ICheepRepository
 
     public async Task DeleteLikes(string userName)
     {
+        var author = await FindAuthorByName(userName);
         var delete = from like in _dbContext.Likes
-                where like.Author == userName
+                where like.AuthorId == author.Id
                 select like;
 
         if (delete.Any())

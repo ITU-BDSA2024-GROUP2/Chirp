@@ -1,10 +1,15 @@
 ﻿document.addEventListener("DOMContentLoaded", function () {
-    const messageBox = document.getElementById("Message");
+    const cheepBox = document.getElementById("Message");
+    const charCount = document.getElementById("charCount");
+    const maxLength = 160;
 
-    if (messageBox) {
-        messageBox.addEventListener("input", function () {
-            this.style.height = "auto"; 
-            this.style.height = (this.scrollHeight) + "px"; 
+    if (cheepBox && charCount) {
+        cheepBox.addEventListener("input", function () {
+            this.style.height = "auto";
+            this.style.height = `${this.scrollHeight}px`;
+            
+            const charsLeft = maxLength - this.value.length;
+            charCount.textContent = `Characters left: ${charsLeft}`;
         });
     }
 });

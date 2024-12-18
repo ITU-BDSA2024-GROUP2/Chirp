@@ -74,6 +74,10 @@ namespace Chirp.Infrastructure.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("ProfilePicture")
+                        .HasMaxLength(1600)
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("TEXT");
 
@@ -134,7 +138,7 @@ namespace Chirp.Infrastructure.Migrations
                     b.Property<string>("LikeId")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Author")
+                    b.Property<string>("AuthorId")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -144,7 +148,7 @@ namespace Chirp.Infrastructure.Migrations
 
                     b.HasKey("LikeId");
 
-                    b.HasIndex("CheepId", "Author")
+                    b.HasIndex("CheepId", "AuthorId")
                         .IsUnique();
 
                     b.ToTable("Likes");

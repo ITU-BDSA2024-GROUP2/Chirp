@@ -1,13 +1,11 @@
-﻿using NUnit.Framework;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Microsoft.Playwright;
 using Microsoft.Playwright.NUnit;
 
 namespace Chirp.UI.Tests
 {
-    public class UIUnitTests : PageTest
+    public class UITests : PageTest
     {
         private Process _serverProcess;
         
