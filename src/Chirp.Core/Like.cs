@@ -1,7 +1,7 @@
 namespace Chirp.Core;
 
 /// <summary>
-/// This class Represents a like on a specific cheep by an author.
+/// This class represents a like on a specific cheep by an author.
 /// A cheep can have many likes. An author can only like a specific cheep once.
 /// </summary>
 public class Like
