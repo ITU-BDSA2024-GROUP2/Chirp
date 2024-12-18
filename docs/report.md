@@ -32,7 +32,9 @@ The _Chirp!_ project implements the onion architecture, which is seen in the com
 
 ![Organization of codebase.](images/Onion.png){ width=60% }
 
-Having the project split up into separate layers is optimal for testing. Since the layers are loosely coupled the core of the project can be tested independently. This makes a foundation for good testing. In addition this means that the outer layers can be modified without affecting the inner layers. This results in easy scalability and maintainability. All in all this architecture greatly benefits the project in the long run.
+Having the project split up into separate layers is optimal for testing. Since the layers are loosely coupled the core of the project can be tested independently. This makes a foundation for good testing. In addition this means that the outer layers can be modified without affecting the inner layers. This results in easy scalability and maintainability.
+
+\newpage
 
 ## Architecture of deployed application
 
@@ -64,22 +66,14 @@ The diagram of sequences shown below illustrates a sequence of calls in the _Chi
 
 **Build and test**
 
-The image below illustrates what happens when either a commit is pushed or a pull request is made.
-
-- `dotnet restore`, restores the dependencies and tools of the project.
-
-- `dotnet build`, builds the project and its dependencies. 
-
-- Installs PlayWright, which is necessary for running PlayWright tests on GitHub.
-
-- `dotnet test`, where all of the tests will run and show if any test will fail and which succeed.
+When a push or pull request is made a build and test workflow is triggered. This workflow sets up the .NET environment, restores dependencies, builds the project and installs Playwright browsers necessary for UI tests. Lastly it runs all the tests. 
 
 ![Build and test workflow](images/OnPushPullRequestYML.png){ width=60% }
 <br>
 
 **Deployment**
 
-When pushing to main, the build and test flows are run. It also logs in to Azure by using the Azure secrets and deploys Chirp to the Azure web service.
+When a push is made to the main branch a deployment workflow is triggered. This workflow builds the app, uploads the build artifacts, and deploys them to Azure using provided secrets.
 
 ![Deployment workflow.](images/OnPushToMain.png){ width=60% }
 <br>
@@ -87,13 +81,7 @@ When pushing to main, the build and test flows are run. It also logs in to Azure
 
 **Release**
 
-When pushing with a new tag, a release is made to GitHub:
-
-- The application is published for Windows, Linux and MacOS.
-
-- The artifacts for each publish is zipped to its own zip file
-
-- The zip files are released to GitHub under a new release.
+When a new tag is pushed to the repository, a release workflow is triggered. This workflow builds the app for multiple platforms (Linux, Windows, macOS x64, and macOS ARM), zips the artifacts, and publishes them as part of a GitHub release corresponding to the new version.
 
 ![Release workflow.](images/OnReleaseYML.png){ width=80% }
 <br>
@@ -159,21 +147,21 @@ To ensure software quality and participation, commits have undergone a review pr
 
 The test suites contain the following tests:
 
-**UNIT tests** 
+**Unit tests** 
 
 Testing individual methods in isolation. E.g. creating a new cheep or author in the database.
 
-**INTEGRATION tests** 
+**Integration tests** 
 
 Testing a combination of methods or a component of the website. E.g. testing that liking a cheep stores the like in the database.
 
-**END TO END tests** 
+**End-to-end tests** 
 
 Testing a complete user journey through the application. E.g. logging in, making a cheep, and having the cheep displayed in the respective authors private timeline.
 
 **UI tests** 
 
-Made using PlayWright. Testing and simulating user interactions and navigation through the user interface. E.g. testing that the submit button is accessible when sharing a cheep.
+Made using PlayWright. Testing and simulating user interactions and navigation through the user interface. E.g. testing that the submit button is accessible when sharing a cheep. These test are mostly designed as integration or end-to-end tests.
 
 # Ethics
 ## License
