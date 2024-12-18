@@ -66,14 +66,14 @@ The diagram of sequences shown below illustrates a sequence of calls in the _Chi
 
 **Build and test**
 
-When a push or pull request is made a build and test workflow is triggered. This workflow sets up the .NET environment, restores dependencies, builds the project and installs Playwright browsers necessary for UI tests. Lastly it runs all the tests. 
+When a push or pull request is made, a build and test workflow is triggered. This workflow sets up the .NET environment, restores dependencies, builds the project and installs Playwright browsers necessary for UI tests. Lastly it runs all the tests. 
 
 ![Build and test workflow](images/OnPushPullRequestYML.png){ width=60% }
 <br>
 
 **Deployment**
 
-When a push is made to the main branch a deployment workflow is triggered. This workflow builds the app, uploads the build artifacts, and deploys them to Azure using provided secrets.
+When a push is made to the main branch, a deployment workflow is triggered. This workflow builds the app, uploads the build artifacts, and deploys them to Azure using provided secrets.
 
 ![Deployment workflow.](images/OnPushToMain.png){ width=60% }
 <br>
@@ -161,7 +161,7 @@ Testing a complete user journey through the application. E.g. logging in, making
 
 **UI tests** 
 
-Made using PlayWright. Testing and simulating user interactions and navigation through the user interface. E.g. testing that the submit button is accessible when sharing a cheep. These test are mostly designed as integration or end-to-end tests.
+Made using Playwright. Testing and simulating user interactions and navigation through the user interface. E.g. testing that the submit button is accessible when sharing a cheep. These test are mostly designed as integration or end-to-end tests.
 
 # Ethics
 ## License
