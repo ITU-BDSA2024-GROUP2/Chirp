@@ -1,7 +1,5 @@
-#nullable disable //fjern null warning
-using System.ComponentModel.DataAnnotations;
+#nullable disable //remove null warnings
 using Chirp.Core;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Chirp.Infrastructure;
@@ -18,6 +16,7 @@ public class CheepRepository : ICheepRepository
     
     /// <summary>
     /// Gets all cheeps, and puts the newest at the top.
+    /// Used for publictimeline. Uses the currentpage number to determine what cheeps to load.
     /// </summary>
     /// <param name="currentPage"></param>
     /// <returns></returns>
@@ -40,25 +39,13 @@ public class CheepRepository : ICheepRepository
         return result;
     }
     
-    public async Task<List<CheepDTO>> GetCheeps(int currentPage)
-    {
-        int offset = (currentPage - 1) * pageSize;
-
-        var query = (from cheep in _dbContext.Cheeps
-            orderby cheep.Likes.Count descending
-            select new CheepDTO
-            {
-                Id = cheep.CheepId,
-                Author = cheep.Author.UserName,
-                Text = cheep.Text,
-                TimeStamp = cheep.TimeStamp.ToString("MM'/'dd'/'yy H':'mm':'ss"),
-                LikeCount = cheep.Likes.Count.ToString(),
-            }).Skip(offset).Take(pageSize);
-        
-        var result = await query.ToListAsync();
-        return result;
-    }
     
+    /// <summary>
+    /// Used for loading all cheeps from an author name.
+    /// Used for about me or downloading a users data.
+    /// </summary>
+    /// <param name="authorName"></param>
+    /// <returns></returns>
     public async Task<List<CheepDTO>> GetAllCheepsFromAuthor(string authorName)
     {
         var query = (from cheep in _dbContext.Cheeps
@@ -77,6 +64,13 @@ public class CheepRepository : ICheepRepository
         return result;
     }
     
+    /// <summary>
+    /// Useed for loading another users private timeline, where a user needs another users cheeps.
+    /// It uses the currentpage number to determine what cheeps to load.
+    /// </summary>
+    /// <param name="authorName"></param>
+    /// <param name="currentPage"></param>
+    /// <returns></returns>
     public async Task<List<CheepDTO>> GetCheepsFromAuthor(string authorName, int currentPage)
     {
         int offset = (currentPage - 1) * pageSize;
@@ -96,7 +90,13 @@ public class CheepRepository : ICheepRepository
         
         return result;
     }
-    
+    /// <summary>
+    /// Used for loading the user timeline, where a user neeeds to see their own cheeps.
+    /// It uses the currentpage number to determine what cheeps to load.
+    /// </summary>
+    /// <param name="userName"></param>
+    /// <param name="currentPage"></param>
+    /// <returns></returns>
     public async Task<List<CheepDTO>> GetCheepsFromFollowersAndOwnCheeps(string userName, int currentPage)
     {
         int offset = (currentPage - 1) * pageSize;
@@ -126,7 +126,7 @@ public class CheepRepository : ICheepRepository
     }
     
     /// <summary>
-    /// Method used for creating cheeps. The cheeps are checked for length
+    /// Used for creating cheeps. The cheeps are checked for length
     /// and whitespace to see if the cheep is valid.
     /// If it is valid it creates a new cheep and inserts it into the database
     /// </summary>
