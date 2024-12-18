@@ -12,6 +12,6 @@ public interface IAuthorRepository
     public Task<List<string>> GetFollowing(string userName);
     public Task<List<string>> GetFollowers(string userName);
     public Task<int> GetFollowerCount(string userName);
-    public Task ChangeProfilePicture(string authorName, string? profilePictureLink);
-    public Task<string?> GetProfilePicture(string? authorName);
+    public Task ChangeProfilePicture(string userName, string? profilePictureLink);
+    public Task<string?> GetProfilePicture(string? userName);
 }

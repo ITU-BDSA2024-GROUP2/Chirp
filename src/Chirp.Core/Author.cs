@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Identity;
 namespace Chirp.Core;
 
 /// <summary>
-/// This class repesents the user of the Chirp application.
-/// An author can post cheeps. An author can follow another or more authors.
-/// An author knows its followers. 
+/// This class represents the user of the Chirp application.
+/// Authenticated users can author cheeps.
+/// An author can follow and be followed other authors.
 /// </summary>
 public class Author : IdentityUser
 {

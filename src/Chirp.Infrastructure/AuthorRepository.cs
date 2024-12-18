@@ -42,10 +42,10 @@ public class AuthorRepository : IAuthorRepository
     }
 
     /// <summary>
-    /// This method is used to follow another user.
+    /// Adds the specified author to the follower/following relationship between the two users.
     /// </summary>
-    /// <param name="userName"></param>
-    /// <param name="authorName"></param>
+    /// <param name="userName">The username of the user initiating the follow action</param>
+    /// <param name="authorName">The username of the user to be followed.</param>
     public async Task Follow(string userName, string authorName)
     {
         if (userName == authorName)
@@ -70,10 +70,10 @@ public class AuthorRepository : IAuthorRepository
     }
     
     /// <summary>
-    /// This method is used for unfollowing another user.
+    /// Removes the specified author from the follower/following relationship between the two users.
     /// </summary>
-    /// <param name="userName"></param>
-    /// <param name="authorName"></param>
+    /// <param name="userName">The username of the user initiating the unfollow action.</param>
+    /// <param name="authorName">The username of the user to be unfollowed.</param>
     public async Task Unfollow(string userName, string authorName)
     {
         if (userName == authorName)
@@ -97,6 +97,12 @@ public class AuthorRepository : IAuthorRepository
         await _dbContext.SaveChangesAsync();
     }
 
+    /// <summary>
+    /// Determines whether the specified user is following the specified author.
+    /// </summary>
+    /// <param name="userName">The username of the user initiating the check.</param>
+    /// <param name="authorName">The username of the author being checked.</param>
+    /// <returns></returns>
     public async Task<bool> IsFollowing(string userName, string authorName)
     {
         if (userName == authorName)
@@ -110,6 +116,11 @@ public class AuthorRepository : IAuthorRepository
         return user.Following.Contains(author);
     }
 
+    /// <summary>
+    /// Retrieves a list of usernames that the specified user is following.
+    /// </summary>
+    /// <param name="userName">The username of the user whose following list is to be retrieved.</param>
+    /// <returns></returns>
     public async Task<List<string>> GetFollowing(string userName)
     {
         var query = from author in _dbContext.Authors
@@ -121,6 +132,11 @@ public class AuthorRepository : IAuthorRepository
         return result;
     }
     
+    /// <summary>
+    /// Retrieves a list of usernames who are following the specified user.
+    /// </summary>
+    /// <param name="userName">The username of the user whose followers are to be retrieved.</param>
+    /// <returns></returns>
     public async Task<List<string>> GetFollowers(string userName)
     {
         var query = from author in _dbContext.Authors
@@ -132,6 +148,11 @@ public class AuthorRepository : IAuthorRepository
         return result;
     }
     
+    /// <summary>
+    /// Retrieves the total number of followers for the specified user.
+    /// </summary>
+    /// <param name="userName"></param>
+    /// <returns></returns>
     public async Task<int> GetFollowerCount(string userName)
     {
         var query = from author in _dbContext.Authors
@@ -144,18 +165,17 @@ public class AuthorRepository : IAuthorRepository
     }
 
     /// <summary>
-    /// Changes the profile picture of the user.
-    /// Finds the author in question from username, and then changes the users profile picture.
+    /// Changes the profile picture of the specified user.
     /// </summary>
-    /// <param name="authorName"></param>
+    /// <param name="userName"></param>
     /// <param name="profilePictureLink"></param>
-    public async Task ChangeProfilePicture(string authorName, string? profilePictureLink)
+    public async Task ChangeProfilePicture(string userName, string? profilePictureLink)
     {
         if (profilePictureLink == null)
         {
             return;
         }
-        var author = await FindAuthor(authorName);
+        var author = await FindAuthor(userName);
         if (author == null) return;
         
         author.ProfilePicture = profilePictureLink;
@@ -163,15 +183,20 @@ public class AuthorRepository : IAuthorRepository
         await _dbContext.SaveChangesAsync();
     }
     
-    public async Task<string?> GetProfilePicture(string authorName)
+    /// <summary>
+    /// Retrieves the profile picture of the specified user.
+    /// </summary>
+    /// <param name="userName"></param>
+    /// <returns></returns>
+    public async Task<string?> GetProfilePicture(string userName)
     {
-        if (authorName == null)
+        if (userName == null)
         {
             return null;
         }
         
         var query = from author in _dbContext.Authors
-            where author.UserName == authorName
+            where author.UserName == userName
             select author.ProfilePicture;
         var result = await query.Distinct().FirstOrDefaultAsync();
         
