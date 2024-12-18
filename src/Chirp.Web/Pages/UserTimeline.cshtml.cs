@@ -1,4 +1,4 @@
-﻿#nullable disable //fjern null warning
+﻿#nullable disable //Remove null warnings
 using Chirp.Core;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Chirp.Web.Pages;
 
+/// <summary>
+/// The private timeline of each user. Where a user sees their own and followed users cheeps.
+/// </summary>
 public class UserTimelineModel : PageModel
 {
     private readonly ICheepRepository _cheepRepository;
