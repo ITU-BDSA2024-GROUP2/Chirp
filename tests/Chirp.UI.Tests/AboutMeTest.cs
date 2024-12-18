@@ -1,12 +1,9 @@
 ﻿using System.Diagnostics;
 using System.Text.RegularExpressions;
-using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Playwright;
 using Microsoft.Playwright.NUnit;
-using Xunit;
 
 namespace Chirp.UI.Tests;
-
 
 public class AboutMeTest : PageTest
 {
