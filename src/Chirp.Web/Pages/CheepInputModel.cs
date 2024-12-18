@@ -1,4 +1,4 @@
-#nullable disable
+#nullable disable //Remove null warnings
 using System.ComponentModel.DataAnnotations;
 
 namespace Chirp.Web.Pages;
