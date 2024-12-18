@@ -331,7 +331,6 @@ public class AuthorRepositoryTest
         //Act
         var deleteResult = await userManager.DeleteAsync(author!);
         
-        
         //Assert
         try
         {
