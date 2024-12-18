@@ -1,5 +1,8 @@
 namespace Chirp.Core;
 
+/// <summary>
+/// The ICheepRepository interface defines the methods that the CheepRepository class must implement.
+/// </summary>
 public interface ICheepRepository
 {
     public Task<List<CheepDTO>> GetCheepsByNewest(int currentPage);
