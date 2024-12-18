@@ -1,7 +1,7 @@
 # Chirp
-Chirp is project made during the BDSA course at the IT-university of Copenhagen.
+Chirp is a project made during the BDSA course at the IT-university of Copenhagen.
 
-Chirp is live at: 
+Live at: 
 https://bdsagroup02chirprazor.azurewebsites.net/
 
 Made by:
