@@ -3,8 +3,15 @@ using Microsoft.Playwright;
 
 namespace Chirp.UI.Tests
 {
+    /// <summary>
+    /// Provides utility methods used for UI testing.
+    /// </summary>
     public static class ServerUtil 
     {
+        /// <summary>
+        /// Starts a web server used to run Playwright tests.
+        /// </summary>
+        /// <returns></returns>
         public static async Task<Process> StartServer()
         {
             var serverProcess = new Process
@@ -27,7 +34,12 @@ namespace Chirp.UI.Tests
 
         }
 
-        
+        /// <summary>
+        /// Helper method for logging in a user with the specified information.
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="email"></param>
+        /// <param name="password"></param>
         public static async Task LoginUser(IPage page, string email = "name@example.com", string password = "Password123!")
         {
 
@@ -46,6 +58,13 @@ namespace Chirp.UI.Tests
             await page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
         }
         
+        /// <summary>
+        /// Helper method for registering a user with the specified information.
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="username"></param>
+        /// <param name="email"></param>
+        /// <param name="password"></param>
         public static async Task RegisterUser(IPage page, string username = "username", string email = "name@example.com", string password = "Password123!")
         {
             await page.GotoAsync("https://localhost:5273/");
@@ -59,6 +78,12 @@ namespace Chirp.UI.Tests
             await page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
         }
 
+        /// <summary>
+        /// Helper method for logging in and deleting a users profile with the provided information.
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="email"></param>
+        /// <param name="password"></param>
         public static async Task DeleteUser(IPage page, string email = "name@example.com", string password = "Password123!")
         {
             var isUserLoggedIn = await page.GetByRole(AriaRole.Link, new() { Name = "my timeline" }).IsVisibleAsync();
