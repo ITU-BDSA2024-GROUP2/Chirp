@@ -16,7 +16,7 @@ public class CheepRepository : ICheepRepository
     
     /// <summary>
     /// Gets all cheeps, and puts the newest at the top.
-    /// Used for publictimeline
+    /// Used for publictimeline. Uses the currentpage number to determine what cheeps to load.
     /// </summary>
     /// <param name="currentPage"></param>
     /// <returns></returns>
@@ -39,30 +39,6 @@ public class CheepRepository : ICheepRepository
         return result;
     }
     
-    /// <summary>
-    /// Used for public timeline.
-    /// It uses the currentpage number to determine what cheeps to load.
-    /// </summary>
-    /// <param name="currentPage"></param>
-    /// <returns></returns>
-    public async Task<List<CheepDTO>> GetCheeps(int currentPage)
-    {
-        int offset = (currentPage - 1) * pageSize;
-
-        var query = (from cheep in _dbContext.Cheeps
-            orderby cheep.Likes.Count descending
-            select new CheepDTO
-            {
-                Id = cheep.CheepId,
-                Author = cheep.Author.UserName,
-                Text = cheep.Text,
-                TimeStamp = cheep.TimeStamp.ToString("MM'/'dd'/'yy H':'mm':'ss"),
-                LikeCount = cheep.Likes.Count.ToString(),
-            }).Skip(offset).Take(pageSize);
-        
-        var result = await query.ToListAsync();
-        return result;
-    }
     
     /// <summary>
     /// Used for loading all cheeps from an author name.
