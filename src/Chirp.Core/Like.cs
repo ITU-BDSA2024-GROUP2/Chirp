@@ -2,8 +2,8 @@ namespace Chirp.Core;
 
 /// <summary>
 /// This class repesents likes on a cheep.
-/// A user can only like the same cheep once.
-/// A user can also remove their on a liked cheep.
+/// An author can only like the same cheep once.
+/// An author can also remove their like on a liked cheep.
 /// </summary>
 public class Like
 {
