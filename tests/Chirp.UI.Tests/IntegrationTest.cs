@@ -60,11 +60,11 @@ public class IntegrationTest : PageTest
             
         //Assert
         await Expect(Page.GetByRole(AriaRole.Button, new() { Name = "Previous Page" })).Not.ToBeVisibleAsync(); //On page 1, so should not be visible
-        await Expect(Page.GetByRole(AriaRole.Button, new() { Name = "Next Page" })).Not.ToBeVisibleAsync(); //Havent posted or followed, so button should not be visible
+        await Expect(Page.GetByRole(AriaRole.Button, new() { Name = "Next Page" })).Not.ToBeVisibleAsync(); //Haven't posted or followed, so button should not be visible
             
         //Act
         await Page.GetByRole(AriaRole.Link, new() { Name = "public timeline" }).ClickAsync();
-        await Page.Locator("li").Filter(new() { HasText = "Starbuck now is what we hear the worst." }).Locator("#follow").ClickAsync(); //Follow jac.. because she has > 32 cheeps
+        await Page.Locator("li").Filter(new() { HasText = "Starbuck now is what we hear the worst." }).Locator("#follow").ClickAsync(); //Follow Jacqualine because she has > 32 cheeps
         await Page.GetByRole(AriaRole.Link, new() { Name = "my timeline" }).ClickAsync();
         await Page.GetByRole(AriaRole.Button, new() { Name = "Next Page" }).ClickAsync();
             

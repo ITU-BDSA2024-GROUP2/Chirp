@@ -206,7 +206,7 @@ namespace Chirp.UI.Tests
             await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
             var cheepbox = Page.GetByText("Cheep cannot be empty Share");
             
-            // Assert cheepbox still there, and all timline still displays cheeps
+            // Assert cheepbox is still there, and timeline still displays cheeps
             await Expect(Page.GetByText("Starbuck now is what we hear the worst")).ToBeVisibleAsync();
             await Expect(cheepbox).ToBeVisibleAsync();
         }
@@ -222,7 +222,7 @@ namespace Chirp.UI.Tests
             await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
             var cheepbox = Page.GetByText("Cheep cannot be empty Share");
             
-            // Assert cheepbox still there, and all timline still displays cheeps
+            // Assert cheepbox is still there, and timeline still displays cheeps
             await Expect(Page.GetByText("Starbuck now is what we hear the worst")).ToBeVisibleAsync();
             await Expect(cheepbox).ToBeVisibleAsync();
         }

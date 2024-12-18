@@ -67,8 +67,6 @@ namespace Chirp.UI.Tests
         [Test]
         public async Task TestTitle()
         {   
-            //Arrange
-            
             //Act
             await Page.GotoAsync("https://localhost:5273");
             

@@ -110,13 +110,13 @@ public class AuthorRepositoryTest
         var authorFollowed = new AuthorDTO { Name = "Not John Doe", Email = "notjohndoe@example.com" };
         IAuthorRepository authorRepository = new Infrastructure.AuthorRepository(_dbContext);
         
-        // 
+        // Act
         await authorRepository.CreateAuthor(userFollowing);
         await authorRepository.CreateAuthor(authorFollowed);
         await authorRepository.Follow(userFollowing.Name, authorFollowed.Name);
         
+        //Assert
         var following = await authorRepository.GetFollowing(userFollowing.Name);
-        
         Assert.NotEmpty(following);
         Assert.Contains(following, author => author == authorFollowed.Name);
     }
@@ -129,13 +129,13 @@ public class AuthorRepositoryTest
         var authorFollowed = new AuthorDTO { Name = "Not John Doe", Email = "notjohndoe@example.com" };
         IAuthorRepository authorRepository = new Infrastructure.AuthorRepository(_dbContext);
         
-        // 
+        // Act
         await authorRepository.CreateAuthor(userFollowing);
         await authorRepository.CreateAuthor(authorFollowed);
         await authorRepository.Follow(userFollowing.Name, authorFollowed.Name);
         
+        //Assert
         var followers = await authorRepository.GetFollowers(authorFollowed.Name);
-        
         Assert.NotEmpty(followers);
         Assert.Contains(followers, user => user == userFollowing.Name);
     }
@@ -329,13 +329,13 @@ public class AuthorRepositoryTest
         Assert.Equal(author, author2);
         
         //Act
-        var deleteResult = await userManager.DeleteAsync(author!);
+        await userManager.DeleteAsync(author!);
         
         
         //Assert
         try
         {
-            author2 = await authorRepository.FindAuthor("JohnDoe");
+            await authorRepository.FindAuthor("JohnDoe");
         }
         catch (Exception e)
         {

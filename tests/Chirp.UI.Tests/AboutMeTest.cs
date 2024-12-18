@@ -127,7 +127,4 @@ public class AboutMeTest : PageTest
         // Assert
         await Expect(listItemText.Nth(0)).ToBeVisibleAsync();
     }
-    
-    
-    
 }
