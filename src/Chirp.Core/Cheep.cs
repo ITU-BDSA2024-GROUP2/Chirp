@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 namespace Chirp.Core;
 
 /// <summary>
-/// This class repesents a cheep of the Chirp application.
+/// This class represents a cheep of the Chirp application.
 /// A cheep is an author written text that is published to the Chirp application.
 /// Authors can see other authors cheeps and have the option to like the cheep and follow the author. 
 /// </summary>
