@@ -4,15 +4,27 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Chirp.Infrastructure;
 
+/// <summary>
+/// The AuthorRepository class is used to do CRUD operations on the database.
+/// </summary>
 public class AuthorRepository : IAuthorRepository
 {
     private readonly ChirpDBContext _dbContext;
-    
+
+    /// <summary>
+    /// Initializes a new instance of AuthorRepository.
+    /// </summary>
+    /// <param name="dbContext"></param>
     public AuthorRepository(ChirpDBContext dbContext)
     {
         _dbContext = dbContext;
     }
     
+    /// <summary>
+    /// Creates an author with an AuthorDTO.
+    /// </summary>
+    /// <param name="authorDto"></param>
+    /// <returns></returns>
     public async Task<Author> CreateAuthor(AuthorDTO authorDto)
     {
         Author newAuthor = new() { UserName = authorDto.Name, Email = authorDto.Email, ProfilePicture = "https://cdn.pixabay.com/photo/2024/01/29/09/06/ai-generated-8539307_1280.png"};
@@ -22,6 +34,12 @@ public class AuthorRepository : IAuthorRepository
         return queryResult.Entity;
     }
     
+    /// <summary>
+    /// Finds the author from the database with the given name.
+    /// </summary>
+    /// <param name="authorName"></param>
+    /// <returns></returns>
+    /// <exception cref="InvalidOperationException">An author was not found.</exception>
     public async Task<Author> FindAuthor(string authorName)
     {
         var query = from author in _dbContext.Authors
