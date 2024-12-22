@@ -15,5 +15,5 @@ public interface ICheepRepository
     public Task Like(string cheepId, string userName);
     public Task Unlike(string cheepId, string userName);
     public Task<bool> IsLiked(string cheepId, string userName);
-    public Task DeleteLikes(string userName);
+    public Task DeleteLikesFromAuthor(string userName);
 }

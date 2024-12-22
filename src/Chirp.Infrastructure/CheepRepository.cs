@@ -172,7 +172,8 @@ public class CheepRepository : ICheepRepository
             .FirstOrDefaultAsync(c => c.CheepId == cheepId);
         
         if (cheep != null && cheep.Author.UserName == userName)
-        { 
+        {
+            await DeleteLikesFromCheep(cheep);
             _dbContext.Cheeps.Remove(cheep);
         }
         
@@ -263,7 +264,7 @@ public class CheepRepository : ICheepRepository
     /// Deletes all likes associated with a user from the database.
     /// </summary>
     /// <param name="userName"></param>
-    public async Task DeleteLikes(string userName)
+    public async Task DeleteLikesFromAuthor(string userName)
     {
         var author = await FindAuthorByName(userName);
         var delete = from like in _dbContext.Likes
@@ -274,6 +275,20 @@ public class CheepRepository : ICheepRepository
         {
             _dbContext.Likes.RemoveRange(delete);
         }
+
+        await _dbContext.SaveChangesAsync();
+    }
+    
+    /// <summary>
+    /// Removes all likes associated with a specified cheep.
+    /// Used for likes before deleting a cheep.
+    /// </summary>
+    /// <param name="cheep"></param>
+    private async Task DeleteLikesFromCheep(Cheep cheep)
+    {
+        var likesToDelete = _dbContext.Likes.Where(like => like.CheepId == cheep.CheepId);
+
+        _dbContext.Likes.RemoveRange(likesToDelete);
 
         await _dbContext.SaveChangesAsync();
     }
