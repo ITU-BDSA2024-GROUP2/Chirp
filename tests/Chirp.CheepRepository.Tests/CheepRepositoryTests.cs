@@ -441,7 +441,7 @@ public class CheepRepositoryTests
         Assert.True(isLikedBefore);
         
         // Act
-        await cheepRepository.DeleteLikes(userName);
+        await cheepRepository.DeleteLikesFromAuthor(userName);
         var isLikedAfter = await cheepRepository.IsLiked(createdCheep.CheepId, userName);
         Assert.False(isLikedAfter);
     }

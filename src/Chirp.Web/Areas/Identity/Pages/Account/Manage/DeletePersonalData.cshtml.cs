@@ -90,7 +90,7 @@ namespace Chirp.Web.Areas.Identity.Pages.Account.Manage
                 }
             }
 
-            await _cheepRepository.DeleteLikes(user.UserName);
+            await _cheepRepository.DeleteLikesFromAuthor(user.UserName);
             
             var result = await _userManager.DeleteAsync(user);
             var userId = await _userManager.GetUserIdAsync(user);
