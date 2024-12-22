@@ -279,7 +279,12 @@ public class CheepRepository : ICheepRepository
         await _dbContext.SaveChangesAsync();
     }
     
-    public async Task DeleteLikesFromCheep(Cheep cheep)
+    /// <summary>
+    /// Removes all likes associated with a specified cheep.
+    /// Used for likes before deleting a cheep.
+    /// </summary>
+    /// <param name="cheep"></param>
+    private async Task DeleteLikesFromCheep(Cheep cheep)
     {
         var likesToDelete = _dbContext.Likes.Where(like => like.CheepId == cheep.CheepId);
 
